@@ -2,10 +2,10 @@
 
 This repo is for people who want to work at Social Tables.
 
-The goal, make the best connect four app you ever.
+The goal is to make a really sweet Connect Four app.
 
 ## Game Background
-There are several variations of the game, but for this project let's use the [Hasbro rules](http://www.hasbro.com/common/documents/dad2614d1c4311ddbd0b0800200c9a66/1EF6874419B9F36910222EB9858E8CB8.pdf)
+There are several variations of the game, but for this project let's use the basic [Hasbro rules](http://www.hasbro.com/common/documents/dad2614d1c4311ddbd0b0800200c9a66/1EF6874419B9F36910222EB9858E8CB8.pdf)
 
 
 ## Objectives for Project Completion
