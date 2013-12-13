@@ -162,6 +162,29 @@ exports.new = function(req, res){
 				team: "none"
 			},
 		],
+		[
+			{
+				team: "none"
+			},
+			{
+				team: "none"
+			},
+			{
+				team: "none"
+			},
+			{
+				team: "none"
+			},
+			{
+				team: "none"
+			},
+			{
+				team: "none"
+			},
+			{
+				team: "none"
+			},
+		]		
 	];
 
 	games[id] = data;
