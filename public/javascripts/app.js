@@ -44,8 +44,6 @@ connectFourApp.factory('GameSlotData', ['appContantValues', function(appContantV
 ]);
 
 connectFourApp.factory('gameBoardData', ['appContantValues', function(appContantValues) {
-		var data = ;
-
 		return {
 			getData : function() {
 				return data;
@@ -76,7 +74,7 @@ connectFourApp.factory('gameStateManager', ['appContantValues', function(appCont
 	Controllers
 
 **********************/
-connectFourApp.controller('GameBoardCtrl', ['$scope', 'gameStateManager' function($scope, gameStateManager) {
+connectFourApp.controller('GameBoardCtrl', ['$scope', 'gameStateManager', function($scope, gameStateManager) {
 	$scope.data = [
 		[{}, {}, {}, {}, {}, {}, {}], /* Col. 1 */
 		[{}, {}, {}, {}, {}, {}, {}], /* Col. 2 */
@@ -99,4 +97,13 @@ connectFourApp.controller('GameBoardCtrl', ['$scope', 'gameStateManager' functio
 			return false;
 		}
 	}
+}]);
+
+connectFourApp.controller('GameInfoCtrl', ['$scope', 'gameStateManager', 'appContantValues', function($scope, gameStateManager, appContantValues) {
+	$scope.startingPlayer = appContantValues.playerTypes.RED;
+
+	$scope.$watch(gameStateManager.getCurrentState, function(newState, previousState) {
+		console.log(newState);
+		console.log(previousState);
+	});
 }]);

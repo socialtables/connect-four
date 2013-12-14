@@ -21,6 +21,10 @@
 	width: 30%;
 }
 
+#redPlayerOptionLabel {
+	color: red;
+}
+
 #gameBoard {
 	background-color: yellow;
 	width: 500px;

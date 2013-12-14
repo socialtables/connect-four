@@ -28,7 +28,7 @@
     <div class="container">
       <div class="page-header">
         <h1><%= title %></h1>
-        <p class="lead">Basic grid layouts to get you familiar with building within the Bootstrap grid system.</p>
+        <p class="lead"><%= description %></p>
       </div>
 
       <div id="panel">
@@ -39,8 +39,21 @@
             </div>
           </div>
         </div>
+        <div id="gameInfoSection" class="panel-section" ng-controller="GameInfoCtrl">
 
-        <div id="gameInfoSection" class="panel-section">
+          <p>Select the player who will take the first turn and click "Start" to begin!</p>
+          <div>
+            <label id="redPlayerOptionLabel" class="radio-inline">
+                <input type="radio" ng-model="startingPlayer" value="4" checked>
+                Red
+            </label>
+            <label id="blackPlayerOptionLabel" class="radio-inline">
+                <input type="radio" ng-model="startingPlayer" value="5">
+                Black
+            </label>
+          </div>
+          <button type="button" class="btn btn-success btn-lg">Start</button>
+
         </div>
       </div>
     </div>
