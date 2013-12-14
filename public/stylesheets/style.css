@@ -23,7 +23,11 @@
 
 #gameBoard {
 	background-color: yellow;
-	width: 525px;
+	width: 500px;
+}
+
+.game-board-column {
+	display: inline-block;
 }
 
 .game-board-slot:not(.selected-cell):hover {
@@ -45,7 +49,6 @@
 }
 
 .game-board-slot {
-	display: inline-block;
 	height: 55px;
 	width: 55px;
 	margin: 8px;

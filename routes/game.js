@@ -24,13 +24,13 @@ exports.new = function(req, res){
 	var id = uuid.v4();
 	
 	var data = [
-		[null, null, null, null, null, null],
-		[null, null, null, null, null, null],
-		[null, null, null, null, null, null],
-		[null, null, null, null, null, null],
-		[null, null, null, null, null, null],
-		[null, null, null, null, null, null],
-		[null, null, null, null, null, null]
+		[null, null, null, null, null, null], /* Col. 1 */
+		[null, null, null, null, null, null], /* Col. 2 */
+		[null, null, null, null, null, null], /* Col. 3 */
+		[null, null, null, null, null, null], /* Col. 4 */
+		[null, null, null, null, null, null], /* Col. 5 */
+		[null, null, null, null, null, null], /* Col. 6 */
+		[null, null, null, null, null, null]  /* Col. 7 */
 	];
 
 	games[id] = data;
