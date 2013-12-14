@@ -1,8 +1,54 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+.container {
+	min-width: 992px;
 }
 
-a {
-  color: #00B7FF;
+#panel {
+	position: relative;
+}
+
+.panel-section {
+	position: absolute;
+}
+
+#gameBoardSection {
+	left: 0;
+	width: 70%;
+	padding: 0px 20px;
+}
+
+#gameInfoSection {
+	right: 0;
+	width: 30%;
+}
+
+#gameBoard {
+	background-color: yellow;
+	width: 525px;
+}
+
+.game-board-slot:not(.selected-cell):hover {
+	background-color: rgb(140, 241, 255);
+	opacity: 1;
+	cursor: pointer;
+}
+
+.game-board-slot.selected-cell {
+	cursor: not-allowed;
+}
+
+.game-board-slot.selected-cell.player-red-selected {
+	background-color: red;
+}
+
+.game-board-slot.selected-cell.player-black-selected {
+	background-color: black;
+}
+
+.game-board-slot {
+	display: inline-block;
+	height: 55px;
+	width: 55px;
+	margin: 8px;
+	border-radius: 50%;
+	background-color: white;
 }

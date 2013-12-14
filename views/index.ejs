@@ -1,13 +1,102 @@
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="<%= description %>">
+    <meta name="author" content="<%= author %>">
+
     <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
+
+    <!-- Bootstrap core CSS -->
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/stylesheets/style.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
   </head>
+
   <body>
-    <h1><%= title %></h1>
-    <p>Your mission is to replace this page with a badass <a href="http://en.wikipedia.org/wiki/Connect_Four">Connect 4</a> game.</p>
-    <p>We've given you the basic back end that you will be communicating with. Refer to the docs and guidelines in the <a href="https://github.com/socialtables/connect-four">Github repo</a>. Your job is to implement the user interface and visual representation of the game.</p>
-    <p>Good Luck!</p>
+    <div class="container">
+
+      <div class="page-header">
+        <h1><%= title %></h1>
+        <p class="lead">Basic grid layouts to get you familiar with building within the Bootstrap grid system.</p>
+      </div>
+
+      <div id="panel">
+        <div id="gameBoardSection" class="panel-section">
+          <div id="gameBoard">   
+            <div class="game-board-row">
+              <div class="game-board-slot selected-cell player-red-selected"></div>
+              <div class="game-board-slot"></div>
+              <div class="game-board-slot"></div>
+              <div class="game-board-slot"></div>
+              <div class="game-board-slot selected-cell player-black-selected"></div>
+              <div class="game-board-slot"></div>
+              <div class="game-board-slot"></div>
+            </div>
+            <div class="game-board-row">
+              <div class="game-board-slot"></div>
+              <div class="game-board-slot"></div>
+              <div class="game-board-slot"></div>
+              <div class="game-board-slot"></div>
+              <div class="game-board-slot"></div>
+              <div class="game-board-slot"></div>
+              <div class="game-board-slot"></div>
+            </div>
+            <div class="game-board-row">
+              <div class="game-board-slot"></div>
+              <div class="game-board-slot"></div>
+              <div class="game-board-slot"></div>
+              <div class="game-board-slot"></div>
+              <div class="game-board-slot"></div>
+              <div class="game-board-slot"></div>
+              <div class="game-board-slot"></div>
+            </div>
+            <div class="game-board-row">
+              <div class="game-board-slot"></div>
+              <div class="game-board-slot"></div>
+              <div class="game-board-slot"></div>
+              <div class="game-board-slot"></div>
+              <div class="game-board-slot"></div>
+              <div class="game-board-slot"></div>
+              <div class="game-board-slot"></div>
+            </div>
+            <div class="game-board-row">
+              <div class="game-board-slot"></div>
+              <div class="game-board-slot"></div>
+              <div class="game-board-slot"></div>
+              <div class="game-board-slot"></div>
+              <div class="game-board-slot"></div>
+              <div class="game-board-slot"></div>
+              <div class="game-board-slot"></div>
+            </div>
+            <div class="game-board-row">
+              <div class="game-board-slot"></div>
+              <div class="game-board-slot"></div>
+              <div class="game-board-slot"></div>
+              <div class="game-board-slot"></div>
+              <div class="game-board-slot"></div>
+              <div class="game-board-slot"></div>
+              <div class="game-board-slot"></div>
+            </div>
+          </div>
+        </div>
+        <div id="gameInfoSection" class="panel-section">
+        </div>
+      </div>
+
+    </div> <!-- /container -->
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
   </body>
 </html>
