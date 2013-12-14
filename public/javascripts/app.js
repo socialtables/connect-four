@@ -18,15 +18,15 @@ connectFourApp.constant('appContantValues', {
     	DRAW: 3
     },
     playerTypes: {
-    	RED: 4,
-    	BLACK: 5
+    	RED: "red",
+    	BLACK: "black"
     }
 });
 
 connectFourApp.factory('GameSlotData', ['appContantValues', function(appContantValues) {
 
 		function GameSlotData() {
-			this._selectedPlayer = false;
+			this._selectedPlayer = null;
 		}
 
 		Object.defineProperty(GameSlotData.prototype, "selectedPlayer", {
@@ -58,6 +58,9 @@ connectFourApp.factory('gameStateManager', ['appContantValues', function(appCont
 		return {
 			getCurrentState : function() {
 				return currentState;
+			},
+			startNewGame : function() {
+				currentState = 	appContantValues.gameStates.INPROGRESS;
 			}
 		};
 	}
@@ -99,11 +102,12 @@ connectFourApp.controller('GameBoardCtrl', ['$scope', 'gameStateManager', functi
 	}
 }]);
 
-connectFourApp.controller('GameInfoCtrl', ['$scope', 'gameStateManager', 'appContantValues', function($scope, gameStateManager, appContantValues) {
+connectFourApp.controller('GameMenusCtrl', ['$scope', 'gameStateManager', 'appContantValues', function($scope, gameStateManager, appContantValues) {
 	$scope.startingPlayer = appContantValues.playerTypes.RED;
 
-	$scope.$watch(gameStateManager.getCurrentState, function(newState, previousState) {
-		console.log(newState);
-		console.log(previousState);
+	$scope.$watch(gameStateManager.getCurrentState, function(newState) {
+		if(newState === appContantValues.gameStates.START) {
+
+		}
 	});
 }]);

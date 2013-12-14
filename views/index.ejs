@@ -39,23 +39,55 @@
             </div>
           </div>
         </div>
-        <div id="gameInfoSection" class="panel-section" ng-controller="GameInfoCtrl">
-
-          <p>Select the player who will take the first turn and click "Start" to begin!</p>
-          <div>
-            <label id="redPlayerOptionLabel" class="radio-inline">
-                <input type="radio" ng-model="startingPlayer" value="4" checked>
-                Red
-            </label>
-            <label id="blackPlayerOptionLabel" class="radio-inline">
-                <input type="radio" ng-model="startingPlayer" value="5">
-                Black
-            </label>
-          </div>
-          <button type="button" class="btn btn-success btn-lg">Start</button>
-
+        <div id="gameMenusSection" class="panel-section" ng-controller="GameMenusCtrl">
+          <div ng-include="'startMenuTemplate'"></div>
         </div>
       </div>
     </div>
+
+    <!-- Game Menu Templates -->
+    <script id="startMenuTemplate" type="text/ng-template">
+      <div ng-controller="StartMenuCtrl" class="text-center">
+        <p class="start-menu-element">Select the player who will take the first turn and click "Start" to play!</p>
+        <div class="start-menu-element">
+          <label id="redPlayerOptionLabel" class="radio-inline">
+              <input type="radio" ng-model="startingPlayer" value="red" checked>
+              Red
+          </label>
+          <label id="blackPlayerOptionLabel" class="radio-inline">
+              <input type="radio" ng-model="startingPlayer" value="black">
+              Black
+          </label>
+        </div>
+        <button type="button" class="btn btn-success btn-lg start-menu-element">Start</button>
+      <div>
+    </script>
+
+    <script id="gameInfoTemplate" type="text/ng-template">
+      <div ng-controller="GameInfoCtrl">
+        <div class="text-center">
+          <table class="table table-bordered">
+            <caption id="scoreTableCaption">Score:</caption>
+            <thead>
+              <tr>
+                <th class="danger text-center">Red</th>
+                <th class="active text-center">Black</th>
+                <th class="warning text-center">Draw</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>{{ redPlayerScore }}</td>
+                <td>{{ blackPlayerScore }}</td>
+                <td>{{ numOfDraws }}</td>
+              </tr>
+            </tbody>
+          </table>
+          <p id="gamePrompt">Default Message</p>
+          <button type="button" class="btn btn-danger btn-lg">Restart</button>
+        <div>
+      <div>
+    </script>
+
   </body>
 </html>
