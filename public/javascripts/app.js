@@ -15,7 +15,8 @@ connectFourApp.constant('appConstantValues', {
     	START: "START",
     	INPROGRESS: "INPROGRESS",
     	WINNER: "WINNER",
-    	DRAW: "DRAW"
+    	DRAW: "DRAW",
+    	RESTART: "RESTART"
     },
     playerType: {
     	RED: "red",
@@ -23,7 +24,8 @@ connectFourApp.constant('appConstantValues', {
     }
 });
 
-connectFourApp.factory('GameSlotData', ['appConstantValues', function(appConstantValues) {
+connectFourApp.factory('GameSlotData', ['appConstantValues', 
+	function(appConstantValues) {
 
 		function GameSlotData() {
 			this._selectedPlayer = null;
@@ -42,27 +44,42 @@ connectFourApp.factory('GameSlotData', ['appConstantValues', function(appConstan
 	}
 ]);
 
-connectFourApp.factory('gameBoardData', ['appConstantValues', 'GameSlotData', function(appConstantValues, GameSlotData) {
-		var data;
+connectFourApp.factory('gameBoardClientSideModel', ['appConstantValues', 'GameSlotData', 
+	function(appConstantValues, GameSlotData) {
+		
+		var id;
+		var serverData;
+		var gameBoardData;
 
 		return {
-			getData: function() {
-				return data;
+			get id() {
+				return id;
 			},
-			reset: function(serverData) {
-				data = _transformIntoGameBoardData(serverData);
+			get gameBoardData() {
+				// NOTE: Returns representation of game board data used on the client-side
+				return gameBoardData;
+			},
+			get serverData() {
+				// NOTE: Returns representation of game board data used to persist to the server-side
+				return serverData;
+			},
+			set: function(serverResponse) {
+				id = serverResponse.id;
+				serverData = serverResponse.data;
+				gameBoardData = _transformIntoGameBoardData(serverResponse.data);
 			},
 			determineState: function() {
-				/* TODO */
-				return appConstantValues.gameStates.DRAW;
+				/* TODO: Game board state detected algorighm goes here */
+				return appConstantValues.gameStates.INPROGRESS;
 			},
 			insertChecker: function(args) {
 				_insertCheckerIntoColumn(args.playerType, args.columnIndex);
+				_updateNewCheckerPositionInServerData(args.playerType, args.columnIndex);
 			}
 		};
 
-		function _transformIntoGameBoardData(serverData) {
-			return serverData.map(function(column) {
+		function _transformIntoGameBoardData(rawData) {
+			return rawData.map(function(column) {
 				return column.map(function(slot) {
 					return new GameSlotData();
 				});
@@ -70,7 +87,7 @@ connectFourApp.factory('gameBoardData', ['appConstantValues', 'GameSlotData', fu
 		}
 
 		function _insertCheckerIntoColumn(playerType, columnIndex) {
-			var columnData = data[columnIndex];
+			var columnData = gameBoardData[columnIndex];
 		
 			var firstEmptySlotInColumn = _.find(columnData, function(slot) {
 				return !slot.selectedPlayer;
@@ -80,10 +97,24 @@ connectFourApp.factory('gameBoardData', ['appConstantValues', 'GameSlotData', fu
 				firstEmptySlotInColumn.selectedPlayer = playerType;
 			}
 		}
+
+		function _updateNewCheckerPositionInServerData(playerType, columnIndex) {
+			var columnData = serverData[columnIndex];
+		
+			_.every(columnData, function(slot, index) {
+				if(slot === null) {
+					columnData[index] = playerType;
+					return false;
+				}
+				return true;
+			});
+		}
 	}
 ]);
 
-connectFourApp.factory('gameStateManager', ['appConstantValues', 'GameBoardResource', 'gameBoardData', function(appConstantValues, GameBoardResource, gameBoardData) {
+connectFourApp.factory('gameStateManager', ['appConstantValues', 'GameBoardResource', 'gameBoardClientSideModel', 
+	function(appConstantValues, GameBoardResource, gameBoardClientSideModel) {
+		
 		var currentState = appConstantValues.gameStates.START;
 		var currentPlayer = { // NOTE: Making 'currentPlayer' an object in order to take advantage of Angular's two-way data binding feature
 			type: null
@@ -98,7 +129,8 @@ connectFourApp.factory('gameStateManager', ['appConstantValues', 'GameBoardResou
 			},
 			restartGame: function() {
 				var oppositePlayerType = _getOppositePlayerType(currentPlayer.type);
-				
+
+				currentState = appConstantValues.gameStates.RESTART;
 				this.startNewGame({
 					startingPlayer: oppositePlayerType
 				});
@@ -107,16 +139,14 @@ connectFourApp.factory('gameStateManager', ['appConstantValues', 'GameBoardResou
 				currentPlayer.type = args.startingPlayer;
 				GameBoardResource.create().$promise
 					.then(function(response) {
-						gameBoardData.reset(response.data);
+						console.log("new game board id:" + response.id);
+						gameBoardClientSideModel.set(response);
 						currentState = appConstantValues.gameStates.INPROGRESS;
 					});
 			},
 			checkStateAndAdvanceGame: function() {
-				/*
-				 TODO: 
-				 - Persist the GameBoardResource
-				*/
-				currentState = gameBoardData.determineState();
+				GameBoardResource.update({ id: gameBoardClientSideModel.id }, gameBoardClientSideModel.serverData);
+				currentState = gameBoardClientSideModel.determineState();
 				if(currentState === appConstantValues.gameStates.INPROGRESS) {
 					_toggleCurrentPlayer();
 				};
@@ -142,7 +172,9 @@ connectFourApp.factory('gameStateManager', ['appConstantValues', 'GameBoardResou
 	Resources
 
 **********************/
-connectFourApp.factory('GameBoardResource', ['appConstantValues', '$resource', function(appConstantValues, $resource) {
+connectFourApp.factory('GameBoardResource', ['appConstantValues', '$resource', 
+	function(appConstantValues, $resource) {
+		
 		var customResourceActions = { 
 			update: {
 				url: '/save/:id',
@@ -174,9 +206,11 @@ connectFourApp.filter('reverse', function() {
 	Controllers
 
 **********************/
-connectFourApp.controller('GameBoardCtrl', ['$scope', 'gameStateManager', 'gameBoardData', 'appConstantValues', function($scope, gameStateManager, gameBoardData, appConstantValues) {
+connectFourApp.controller('GameBoardCtrl', ['$scope', 'gameStateManager', 'gameBoardClientSideModel', 'appConstantValues', 
+	function($scope, gameStateManager, gameBoardClientSideModel, appConstantValues) {
+
 		$scope.$watch(gameStateManager.getCurrentState, function(newState) {
-			$scope.data = gameBoardData.getData();
+			$scope.data = gameBoardClientSideModel.gameBoardData;
 		});
 
 		$scope.insertCheckerIntoColumn = function(colIndex) {
@@ -185,7 +219,7 @@ connectFourApp.controller('GameBoardCtrl', ['$scope', 'gameStateManager', 'gameB
 			if(gameState === appConstantValues.gameStates.INPROGRESS) {
 				var currentPlayer = gameStateManager.getCurrentPlayer();
 
-				gameBoardData.insertChecker({
+				gameBoardClientSideModel.insertChecker({
 					playerType: currentPlayer.type,
 					columnIndex: colIndex
 				});
@@ -219,7 +253,9 @@ connectFourApp.controller('GameBoardCtrl', ['$scope', 'gameStateManager', 'gameB
 	}
 ]);
 
-connectFourApp.controller('MenusSectionCtrl', ['$scope', 'gameStateManager', 'appConstantValues', function($scope, gameStateManager, appConstantValues) {
+connectFourApp.controller('MenusSectionCtrl', ['$scope', 'gameStateManager', 'appConstantValues', 
+	function($scope, gameStateManager, appConstantValues) {
+		
 		$scope.showStartMenu = true;
 
 		$scope.$watch(gameStateManager.getCurrentState, function(newState) {
@@ -231,7 +267,9 @@ connectFourApp.controller('MenusSectionCtrl', ['$scope', 'gameStateManager', 'ap
 	}
 ]);
 
-connectFourApp.controller('StartMenuCtrl', ['$scope', 'gameStateManager', 'appConstantValues', function($scope, gameStateManager, appConstantValues) {
+connectFourApp.controller('StartMenuCtrl', ['$scope', 'gameStateManager', 'appConstantValues', 
+	function($scope, gameStateManager, appConstantValues) {
+		
 		$scope.firstPlayer = appConstantValues.playerType.RED;
 		$scope.secondPlayer = appConstantValues.playerType.BLACK;
 		$scope.startingPlayer = appConstantValues.playerType.RED; // NOTE: Red player set to start by default but can be toggled
@@ -244,7 +282,9 @@ connectFourApp.controller('StartMenuCtrl', ['$scope', 'gameStateManager', 'appCo
 	}
 ]);
 
-connectFourApp.controller('GameInfoCtrl', ['$scope', 'gameStateManager', 'appConstantValues', function($scope, gameStateManager, appConstantValues) {
+connectFourApp.controller('GameInfoCtrl', ['$scope', 'gameStateManager', 'appConstantValues', 
+	function($scope, gameStateManager, appConstantValues) {
+		
 		$scope.currentPlayer = gameStateManager.getCurrentPlayer();
 
 		$scope.redPlayerScore = 0;
