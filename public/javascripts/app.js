@@ -12,10 +12,10 @@ var connectFourApp = angular.module('connectFourApp', ['ngResource']);
 **********************/
 connectFourApp.constant('appConstantValues', {
     gameStates: {
-    	START: 0,
-    	INPROGRESS: 1,
-    	WINNER: 2,
-    	DRAW: 3
+    	START: "START",
+    	INPROGRESS: "INPROGRESS",
+    	WINNER: "WINNER",
+    	DRAW: "DRAW"
     },
     playerId: {
     	RED: "red",
@@ -42,7 +42,7 @@ connectFourApp.factory('GameSlotData', ['appConstantValues', function(appConstan
 	}
 ]);
 
-connectFourApp.factory('gameBoardData', ['appConstantValues', 'GameSlotData', 'gameStates', function(appConstantValues, GameSlotData, gameStates) {
+connectFourApp.factory('gameBoardData', ['appConstantValues', 'GameSlotData', function(appConstantValues, GameSlotData) {
 		var data;
 
 		return {
@@ -54,6 +54,10 @@ connectFourApp.factory('gameBoardData', ['appConstantValues', 'GameSlotData', 'g
 			},
 			determineState: function() {
 				/* TODO */
+				return appConstantValues.gameStates.INPROGRESS;
+			},
+			insertChecker: function(args) {
+				_insertCheckerIntoColumn(args.player, args.columnIndex);
 			}
 		};
 
@@ -63,6 +67,18 @@ connectFourApp.factory('gameBoardData', ['appConstantValues', 'GameSlotData', 'g
 					return new GameSlotData();
 				});
 			})
+		}
+
+		function _insertCheckerIntoColumn(player, columnIndex) {
+			var columnData = data[columnIndex];
+		
+			var firstEmptySlotInColumn = _.find(columnData, function(slot) {
+				return !slot.selectedPlayer;
+			});
+
+			if(firstEmptySlotInColumn) {
+				firstEmptySlotInColumn.selectedPlayer = player;
+			}
 		}
 	}
 ]);
@@ -131,30 +147,74 @@ connectFourApp.factory('GameBoardResource', ['appConstantValues', '$resource', f
 
 /**********************
 
+	Filters
+
+**********************/
+connectFourApp.filter('reverse', function() {
+  return function(array) {
+    return array.slice().reverse();
+  };
+});
+
+/**********************
+
 	Controllers
 
 **********************/
-connectFourApp.controller('GameBoardCtrl', ['$scope', 'gameStateManager', 'gameBoardData', function($scope, gameStateManager, gameBoardData) {
-	$scope.data = gameBoardData.getData();
+connectFourApp.controller('GameBoardCtrl', ['$scope', 'gameStateManager', 'gameBoardData', 'appConstantValues', function($scope, gameStateManager, gameBoardData, appConstantValues) {
+		$scope.$watch(gameStateManager.getCurrentState, function(newState) {
+			if(newState === appConstantValues.gameStates.INPROGRESS) {
+				$scope.data = gameBoardData.getData();
+			}
+		});
 
-	$scope.selectSlot = function(clickedSlot) {
-		var getCurrentPlayer = gameStateManager.getCurrentPlayer();
-		clickedSlot.selectedPlayer = getCurrentPlayer;
-		gameStateManager.checkStateAndAdvanceGame();
-	}
+		$scope.insertCheckerIntoColumn = function(colIndex) {
+			var currentPlayer = gameStateManager.getCurrentPlayer();
 
-	$scope.isSlotSelected = function(slot) {
-		if(slot.selectedPlayer) {
-			return true;
-		} else {
-			return false;
+			gameBoardData.insertChecker({
+				player: currentPlayer,
+				columnIndex: colIndex
+			});
+			gameStateManager.checkStateAndAdvanceGame();
+		}
+
+		$scope.isSlotSelected = function(slot) {
+			if(slot.selectedPlayer) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+
+		$scope.isSlotSelectedByRedPlayer = function(slot) {
+			if(slot.selectedPlayer === appConstantValues.playerId.RED) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+
+		$scope.isSlotSelectedByBlackPlayer = function(slot) {
+			if(slot.selectedPlayer === appConstantValues.playerId.BLACK) {
+				return true;
+			} else {
+				return false;
+			}
 		}
 	}
-}]);
+]);
 
-connectFourApp.controller('GameMenusSectionCtrl', ['$scope', function($scope) {
-	console.log("launching GameMenusSectionCtrl")
-}]);
+connectFourApp.controller('MenusSectionCtrl', ['$scope', 'gameStateManager', 'appConstantValues', function($scope, gameStateManager, appConstantValues) {
+		$scope.showStartMenu = true;
+
+		$scope.$watch(gameStateManager.getCurrentState, function(newState) {
+			if(newState === appConstantValues.gameStates.INPROGRESS) {
+				$scope.showStartMenu = false;
+				$scope.showGameInfo = true;
+			}
+		});	
+	}
+]);
 
 connectFourApp.controller('StartMenuCtrl', ['$scope', 'gameStateManager', 'appConstantValues', function($scope, gameStateManager, appConstantValues) {
 		$scope.startingPlayer = appConstantValues.playerId.RED;
@@ -162,5 +222,16 @@ connectFourApp.controller('StartMenuCtrl', ['$scope', 'gameStateManager', 'appCo
 		$scope.start = function() {
 			gameStateManager.startNewGame($scope.startingPlayer);
 		}
+	}
+]);
+
+connectFourApp.controller('GameInfoCtrl', ['$scope', 'gameStateManager', 'appConstantValues', function($scope, gameStateManager, appConstantValues) {
+		/*
+			TODO
+		*/
+
+		$scope.redPlayerScore = 0;
+        $scope.blackPlayerScore = 0;
+        $scope.numOfDraws = 0;
 	}
 ]);
