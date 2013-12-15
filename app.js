@@ -31,7 +31,7 @@ if ('development' == app.get('env')) {
 app.get('/', routes.index);
 
 app.get('/new', game.new);
-app.post('/:id', game.save);
+app.post('/save/:id', game.save);
 app.get('/:id', game.detail);
 
 http.createServer(app).listen(app.get('port'), function(){

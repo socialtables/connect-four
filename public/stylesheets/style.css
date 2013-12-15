@@ -1,3 +1,7 @@
+body {
+	background-color: rgb(224, 224, 224);
+}
+
 .container {
 	min-width: 992px;
 }
