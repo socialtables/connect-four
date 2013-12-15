@@ -1,5 +1,5 @@
 .container {
-	min-width: 992px;
+	min-width: 1200px;
 }
 
 #panel {
@@ -12,10 +12,10 @@
 
 #menusSection {
 	right: 0;
-	width: 30%;
+	width: 50%;
 }
 
-#redPlayerOptionLabel {
+.color-red {
 	color: red;
 }
 
@@ -27,19 +27,19 @@
 	font-size: 3em;
 }
 
-#gamePrompt {
+.game-prompt {
 	font-size: 1.2em;
 }
 
 #gameBoardSection {
 	left: 0;
-	width: 70%;
-	padding: 0px 20px;
+	width: 50%;
 }
 
 #gameBoard {
 	background-color: yellow;
-	width: 497px;
+	width: 499px;
+	border: solid 1px black;
 }
 
 .game-board-column {
@@ -49,6 +49,10 @@
 .game-board-column:hover {
 	background-color: #5EE1EB;
 	cursor: pointer;
+}
+
+.game-board-slot.selected-cell {
+	opacity: 0.78;
 }
 
 .game-board-slot.player-red-selected {
@@ -64,5 +68,6 @@
 	width: 55px;
 	margin: 8px;
 	border-radius: 50%;
-	background-color: white;
+	border: solid 1px rgb(182, 182, 182);
+	background-color: white;	
 }

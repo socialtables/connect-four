@@ -35,7 +35,7 @@
 
       <div id="panel">
         <div id="gameBoardSection" class="panel-section">
-          <div id="gameBoard" ng-controller="GameBoardCtrl">
+          <div id="gameBoard" ng-controller="GameBoardCtrl" ng-show="data">
             <div class="game-board-column"  ng-repeat="column in data" ng-click="insertCheckerIntoColumn($index)">
               <div class="game-board-slot" ng-repeat="slot in column | reverse" ng-class="{ 'selected-cell': isSlotSelected(slot), 'player-red-selected': isSlotSelectedByRedPlayer(slot), 'player-black-selected': isSlotSelectedByBlackPlayer(slot) }">
               </div>
@@ -54,13 +54,13 @@
       <div ng-controller="StartMenuCtrl" class="text-center">
         <p class="start-menu-element">Select the player who will take the first turn and then click <strong>Start</strong> to play!</p>
         <div class="start-menu-element">
-          <label id="redPlayerOptionLabel" class="radio-inline">
-              <input type="radio" ng-model="startingPlayer" value="red">
-              Red
+          <label class="radio-inline color-red">
+              <input type="radio" ng-model="startingPlayer" value="{{ firstPlayer }}">
+              {{ firstPlayer | uppercase }}
           </label>
-          <label id="blackPlayerOptionLabel" class="radio-inline">
-              <input type="radio" ng-model="startingPlayer" value="black">
-              Black
+          <label class="radio-inline">
+              <input type="radio" ng-model="startingPlayer" value="{{ secondPlayer }}">
+              {{ secondPlayer | uppercase }}
           </label>
         </div>
         <button ng-click="start()" type="button" class="btn btn-success btn-lg start-menu-element">Start</button>
@@ -87,8 +87,20 @@
               </tr>
             </tbody>
           </table>
-          <p id="gamePrompt">Default Message</p>
-          <button type="button" class="btn btn-danger btn-lg">Restart</button>
+          <p class="game-prompt" ng-hide="winner">
+            Your turn: 
+            <span ng-class="{ 'color-red': currentPlayer.type == 'red' }">
+              {{ currentPlayer.type | uppercase }}
+            </span>
+          </p>
+          <p class="game-prompt" ng-show="winner">
+            Congrats 
+            <span ng-class="{ 'color-red': currentPlayer.type == 'red' }">
+              {{ winner | uppercase }}
+            </span>!!! You are the victor!
+          </p>
+          <button type="button" class="btn btn-danger btn-lg" ng-click="restart(currentPlayer.type)" ng-hide="winner">Restart</button>
+          <button type="button" class="btn btn-success btn-lg" ng-click="playAgain(winner)" ng-show="winner">Play Again</button>
         <div>
       <div>
     </script>
