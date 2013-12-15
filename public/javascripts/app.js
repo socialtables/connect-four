@@ -139,7 +139,6 @@ connectFourApp.factory('gameStateManager', ['appConstantValues', 'GameBoardResou
 				currentPlayer.type = args.startingPlayer;
 				GameBoardResource.create().$promise
 					.then(function(response) {
-						console.log("new game board id:" + response.id);
 						gameBoardClientSideModel.set(response);
 						currentState = appConstantValues.gameStates.INPROGRESS;
 					});
@@ -206,7 +205,7 @@ connectFourApp.filter('reverse', function() {
 	Controllers
 
 **********************/
-connectFourApp.controller('GameBoardCtrl', ['$scope', 'gameStateManager', 'gameBoardClientSideModel', 'appConstantValues', 
+connectFourApp.controller('GameBoardSectionCtrl', ['$scope', 'gameStateManager', 'gameBoardClientSideModel', 'appConstantValues', 
 	function($scope, gameStateManager, gameBoardClientSideModel, appConstantValues) {
 
 		$scope.$watch(gameStateManager.getCurrentState, function(newState) {

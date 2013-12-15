@@ -34,9 +34,13 @@
       </div>
 
       <div id="panel">
-        <div id="gameBoardSection" class="panel-section">
-          <div id="gameBoard" ng-controller="GameBoardCtrl" ng-show="data">
-            <div class="game-board-column"  ng-repeat="column in data" ng-click="insertCheckerIntoColumn($index)">
+        <div id="gameBoardSection" class="panel-section" ng-controller="GameBoardSectionCtrl">
+          <div id="gameRules" class="text-center" ng-hide="data">
+            <h3>Game Rules</h3>
+            <img id="gameRulesPicture" src="/images/rules.png" alt="Game rules"></img>
+          </div>
+          <div id="gameBoard" ng-show="data">
+            <div class="game-board-column" ng-repeat="column in data" ng-click="insertCheckerIntoColumn($index)">
               <div class="game-board-slot" ng-repeat="slot in column | reverse" ng-class="{ 'selected-cell': isSlotSelected(slot), 'player-red-selected': isSlotSelectedByRedPlayer(slot), 'player-black-selected': isSlotSelectedByBlackPlayer(slot) }">
               </div>
             </div>
