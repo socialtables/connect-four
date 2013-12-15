@@ -87,11 +87,14 @@
               </tr>
             </tbody>
           </table>
-          <p class="game-prompt" ng-hide="winner">
+          <p class="game-prompt" ng-hide="winner || isDraw">
             Your turn: 
             <span ng-class="{ 'color-red': currentPlayer.type == 'red' }">
               {{ currentPlayer.type | uppercase }}
             </span>
+          </p>
+          <p class="game-prompt" ng-show="isDraw">
+            Its a draw...No one wins!
           </p>
           <p class="game-prompt" ng-show="winner">
             Congrats 

@@ -54,7 +54,7 @@ connectFourApp.factory('gameBoardData', ['appConstantValues', 'GameSlotData', fu
 			},
 			determineState: function() {
 				/* TODO */
-				return appConstantValues.gameStates.WINNER;
+				return appConstantValues.gameStates.DRAW;
 			},
 			insertChecker: function(args) {
 				_insertCheckerIntoColumn(args.playerType, args.columnIndex);
@@ -253,14 +253,10 @@ connectFourApp.controller('GameInfoCtrl', ['$scope', 'gameStateManager', 'appCon
 
 		$scope.$watch(gameStateManager.getCurrentState, function(newState) {
 			if(newState === appConstantValues.gameStates.WINNER) {
-				console.log("Do something in GameInfoCtrl if someone is a WINNER");
 				$scope.winner = $scope.currentPlayer.type;
-				/*
-					TODO: Update $scope.redPlayerScore = 0;
-        						$scope.blackPlayerScore = 0;
-				*/
+				_updateWinnersScoreOnScope();
 			} else if(newState === appConstantValues.gameStates.DRAW) {
-				console.log("Do something in GameInfoCtrl if there is a DRAW");
+				$scope.isDraw = true;
 				$scope.numOfDraws++;
 			} else {
 				// Default case
@@ -268,6 +264,8 @@ connectFourApp.controller('GameInfoCtrl', ['$scope', 'gameStateManager', 'appCon
 		});
 
 		$scope.restart = function() {
+			$scope.isDraw = false;
+
 			gameStateManager.restartGame();
 		}
 
@@ -277,6 +275,14 @@ connectFourApp.controller('GameInfoCtrl', ['$scope', 'gameStateManager', 'appCon
 			gameStateManager.startNewGame({
 				startingPlayer: winner
 			});	
+		}
+
+		function _updateWinnersScoreOnScope() {
+			if($scope.winner === appConstantValues.playerType.RED) {
+				$scope.redPlayerScore++;
+			} else {
+				$scope.blackPlayerScore++;
+			}
 		}
 	}
 ]);
