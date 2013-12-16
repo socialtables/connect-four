@@ -68,7 +68,7 @@ connectFourApp.factory('gameBoardClientSideModel', ['appConstantValues', 'GameSl
 				// NOTE: Returns representation of game board data used to persist to the server-side
 				return serverData;
 			},
-			set: function(serverResponse) {
+			reset: function(serverResponse) {
 				id = serverResponse.id;
 				serverData = serverResponse.data;
 				gameBoardData = _transformIntoGameBoardData(serverResponse.data);
@@ -136,14 +136,15 @@ connectFourApp.factory('gameBoardClientSideModel', ['appConstantValues', 'GameSl
 			var row;
 			var col;
 
+			var slot;
+			var slotSelectedByRecentPlayer;
+
 			// Top Check
 			for(row = recentRow + 1; row < recentRow + 4 && row < numRows; row++) {
-				var slot = gameBoardData[recentCol][row];
-				if(slot) {
-					if (!slot.selectedPlayer || slot.selectedPlayer !== recentCheckerPlayer) {
-						break;
-					}
-				} else {
+				slot = gameBoardData[recentCol][row];
+				slotSelectedByRecentPlayerOrDoesNotExist = _isSlotSelectedByRecentPlayerOrDoesNotExist(slot);
+
+				if(slotSelectedByRecentPlayerOrDoesNotExist) {
 					break;
 				}
 			}
@@ -153,12 +154,10 @@ connectFourApp.factory('gameBoardClientSideModel', ['appConstantValues', 'GameSl
 
 			// Bottom Check
 			for(row = recentRow - 1; row > recentRow - 4 && row >= 0; row--) {
-				var slot = gameBoardData[recentCol][row];
-				if(slot) {
-					if (!slot.selectedPlayer || slot.selectedPlayer !== recentCheckerPlayer) {
-						break;
-					}
-				} else {
+				slot = gameBoardData[recentCol][row];
+				slotSelectedByRecentPlayerOrDoesNotExist = _isSlotSelectedByRecentPlayerOrDoesNotExist(slot);
+
+				if(slotSelectedByRecentPlayerOrDoesNotExist) {
 					break;
 				}
 			}
@@ -168,12 +167,10 @@ connectFourApp.factory('gameBoardClientSideModel', ['appConstantValues', 'GameSl
 			
 			// Left Check
 			for(col = recentCol - 1; col > recentCol - 4 && col >= 0; col--) {
-				var slot = gameBoardData[col][recentRow];
-				if(slot) {
-					if (!slot.selectedPlayer || slot.selectedPlayer !== recentCheckerPlayer) {
-						break;
-					}
-				} else {
+				slot = gameBoardData[col][recentRow];
+				slotSelectedByRecentPlayerOrDoesNotExist = _isSlotSelectedByRecentPlayerOrDoesNotExist(slot);
+
+				if(slotSelectedByRecentPlayerOrDoesNotExist) {
 					break;
 				}
 			}
@@ -183,12 +180,10 @@ connectFourApp.factory('gameBoardClientSideModel', ['appConstantValues', 'GameSl
 
 			// Right Check
 			for(col = recentCol + 1; col < recentCol + 4 && col < numColumns; col++) {
-				var slot = gameBoardData[col][recentRow];
-				if(slot) {
-					if (!slot.selectedPlayer || slot.selectedPlayer !== recentCheckerPlayer) {
-						break;
-					}
-				} else {
+				slot = gameBoardData[col][recentRow];
+				slotSelectedByRecentPlayerOrDoesNotExist = _isSlotSelectedByRecentPlayerOrDoesNotExist(slot);
+
+				if(slotSelectedByRecentPlayerOrDoesNotExist) {
 					break;
 				}
 			}
@@ -199,12 +194,10 @@ connectFourApp.factory('gameBoardClientSideModel', ['appConstantValues', 'GameSl
 			// Top-Left Check
 			row = recentRow + 1;
 			for(col = recentCol - 1; col > recentCol - 4 && col >= 0; col--) {
-				var slot = gameBoardData[col][row++];
-				if(slot) {
-					if (!slot.selectedPlayer || slot.selectedPlayer !== recentCheckerPlayer) {
-						break;
-					}
-				} else {
+				slot = gameBoardData[col][row++];
+				slotSelectedByRecentPlayerOrDoesNotExist = _isSlotSelectedByRecentPlayerOrDoesNotExist(slot);
+
+				if(slotSelectedByRecentPlayerOrDoesNotExist) {
 					break;
 				}
 			}
@@ -215,12 +208,10 @@ connectFourApp.factory('gameBoardClientSideModel', ['appConstantValues', 'GameSl
 			// Bottom-Left Check
 			row = recentRow - 1;
 			for(col = recentCol - 1; col > recentCol - 4 && col >= 0; col--) {
-				var slot = gameBoardData[col][row--];
-				if(slot) {
-					if (!slot.selectedPlayer || slot.selectedPlayer !== recentCheckerPlayer) {
-						break;
-					}
-				} else {
+				slot = gameBoardData[col][row--];
+				slotSelectedByRecentPlayerOrDoesNotExist = _isSlotSelectedByRecentPlayerOrDoesNotExist(slot);
+
+				if(slotSelectedByRecentPlayerOrDoesNotExist) {
 					break;
 				}
 			}
@@ -231,12 +222,10 @@ connectFourApp.factory('gameBoardClientSideModel', ['appConstantValues', 'GameSl
 			// Top-Right Check
 			row = recentRow + 1;
 			for(col = recentCol + 1; col < recentCol + 4 && col < numColumns; col++) {
-				var slot = gameBoardData[col][row++];
-				if(slot) {
-					if (!slot.selectedPlayer || slot.selectedPlayer !== recentCheckerPlayer) {
-						break;
-					}
-				} else {
+				slot = gameBoardData[col][row++];
+				slotSelectedByRecentPlayerOrDoesNotExist = _isSlotSelectedByRecentPlayerOrDoesNotExist(slot);
+
+				if(slotSelectedByRecentPlayerOrDoesNotExist) {
 					break;
 				}
 			}
@@ -247,12 +236,10 @@ connectFourApp.factory('gameBoardClientSideModel', ['appConstantValues', 'GameSl
 			// Bottom-Right Check
 			row = recentRow - 1;
 			for(col = recentCol + 1; col < recentCol + 4 && col < numColumns; col++) {
-				var slot = gameBoardData[col][row--];
-				if(slot) {
-					if (!slot.selectedPlayer || slot.selectedPlayer !== recentCheckerPlayer) {
-						break;
-					}
-				} else {
+				slot = gameBoardData[col][row--];
+				slotSelectedByRecentPlayerOrDoesNotExist = _isSlotSelectedByRecentPlayerOrDoesNotExist(slot);
+
+				if(slotSelectedByRecentPlayerOrDoesNotExist) {
 					break;
 				}
 			}
@@ -266,6 +253,18 @@ connectFourApp.factory('gameBoardClientSideModel', ['appConstantValues', 'GameSl
 			}
 
 			return appConstantValues.gameStates.INPROGRESS;			
+		}
+
+		function _isSlotSelectedByRecentPlayerOrDoesNotExist(slot) {
+			if(slot) {
+				if(!slot.selectedPlayer || slot.selectedPlayer !== recentCheckerPlayer) {
+					return true;
+				} else {
+					return false;
+				}
+			} else {
+				return true;
+			}
 		}
 	}
 ]);
@@ -297,7 +296,7 @@ connectFourApp.factory('gameStateManager', ['appConstantValues', 'GameBoardResou
 				currentPlayer.type = args.startingPlayer;
 				GameBoardResource.create().$promise
 					.then(function(response) {
-						gameBoardClientSideModel.set(response);
+						gameBoardClientSideModel.reset(response);
 						currentState = appConstantValues.gameStates.INPROGRESS;
 					});
 			},
