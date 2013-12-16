@@ -133,14 +133,25 @@ connectFourApp.factory('gameBoardClientSideModel', ['appConstantValues', 'GameSl
 		function _determineGameState() {
 			var recentRow = recentCheckerPos.row;
 			var recentCol = recentCheckerPos.column;
+
+			var oneSpotAboveRecentRow = recentRow + 1;
+			var oneSpotBelowRecentRow = recentRow - 1;
+			var oneSpotLeftOfRecentCol = recentCol - 1;
+			var oneSpotRightOfRecentCol = recentCol + 1;
+
+			var fourSpotsAboveRecentRow = recentRow + 4;
+			var fourSpotsBelowRecentRow = recentRow - 4;
+			var fourSpotsRightOfRecentCol = recentCol + 4;
+			var fourSpotsLeftOfRecentCol = recentCol - 4;
+
 			var row;
 			var col;
-
 			var slot;
 			var slotSelectedByRecentPlayer;
+			var slotSelectedByRecentPlayerOrDoesNotExist;
 
-			// Top Check
-			for(row = recentRow + 1; row < recentRow + 4 && row < numRows; row++) {
+			// Top-to-Bottom Check
+			for(row = oneSpotBelowRecentRow; row > fourSpotsBelowRecentRow && row >= 0; row--) {
 				slot = gameBoardData[recentCol][row];
 				slotSelectedByRecentPlayerOrDoesNotExist = _isSlotSelectedByRecentPlayerOrDoesNotExist(slot);
 
@@ -148,104 +159,106 @@ connectFourApp.factory('gameBoardClientSideModel', ['appConstantValues', 'GameSl
 					break;
 				}
 			}
-			if(row === recentRow + 4) { 
-				return appConstantValues.gameStates.WINNER; 
-			}
 
-			// Bottom Check
-			for(row = recentRow - 1; row > recentRow - 4 && row >= 0; row--) {
-				slot = gameBoardData[recentCol][row];
-				slotSelectedByRecentPlayerOrDoesNotExist = _isSlotSelectedByRecentPlayerOrDoesNotExist(slot);
-
-				if(slotSelectedByRecentPlayerOrDoesNotExist) {
-					break;
-				}
-			}
-			if(row === recentRow - 4) { 
+			if(row === fourSpotsBelowRecentRow) { 
 				return appConstantValues.gameStates.WINNER; 
 			}
 			
-			// Left Check
-			for(col = recentCol - 1; col > recentCol - 4 && col >= 0; col--) {
-				slot = gameBoardData[col][recentRow];
-				slotSelectedByRecentPlayerOrDoesNotExist = _isSlotSelectedByRecentPlayerOrDoesNotExist(slot);
-
-				if(slotSelectedByRecentPlayerOrDoesNotExist) {
-					break;
-				}
-			}
-			if(col === recentCol - 4) { 
-				return appConstantValues.gameStates.WINNER; 
-			}
-
-			// Right Check
-			for(col = recentCol + 1; col < recentCol + 4 && col < numColumns; col++) {
-				slot = gameBoardData[col][recentRow];
-				slotSelectedByRecentPlayerOrDoesNotExist = _isSlotSelectedByRecentPlayerOrDoesNotExist(slot);
-
-				if(slotSelectedByRecentPlayerOrDoesNotExist) {
-					break;
-				}
-			}
-			if(col === recentCol + 4) { 
-				return appConstantValues.gameStates.WINNER; 
-			}
+			// Left-to-Right Check
+			var checkerCount = 0;
+			var failures = 0;
+			var counter = 3;
 			
-			// Top-Left Check
-			row = recentRow + 1;
-			for(col = recentCol - 1; col > recentCol - 4 && col >= 0; col--) {
-				slot = gameBoardData[col][row++];
-				slotSelectedByRecentPlayerOrDoesNotExist = _isSlotSelectedByRecentPlayerOrDoesNotExist(slot);
+			col = oneSpotLeftOfRecentCol;
 
-				if(slotSelectedByRecentPlayerOrDoesNotExist) {
-					break;
+			while(counter > 0 && failures < 2) {
+				columnData = gameBoardData[col];
+				
+				if(columnData) {
+					slot = columnData[recentRow];
+				} else {
+					slot = null;
+				}
+
+				if(slot) {
+					if(slot.selectedPlayer === recentCheckerPlayer) {
+						checkerCount++;
+						counter--;
+						if(col < recentCol) {
+							col--;
+						} else {
+							col++;
+						}
+					} else {
+						col = oneSpotRightOfRecentCol;
+						failures++;
+					}
+				} else {
+					col = oneSpotRightOfRecentCol;
+					failures++;
 				}
 			}
-			if(col === recentCol - 4) { 
+
+			if(checkerCount === 3) {
 				return appConstantValues.gameStates.WINNER; 
 			}
 
-			// Bottom-Left Check
-			row = recentRow - 1;
-			for(col = recentCol - 1; col > recentCol - 4 && col >= 0; col--) {
-				slot = gameBoardData[col][row--];
-				slotSelectedByRecentPlayerOrDoesNotExist = _isSlotSelectedByRecentPlayerOrDoesNotExist(slot);
-
-				if(slotSelectedByRecentPlayerOrDoesNotExist) {
-					break;
-				}
-			}
-			if(col === recentCol - 4) { 
-				return appConstantValues.gameStates.WINNER; 
-			}
 			
-			// Top-Right Check
-			row = recentRow + 1;
-			for(col = recentCol + 1; col < recentCol + 4 && col < numColumns; col++) {
-				slot = gameBoardData[col][row++];
-				slotSelectedByRecentPlayerOrDoesNotExist = _isSlotSelectedByRecentPlayerOrDoesNotExist(slot);
+			// // Top-Left Check
+			// row = oneSpotAboveRecentRow;
+			// for(col = oneSpotLeftOfRecentCol; col > fourSpotsLeftOfRecentCol && col >= 0; col--) {
+			// 	slot = gameBoardData[col][row++];
+			// 	slotSelectedByRecentPlayerOrDoesNotExist = _isSlotSelectedByRecentPlayerOrDoesNotExist(slot);
 
-				if(slotSelectedByRecentPlayerOrDoesNotExist) {
-					break;
-				}
-			}
-			if(col === recentCol + 4) { 
-				return appConstantValues.gameStates.WINNER; 
-			}
+			// 	if(slotSelectedByRecentPlayerOrDoesNotExist) {
+			// 		break;
+			// 	}
+			// }
+			// if(col === fourSpotsLeftOfRecentCol) { 
+			// 	return appConstantValues.gameStates.WINNER; 
+			// }
+
+			// // Bottom-Left Check
+			// row = oneSpotBelowRecentRow;
+			// for(col = oneSpotLeftOfRecentCol; col > fourSpotsLeftOfRecentCol && col >= 0; col--) {
+			// 	slot = gameBoardData[col][row--];
+			// 	slotSelectedByRecentPlayerOrDoesNotExist = _isSlotSelectedByRecentPlayerOrDoesNotExist(slot);
+
+			// 	if(slotSelectedByRecentPlayerOrDoesNotExist) {
+			// 		break;
+			// 	}
+			// }
+			// if(col === fourSpotsLeftOfRecentCol) { 
+			// 	return appConstantValues.gameStates.WINNER; 
+			// }
 			
-			// Bottom-Right Check
-			row = recentRow - 1;
-			for(col = recentCol + 1; col < recentCol + 4 && col < numColumns; col++) {
-				slot = gameBoardData[col][row--];
-				slotSelectedByRecentPlayerOrDoesNotExist = _isSlotSelectedByRecentPlayerOrDoesNotExist(slot);
+			// // Top-Right Check
+			// row = oneSpotAboveRecentRow;
+			// for(col = oneSpotRightOfRecentCol; col < fourSpotsRightOfRecentCol && col < numColumns; col++) {
+			// 	slot = gameBoardData[col][row++];
+			// 	slotSelectedByRecentPlayerOrDoesNotExist = _isSlotSelectedByRecentPlayerOrDoesNotExist(slot);
 
-				if(slotSelectedByRecentPlayerOrDoesNotExist) {
-					break;
-				}
-			}
-			if(col === recentCol + 4) { 
-				return appConstantValues.gameStates.WINNER; 
-			}
+			// 	if(slotSelectedByRecentPlayerOrDoesNotExist) {
+			// 		break;
+			// 	}
+			// }
+			// if(col === fourSpotsRightOfRecentCol) { 
+			// 	return appConstantValues.gameStates.WINNER; 
+			// }
+			
+			// // Bottom-Right Check
+			// row = oneSpotBelowRecentRow;
+			// for(col = oneSpotRightOfRecentCol; col < fourSpotsRightOfRecentCol && col < numColumns; col++) {
+			// 	slot = gameBoardData[col][row--];
+			// 	slotSelectedByRecentPlayerOrDoesNotExist = _isSlotSelectedByRecentPlayerOrDoesNotExist(slot);
+
+			// 	if(slotSelectedByRecentPlayerOrDoesNotExist) {
+			// 		break;
+			// 	}
+			// }
+			// if(col === fourSpotsRightOfRecentCol) { 
+			// 	return appConstantValues.gameStates.WINNER; 
+			// }
 
 			// Draw Check
 			if(remainingSlots === 0) {
