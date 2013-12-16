@@ -50,6 +50,11 @@ connectFourApp.factory('gameBoardClientSideModel', ['appConstantValues', 'GameSl
 		var id;
 		var serverData;
 		var gameBoardData;
+		var recentCheckerPos;
+		var recentCheckerPlayer;
+		var remainingSlots;
+		var numColumns;
+		var numRows;
 
 		return {
 			get id() {
@@ -67,12 +72,20 @@ connectFourApp.factory('gameBoardClientSideModel', ['appConstantValues', 'GameSl
 				id = serverResponse.id;
 				serverData = serverResponse.data;
 				gameBoardData = _transformIntoGameBoardData(serverResponse.data);
+				recentCheckerPos = {
+					column: null,
+					row: null
+				};
+				recentCheckerPlayer = null;
+				numColumns = serverData.length;
+				numRows = serverData[0].length;
+				remainingSlots = numColumns * numRows;
 			},
 			determineState: function() {
-				/* TODO: Game board state detected algorighm goes here */
-				return appConstantValues.gameStates.INPROGRESS;
+				return _determineGameState();
 			},
 			insertChecker: function(args) {
+				recentCheckerPlayer = args.playerType;
 				_insertCheckerIntoColumn(args.playerType, args.columnIndex);
 				_updateNewCheckerPositionInServerData(args.playerType, args.columnIndex);
 			}
@@ -88,19 +101,26 @@ connectFourApp.factory('gameBoardClientSideModel', ['appConstantValues', 'GameSl
 
 		function _insertCheckerIntoColumn(playerType, columnIndex) {
 			var columnData = gameBoardData[columnIndex];
-		
-			var firstEmptySlotInColumn = _.find(columnData, function(slot) {
-				return !slot.selectedPlayer;
+			recentCheckerPos.column = columnIndex;
+
+			var firstEmptySlotInColumn = _.find(columnData, function(slot, index) {
+				var isEmptySlot = !slot.selectedPlayer;
+
+				if(isEmptySlot) {
+					recentCheckerPos.row = index;
+				}
+				return isEmptySlot;
 			});
 
 			if(firstEmptySlotInColumn) {
 				firstEmptySlotInColumn.selectedPlayer = playerType;
+				remainingSlots--;
 			}
 		}
 
 		function _updateNewCheckerPositionInServerData(playerType, columnIndex) {
 			var columnData = serverData[columnIndex];
-		
+	
 			_.every(columnData, function(slot, index) {
 				if(slot === null) {
 					columnData[index] = playerType;
@@ -108,6 +128,144 @@ connectFourApp.factory('gameBoardClientSideModel', ['appConstantValues', 'GameSl
 				}
 				return true;
 			});
+		}
+
+		function _determineGameState() {
+			var recentRow = recentCheckerPos.row;
+			var recentCol = recentCheckerPos.column;
+			var row;
+			var col;
+
+			// Top Check
+			for(row = recentRow + 1; row < recentRow + 4 && row < numRows; row++) {
+				var slot = gameBoardData[recentCol][row];
+				if(slot) {
+					if (!slot.selectedPlayer || slot.selectedPlayer !== recentCheckerPlayer) {
+						break;
+					}
+				} else {
+					break;
+				}
+			}
+			if(row === recentRow + 4) { 
+				return appConstantValues.gameStates.WINNER; 
+			}
+
+			// Bottom Check
+			for(row = recentRow - 1; row > recentRow - 4 && row >= 0; row--) {
+				var slot = gameBoardData[recentCol][row];
+				if(slot) {
+					if (!slot.selectedPlayer || slot.selectedPlayer !== recentCheckerPlayer) {
+						break;
+					}
+				} else {
+					break;
+				}
+			}
+			if(row === recentRow - 4) { 
+				return appConstantValues.gameStates.WINNER; 
+			}
+			
+			// Left Check
+			for(col = recentCol - 1; col > recentCol - 4 && col >= 0; col--) {
+				var slot = gameBoardData[col][recentRow];
+				if(slot) {
+					if (!slot.selectedPlayer || slot.selectedPlayer !== recentCheckerPlayer) {
+						break;
+					}
+				} else {
+					break;
+				}
+			}
+			if(col === recentCol - 4) { 
+				return appConstantValues.gameStates.WINNER; 
+			}
+
+			// Right Check
+			for(col = recentCol + 1; col < recentCol + 4 && col < numColumns; col++) {
+				var slot = gameBoardData[col][recentRow];
+				if(slot) {
+					if (!slot.selectedPlayer || slot.selectedPlayer !== recentCheckerPlayer) {
+						break;
+					}
+				} else {
+					break;
+				}
+			}
+			if(col === recentCol + 4) { 
+				return appConstantValues.gameStates.WINNER; 
+			}
+			
+			// Top-Left Check
+			row = recentRow + 1;
+			for(col = recentCol - 1; col > recentCol - 4 && col >= 0; col--) {
+				var slot = gameBoardData[col][row++];
+				if(slot) {
+					if (!slot.selectedPlayer || slot.selectedPlayer !== recentCheckerPlayer) {
+						break;
+					}
+				} else {
+					break;
+				}
+			}
+			if(col === recentCol - 4) { 
+				return appConstantValues.gameStates.WINNER; 
+			}
+
+			// Bottom-Left Check
+			row = recentRow - 1;
+			for(col = recentCol - 1; col > recentCol - 4 && col >= 0; col--) {
+				var slot = gameBoardData[col][row--];
+				if(slot) {
+					if (!slot.selectedPlayer || slot.selectedPlayer !== recentCheckerPlayer) {
+						break;
+					}
+				} else {
+					break;
+				}
+			}
+			if(col === recentCol - 4) { 
+				return appConstantValues.gameStates.WINNER; 
+			}
+			
+			// Top-Right Check
+			row = recentRow + 1;
+			for(col = recentCol + 1; col < recentCol + 4 && col < numColumns; col++) {
+				var slot = gameBoardData[col][row++];
+				if(slot) {
+					if (!slot.selectedPlayer || slot.selectedPlayer !== recentCheckerPlayer) {
+						break;
+					}
+				} else {
+					break;
+				}
+			}
+			if(col === recentCol + 4) { 
+				return appConstantValues.gameStates.WINNER; 
+			}
+			
+			// Bottom-Right Check
+			row = recentRow - 1;
+			for(col = recentCol + 1; col < recentCol + 4 && col < numColumns; col++) {
+				var slot = gameBoardData[col][row--];
+				if(slot) {
+					if (!slot.selectedPlayer || slot.selectedPlayer !== recentCheckerPlayer) {
+						break;
+					}
+				} else {
+					break;
+				}
+			}
+			if(col === recentCol + 4) { 
+				return appConstantValues.gameStates.WINNER; 
+			}
+
+			// Draw Check
+			if(remainingSlots === 0) {
+				return appConstantValues.gameStates.DRAW;
+			}
+
+			return appConstantValues.gameStates.INPROGRESS;			
 		}
 	}
 ]);
