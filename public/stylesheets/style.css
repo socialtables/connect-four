@@ -19,16 +19,30 @@
 	color: red;
 }
 
+.color-black {
+	color: black;	
+}
+
 .start-menu-element {
 	margin: 10px 0;
 }
 
+#startingMessage {
+	font-size: 1.7em;
+}
+
+#playerSelectionContainer {
+	font-size: 1.3em;
+}
+
 #scoreTableCaption {
-	font-size: 3em;
+	font-size: 4em;
+	color: green;
 }
 
 .game-prompt {
-	font-size: 1.2em;
+	font-size: 2.6em;
+	color: rgb(111, 111, 111);
 }
 
 #gameBoardSection {
@@ -50,7 +64,7 @@
 
 #gameBoard {
 	background-color: yellow;
-	width: 499px;
+	width: 505px;
 	border: solid 1px black;
 }
 

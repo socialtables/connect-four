@@ -56,8 +56,8 @@
     <!-- Game Menu Templates -->
     <script id="startMenuTemplate" type="text/ng-template">
       <div ng-controller="StartMenuCtrl" class="text-center">
-        <p class="start-menu-element">Select the player who will take the first turn and then click <strong>Start</strong> to play!</p>
-        <div class="start-menu-element">
+        <p id="startingMessage" class="start-menu-element">Select the player who will take the first turn and then click <strong>Start</strong> to play!</p>
+        <div id="playerSelectionContainer" class="start-menu-element">
           <label class="radio-inline color-red">
               <input type="radio" ng-model="startingPlayer" value="{{ firstPlayer }}">
               {{ firstPlayer | uppercase }}
@@ -93,7 +93,7 @@
           </table>
           <p class="game-prompt" ng-hide="winner || isDraw">
             Your turn: 
-            <span ng-class="{ 'color-red': currentPlayer.type == 'red' }">
+            <span ng-class="{ 'color-red': isRedCurrentPlayer(), 'color-black': isBlackCurrentPlayer() }">
               {{ currentPlayer.type | uppercase }}
             </span>
           </p>
@@ -101,10 +101,12 @@
             Its a draw...No one wins!
           </p>
           <p class="game-prompt" ng-show="winner">
-            Congrats 
-            <span ng-class="{ 'color-red': currentPlayer.type == 'red' }">
+            Congratulations
+            <span ng-class="{ 'color-red': isRedCurrentPlayer(), 'color-black': isBlackCurrentPlayer() }">
               {{ winner | uppercase }}
-            </span>!!! You are the victor!
+            </span>!!!
+            </br>
+            You are the victor!
           </p>
           <button type="button" class="btn btn-danger btn-lg" ng-click="restart(currentPlayer.type)" ng-hide="winner">Restart</button>
           <button type="button" class="btn btn-success btn-lg" ng-click="playAgain(winner)" ng-show="winner">Play Again</button>
