@@ -28,17 +28,9 @@ connectFourApp.factory('GameSlotData', ['appConstantValues',
 	function(appConstantValues) {
 
 		function GameSlotData() {
-			this._selectedPlayer = null;
+			this.selectedPlayer = null;
+			this.isWinningSlot = false;
 		}
-
-		Object.defineProperty(GameSlotData.prototype, "selectedPlayer", {
-			get: function() { 
-				return this._selectedPlayer;
-			},
-            set: function(newPlayerType) {
-            	this._selectedPlayer = newPlayerType;
-            }
-        });
 
 		return GameSlotData;
 	}
@@ -151,22 +143,32 @@ connectFourApp.factory('gameBoardClientSideModel', ['appConstantValues', 'GameSl
 			var row;
 			var col;
 			var slot;
-			var slotSelectedByRecentPlayerOrDoesNotExist;
 			var failures;
 			var counter;
+
+			var recentSlot = gameBoardData[recentCol][recentRow];
+			var winningSlots = [];
+			winningSlots.push(recentSlot);
 
 			// Top-to-Bottom Check
 			for(row = oneSpotBelowRecentRow; row > fourSpotsBelowRecentRow && row >= 0; row--) {
 				slot = gameBoardData[recentCol][row];
-				slotSelectedByRecentPlayerOrDoesNotExist = _isSlotSelectedByRecentPlayerOrDoesNotExist(slot);
-
-				if(slotSelectedByRecentPlayerOrDoesNotExist) {
-					break;
+				if(slot) {
+					if(slot.selectedPlayer === recentCheckerPlayer) {
+						winningSlots.push(slot);
+					} else {
+						break;
+					}
+				} else {
+					break
 				}
 			}
 
 			if(row === fourSpotsBelowRecentRow) { 
+				_markWinningSlots(winningSlots);
 				return appConstantValues.gameStates.WINNER; 
+			} else {
+				winningSlots.splice(1, 3);
 			}
 			
 			// Left-to-Right Check
@@ -186,6 +188,8 @@ connectFourApp.factory('gameBoardClientSideModel', ['appConstantValues', 'GameSl
 
 				if(slot) {
 					if(slot.selectedPlayer === recentCheckerPlayer) {
+						winningSlots.push(slot);
+
 						counter--;
 						if(col < recentCol) {
 							col--;
@@ -203,7 +207,10 @@ connectFourApp.factory('gameBoardClientSideModel', ['appConstantValues', 'GameSl
 			}
 
 			if(counter === 0) {
+				_markWinningSlots(winningSlots);
 				return appConstantValues.gameStates.WINNER; 
+			} else {
+				winningSlots.splice(1, 3);
 			}
 
 			// Top Left-to-Bottom Right Check
@@ -224,6 +231,8 @@ connectFourApp.factory('gameBoardClientSideModel', ['appConstantValues', 'GameSl
 
 				if(slot) {
 					if(slot.selectedPlayer === recentCheckerPlayer) {
+						winningSlots.push(slot);
+
 						counter--;
 						if(col < recentCol) {
 							col--;
@@ -245,7 +254,10 @@ connectFourApp.factory('gameBoardClientSideModel', ['appConstantValues', 'GameSl
 			}
 
 			if(counter === 0) {
+				_markWinningSlots(winningSlots);
 				return appConstantValues.gameStates.WINNER; 
+			} else {
+				winningSlots.splice(1, 3);
 			}
 
 			// Bottom Left-to-Top Right Check
@@ -266,6 +278,8 @@ connectFourApp.factory('gameBoardClientSideModel', ['appConstantValues', 'GameSl
 
 				if(slot) {
 					if(slot.selectedPlayer === recentCheckerPlayer) {
+						winningSlots.push(slot);
+
 						counter--;
 						if(col < recentCol) {
 							col--;
@@ -287,8 +301,11 @@ connectFourApp.factory('gameBoardClientSideModel', ['appConstantValues', 'GameSl
 			}
 
 			if(counter === 0) {
+				_markWinningSlots(winningSlots);
 				return appConstantValues.gameStates.WINNER; 
-			}	
+			} else {
+				winningSlots.splice(1, 3);
+			}
 	
 			// Draw Check
 			if(remainingSlots === 0) {
@@ -298,16 +315,10 @@ connectFourApp.factory('gameBoardClientSideModel', ['appConstantValues', 'GameSl
 			return appConstantValues.gameStates.INPROGRESS;			
 		}
 
-		function _isSlotSelectedByRecentPlayerOrDoesNotExist(slot) {
-			if(slot) {
-				if(!slot.selectedPlayer || slot.selectedPlayer !== recentCheckerPlayer) {
-					return true;
-				} else {
-					return false;
-				}
-			} else {
-				return true;
-			}
+		function _markWinningSlots(winningSlots) {
+			winningSlots.forEach(function(slot) {
+				slot.isWinningSlot = true;
+			});
 		}
 	}
 ]);

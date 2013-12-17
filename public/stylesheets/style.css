@@ -81,12 +81,16 @@
 	opacity: 0.78;
 }
 
-.game-board-slot.player-red-selected {
+.game-board-slot.player-red-selected-slot {
 	background-color: red;
 }
 
-.game-board-slot.player-black-selected {
+.game-board-slot.player-black-selected-slot {
 	background-color: black;
+}
+
+.game-board-slot.winning-slot {
+	background-color: rgb(0, 173, 0);
 }
 
 .game-board-slot {
