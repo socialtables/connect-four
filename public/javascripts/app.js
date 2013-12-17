@@ -78,8 +78,11 @@ connectFourApp.factory('gameBoardClientSideModel', ['appConstantValues', 'GameSl
 			},
 			insertChecker: function(args) {
 				recentCheckerPlayer = args.playerType;
-				_insertCheckerIntoColumn(args.playerType, args.columnIndex);
+
+				var checkerInserted = _insertCheckerIntoColumn(args.playerType, args.columnIndex);
 				_updateNewCheckerPositionInServerData(args.playerType, args.columnIndex);
+
+				return checkerInserted;
 			}
 		};
 
@@ -107,6 +110,9 @@ connectFourApp.factory('gameBoardClientSideModel', ['appConstantValues', 'GameSl
 			if(firstEmptySlotInColumn) {
 				firstEmptySlotInColumn.selectedPlayer = playerType;
 				remainingSlots--;
+				return true;
+			} else {
+				return false;
 			}
 		}
 
@@ -416,8 +422,8 @@ connectFourApp.filter('reverse', function() {
 	Controllers
 
 **********************/
-connectFourApp.controller('GameBoardSectionCtrl', ['$scope', 'gameStateManager', 'gameBoardClientSideModel', 'appConstantValues', 
-	function($scope, gameStateManager, gameBoardClientSideModel, appConstantValues) {
+connectFourApp.controller('GameBoardSectionCtrl', ['$rootScope', '$scope', 'gameStateManager', 'gameBoardClientSideModel', 'appConstantValues', 
+	function($rootScope, $scope, gameStateManager, gameBoardClientSideModel, appConstantValues) {
 
 		$scope.$watch(gameStateManager.getCurrentState, function(newState) {
 			$scope.data = gameBoardClientSideModel.gameBoardData;
@@ -426,14 +432,21 @@ connectFourApp.controller('GameBoardSectionCtrl', ['$scope', 'gameStateManager',
 		$scope.insertCheckerIntoColumn = function(colIndex) {
 			var gameState = gameStateManager.getCurrentState();
 
+			$rootScope.columnIsFull = false;
+
 			if(gameState === appConstantValues.gameStates.INPROGRESS) {
 				var currentPlayer = gameStateManager.getCurrentPlayer();
 
-				gameBoardClientSideModel.insertChecker({
+				var checkerInserted = gameBoardClientSideModel.insertChecker({
 					playerType: currentPlayer.type,
 					columnIndex: colIndex
 				});
-				gameStateManager.checkStateAndAdvanceGame();
+
+				if(checkerInserted) {
+					gameStateManager.checkStateAndAdvanceGame();
+				} else {
+					$rootScope.columnIsFull = true;
+				}
 			}
 		}
 

@@ -101,3 +101,7 @@
 	border: solid 1px rgb(182, 182, 182);
 	background-color: white;
 }
+
+#columnFullMsg {
+	color: rgb(189, 0, 0);
+}

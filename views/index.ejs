@@ -97,6 +97,9 @@
               {{ currentPlayer.type | uppercase }}
             </span>
           </p>
+          <p id="columnFullMsg" class="game-prompt" ng-show="columnIsFull">
+            This column is full! Please try inserting checker into another column!
+          </p>
           <p class="game-prompt" ng-show="isDraw">
             Its a draw...No one wins!
           </p>
