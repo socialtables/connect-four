@@ -1,0 +1,1 @@
+var connectFourApp = angular.module('connectFourApp', ['ngResource']);
