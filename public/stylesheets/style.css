@@ -6,3 +6,19 @@ body {
 a {
   color: #224455;
 }
+
+.cell {
+	width: 100px;
+	height: 100px;
+	text-align: center;
+	background-color: grey;
+	display: inline-block;
+}
+
+.red.cell {
+	background-color: red;
+}
+
+.black.cell {
+	background-color: black;
+}

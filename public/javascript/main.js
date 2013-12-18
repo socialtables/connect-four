@@ -12,9 +12,9 @@ require.config({
 	}
 });
 
-require(['q', 'knockout', 'gameStatechart'], function (Q, ko, gameStatechart) {
-	console.log(ko);
-	Q.longStackSupport = true;
+require(['q', 'knockout', 'game'],
+	function (Q, ko, game) {
+		Q.longStackSupport = true;
 
-	gameStatechart.begin();
-});
+		game.begin();
+	});
