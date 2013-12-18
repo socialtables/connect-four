@@ -3,11 +3,47 @@
   <head>
     <title><%= title %></title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script src="javascript/require.js" data-main="/javascript/main.js"></script>
   </head>
   <body>
-    <h1><%= title %></h1>
-    <p>Your mission is to replace this page with a badass <a href="http://en.wikipedia.org/wiki/Connect_Four">Connect 4</a> game.</p>
-    <p>We've given you the basic back end that you will be communicating with. Refer to the docs and guidelines in the <a href="https://github.com/socialtables/connect-four">Github repo</a>. Your job is to implement the user interface and visual representation of the game.</p>
-    <p>Good Luck!</p>
+    <h1>Connect Fowa'</h1>
+    <h3><span data-bind="text: overallState()"></span></h3>
+    <h5><span data-bind="text: subState()"></span></h5>
+    
+    <!-- chooseExistingOrNew -->
+    <div data-bind="visible: overallState() == 'chooseExistingOrNew'">
+      <a data-bind="click: function () { gameEvent('chooseNew') }" value="new">New</a>
+      <a data-bind="click: function () { gameEvent('chooseExisting') }" value="existing">Existing</a>
+    </div>
+    
+    <!-- create_game -->
+    <div data-bind="visible: overallState() == 'create_game'">
+      <input type="text" id="newGameName" placeholder="Name your game:" />
+      <a data-bind="click: function () { gameEvent('beginGame') }">Create</a>
+    </div>
+        
+    <!-- load_game -->
+    <div data-bind="visible: overallState() == 'load_game'">
+      Load Not yet implemented! <a data-bind="click: function () { gameEvent('replay') }">Main Menu</a>
+    </div>
+    
+    <!-- game_run -->
+    <div data-bind="visible: overallState() == 'game_run'">
+      <div data-bind="foreach: currentGame().rows">
+        <div data-bind="foreach: cells">
+          <div class="cell" data-bind="css: { red: value() == 'red', black: value() == 'black' }, click: function () { place($parentContext.$index(), $index()) }"></div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- game_over -->
+    <!-- TODO: IMPLEMENT AS LIGHTBOX -->
+    <div data-bind="visible: overallState() == 'game_over'">
+      <div class="cell" data-bind="css: { red: winner() == 'red', black: winner() == 'black' }, click: function () { place($parentContext.$index(), $index()) }">
+        <span data-bind="text: winner"></span> won!
+      </div>     
+      <a data-bind="click: function () { gameEvent('replay') }">Main Menu</a>
+    </div>
+    
   </body>
 </html>

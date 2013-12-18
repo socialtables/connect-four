@@ -4,5 +4,23 @@ body {
 }
 
 a {
-  color: #00B7FF;
+  color: #224455;
+}
+
+.cell {
+	width: 100px;
+	height: 100px;
+	text-align: center;
+	background-color: grey;
+	display: inline-block;
+}
+
+.red.cell {
+	background-color: red;
+	color: white;
+}
+
+.black.cell {
+	background-color: black;
+	color: white;
 }
