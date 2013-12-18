@@ -17,8 +17,10 @@ a {
 
 .red.cell {
 	background-color: red;
+	color: white;
 }
 
 .black.cell {
 	background-color: black;
+	color: white;
 }

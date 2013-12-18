@@ -51,6 +51,9 @@ define('game', ['knockout', 'jquery', 'q', 'underscore', 'stativus'],
 				},
 				beginGame: function () {
 					this.goToState('game_run')
+				},
+				replay: function () {
+					this.goToState('chooseExistingOrNew')
 				}
 			});
 			sc.addState('game_run', {
