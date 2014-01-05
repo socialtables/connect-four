@@ -51,16 +51,36 @@
           </div>
         </div>
         <div id="menusSection" class="panel-section" ng-controller="MenusSectionCtrl">
+          <div ng-if="showSelectGameTypeMenu" ng-include="'selectGameTypeMenuTemplate'"></div>
+          <div ng-if="showInputUsernameScreen" ng-include="'showInputUsernameScreenTemplate'"></div>
           <div ng-if="showStartMenu" ng-include="'startMenuTemplate'"></div>
-          <div ng-if="showGameInfo" ng-include="'gameInfoTemplate'"></div>
+          <div ng-if="showGameInfo" ng-include="'gameInfoTemplate'"></div> 
         </div>
       </div>
     </div>
 
     <!-- Game Menu Templates -->
+    <script id="selectGameTypeMenuTemplate" type="text/ng-template">
+      <div ng-controller="SelectGameTypeMenuCtrl" class='text-center'>
+        <p class="initial-message">Welcome to Connect 4! Please select a game type:</p>
+        <div id="selectGameTypeMenuBtnContainer">
+          <button type="button" class="btn btn-primary btn-lg btn-block" ng-click="takeTurns()">Take turns on the same computer</button>
+          <button type="button" class="btn btn-info btn-lg btn-block" ng-click="playRemoteGame()">Play against a remote player</button>
+        </div>
+      <div>
+    </script>
+
+    <script id="showInputUsernameScreenTemplate" type="text/ng-template">
+      <form>
+        <label for="username">Enter a username:</label>
+        <input type="text" id="username"></input>
+        <button type="submit">Create</button>
+      </form>
+    </script>
+
     <script id="startMenuTemplate" type="text/ng-template">
       <div ng-controller="StartMenuCtrl" class="text-center">
-        <p id="startingMessage" class="start-menu-element">Select the player who will take the first turn and then click <strong>Start</strong> to play!</p>
+        <p id="startingMessage" class="initial-message start-menu-element">Select the player who will take the first turn and then click <strong>Start</strong> to play!</p>
         <div id="playerSelectionContainer" class="start-menu-element">
           <label class="radio-inline color-red">
               <input type="radio" ng-model="startingPlayer" value="{{ firstPlayer }}">

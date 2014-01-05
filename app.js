@@ -4,8 +4,8 @@
  */
 
 var express = require('express');
-var routes = require('./routes');
-var game = require('./routes/game');
+var routes = require('./lib/routes');
+var game = require('./lib/routes/game');
 var http = require('http');
 var path = require('path');
 

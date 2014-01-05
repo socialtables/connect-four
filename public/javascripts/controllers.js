@@ -52,16 +52,29 @@ connectFourApp.controller('GameBoardSectionCtrl', ['$rootScope', '$scope', 'game
 	}
 ]);
 
-
-connectFourApp.controller('MenusSectionCtrl', ['$scope', 'gameStateManager', 'appConstantValues', 
-	function($scope, gameStateManager, appConstantValues) {
+connectFourApp.controller('SelectGameTypeMenuCtrl', ['$scope', '$rootScope',
+	function($scope, $rootScope) {
 		
-		$scope.showStartMenu = true;
+		$scope.takeTurns = function() {
+			$rootScope.showSelectGameTypeMenu = false;
+			$rootScope.showStartMenu = true;
+		}
+
+		$scope.playRemoteGame = function() {
+			console.log("play remote game");
+		}
+	}
+]);
+
+connectFourApp.controller('MenusSectionCtrl', ['$scope', '$rootScope', 'gameStateManager', 'appConstantValues', 
+	function($scope, $rootScope, gameStateManager, appConstantValues) {
+		
+		$rootScope.showSelectGameTypeMenu = true;
 
 		$scope.$watch(gameStateManager.getCurrentState, function(newState) {
 			if(newState === appConstantValues.gameStates.INPROGRESS) {
-				$scope.showStartMenu = false;
-				$scope.showGameInfo = true;
+				$rootScope.showStartMenu = false;
+				$rootScope.showGameInfo = true;
 			}
 		});	
 	}

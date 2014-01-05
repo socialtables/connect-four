@@ -27,7 +27,7 @@
 	margin: 10px 0;
 }
 
-#startingMessage {
+.initial-message {
 	font-size: 1.7em;
 }
 
@@ -104,4 +104,8 @@
 
 #columnFullMsg {
 	color: rgb(189, 0, 0);
+}
+
+#selectGameTypeMenuBtnContainer {
+	padding: 10px;
 }
