@@ -52,7 +52,7 @@
         </div>
         <div id="menusSection" class="panel-section" ng-controller="MenusSectionCtrl">
           <div ng-if="showSelectGameTypeMenu" ng-include="'selectGameTypeMenuTemplate'"></div>
-          <div ng-if="showInputUsernameScreen" ng-include="'showInputUsernameScreenTemplate'"></div>
+          <div ng-if="showRemoteGameStartingMenu" ng-include="'showRemoteGameStartingMenuTemplate'"></div>
           <div ng-if="showStartMenu" ng-include="'startMenuTemplate'"></div>
           <div ng-if="showGameInfo" ng-include="'gameInfoTemplate'"></div> 
         </div>
@@ -70,12 +70,16 @@
       <div>
     </script>
 
-    <script id="showInputUsernameScreenTemplate" type="text/ng-template">
-      <form>
-        <label for="username">Enter a username:</label>
-        <input type="text" id="username"></input>
-        <button type="submit">Create</button>
-      </form>
+    <script id="showRemoteGameStartingMenuTemplate" type="text/ng-template">
+      <div ng-controller="RemoteGameStartingMenuCtrl" class='text-center'>
+        <p>Create a username</p>
+        <form ng-submit="createUser()">
+          <label for="username">Username:</label>
+          <input type="text" id="username"></input>
+          <button class='btn btn-primary' type="submit">Create</button>
+        </form>
+        <p ng-hide="userData" class="text-muted">Loading...</p>
+      </div>
     </script>
 
     <script id="startMenuTemplate" type="text/ng-template">

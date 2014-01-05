@@ -61,7 +61,18 @@ connectFourApp.controller('SelectGameTypeMenuCtrl', ['$scope', '$rootScope',
 		}
 
 		$scope.playRemoteGame = function() {
-			console.log("play remote game");
+			$rootScope.showSelectGameTypeMenu = false;
+			$rootScope.showRemoteGameStartingMenu = true;
+		}
+	}
+]);
+
+connectFourApp.controller('RemoteGameStartingMenuCtrl', ['$scope', '$rootScope',
+	function($scope, $rootScope) {
+		
+		$scope.createUser = function() {
+			console.log("Create user");
+			$scope.userData = {};
 		}
 	}
 ]);
