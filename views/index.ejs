@@ -65,8 +65,12 @@
       <div ng-controller="SelectGameTypeMenuCtrl" class='text-center'>
         <p class="initial-message">Welcome to Connect 4! Please select a game type:</p>
         <div id="selectGameTypeMenuBtnContainer">
-          <button type="button" class="btn btn-primary btn-lg btn-block" ng-click="takeTurns()">Take turns on the same computer</button>
-          <button type="button" class="btn btn-info btn-lg btn-block" ng-click="playRemoteGame()">Play against a remote player</button>
+          <button type="button" class="btn btn-primary btn-lg btn-block" ng-click="takeTurns()">
+            <span class="glyphicon glyphicon-user"></span> Take turns on the same computer
+          </button>
+          <button type="button" class="btn btn-info btn-lg btn-block" ng-click="playRemoteGame()">
+            <span class="glyphicon glyphicon-globe"></span> Play against a remote player
+          </button>
         </div>
       <div>
     </script>
