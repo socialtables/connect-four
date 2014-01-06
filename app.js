@@ -34,6 +34,55 @@ app.get('/new', game.new);
 app.post('/save/:id', game.save);
 app.get('/:id', game.detail);
 
-http.createServer(app).listen(app.get('port'), function(){
+var server = http.createServer(app);
+
+server.listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });
+
+// socket.io for multiplayer games
+var io = require("socket.io").listen(server);
+var uuid = require("uuid");
+var firstUserJoined = false;
+
+io.sockets.on('connection', function(socket) {
+
+	socket.on('createUser', function(username) {
+
+		var newUserInfo = {
+			id: uuid.v4(),
+			name: username,
+			type: _determinePlayerType()
+		};
+
+		firstUserJoined = true;
+
+		socket.set('userInfo', newUserInfo, function() {
+			socket.emit('userCreated', newUserInfo);
+			// TODO: Find/assign an opponent
+			socket.set('opponentInfo', opponentInfo, function() {
+				socket.emit('opponentFound', {
+					userInfo: {},
+					opponentInfo: {},
+					isStartingPlayer: {}
+				});
+			});
+			
+			socket.on('makeMove', function(data) {
+				// TODO
+				// Check data.newGameState to see new game state
+				// Find out this player's opponent
+				// emit an 'opponentMadeMove' message to this player's opponent
+			});
+		});
+
+		function _determinePlayerType() {
+			if(!firstUserJoined) {
+				return 'red';
+			} else {
+				return 'black';
+			}
+		}
+
+	}); //End of 'createUser' listener
+}); //End of 'connection' listener

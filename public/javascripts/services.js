@@ -19,6 +19,12 @@ connectFourApp.constant('appConstantValues', {
 connectFourApp.factory('socket', ['appConstantValues',
 	function(appConstantValues) {
 
+		/* TODO: Remove this object after properly loading socket.io as a client-side dependency */
+		var io = {
+			connect: function() {}
+		}
+		/*****************************************************************************************/
+
 		var socket = io.connect(appConstantValues.socketURL);
 
 		return socket;
@@ -376,8 +382,9 @@ connectFourApp.factory('gameStateManager', ['appConstantValues', 'GameBoardResou
 					currentState = appConstantValues.gameStates.WAITING;
 				}
 
-				socket.on('gameStateChange', function(data) {
+				socket.on('opponentMadeMove', function(data) {
 					/*
+						TODO:
 
 						data.lastInsertedChecker = {
 							playerType:,
@@ -406,7 +413,18 @@ connectFourApp.factory('gameStateManager', ['appConstantValues', 'GameBoardResou
 		function _checkStateAndAdvanceGameForRemoteGame() {
 			var newGameState = gameBoardClientSideModel.determineState();
 
-			socket.emit("newGameState", newGameState);
+			/*
+				TODO:
+
+				data.lastInsertedChecker = {
+					playerType:,
+					columnIndex:	
+				}
+
+				data.newGameState
+
+			*/
+			socket.emit("makeMove", newGameState);
 
 			if(currentState === appConstantValues.gameStates.INPROGRESS) {
 				currentPlayer = opponentInfo;

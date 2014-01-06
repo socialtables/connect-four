@@ -83,8 +83,8 @@ connectFourApp.controller('RemoteGameStartingMenuCtrl', ['$scope', '$rootScope',
 			socket.on('opponentFound', function(data) {
 				gameStateManager.startNewRemoteGame({
 					userInfo: data.userInfo,
-					opponentInfo: data.opponentInfo 
-					isStartingPlayer: data.isStartingPlayer,
+					opponentInfo: data.opponentInfo,
+					isStartingPlayer: data.isStartingPlayer
 				});
 			});
 		}
@@ -131,27 +131,36 @@ connectFourApp.controller('GameInfoCtrl', ['$scope', 'gameStateManager', 'appCon
         $scope.blackPlayerScore = 0;
         $scope.numOfDraws = 0;
 
+        $scope.inProgress = true;
+
 		$scope.$watch(gameStateManager.getCurrentState, function(newState) {
+			if(newState !== appConstantValues.gameStates.INPROGRESS) {
+				$scope.inProgress = false;
+			}
+
 			if(newState === appConstantValues.gameStates.WINNER) {
 				$scope.winner = $scope.currentPlayer.type;
 				_updateWinnersScoreOnScope();
 			} else if(newState === appConstantValues.gameStates.DRAW) {
 				$scope.isDraw = true;
 				$scope.numOfDraws++;
+			} else if(newState === appConstantValues.gameStates.WAITING) {
+				$scope.isWaiting = true;
+			} else if(newState === appConstantValues.gameStates.OPPONENTWINS) {
+				$scope.isLooser = true;
+				_updateWinnersScoreOnScope();
 			} else {
-				// Default case
+				/* Default case */
 			}
 		});
 
 		$scope.restart = function() {
-			$scope.isDraw = false;
-
+			_resetScopeVariables();
 			gameStateManager.restartGame();
 		}
 
 		$scope.playAgain = function(winner) {
-			$scope.winner = null;
-
+			_resetScopeVariables();
 			gameStateManager.startNewGame({
 				startingPlayer: winner
 			});	
@@ -179,6 +188,12 @@ connectFourApp.controller('GameInfoCtrl', ['$scope', 'gameStateManager', 'appCon
 			} else {
 				$scope.blackPlayerScore++;
 			}
+		}
+
+		function _resetScopeVariables() {
+			$scope.isWaiting = $scope.isLooser = $scope.isDraw = false;
+			$scope.winner = null;
+			$scope.inProgress = true;
 		}
 	}
 ]);
