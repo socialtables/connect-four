@@ -8,6 +8,7 @@
   "dependencies": {
     "express": "3.4.4",
     "ejs": "*",
-    "uuid": "~1.4.1"
+    "uuid": "~1.4.1",
+    "socket.io": "latest"
   }
 }

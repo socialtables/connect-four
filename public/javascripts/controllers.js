@@ -67,12 +67,24 @@ connectFourApp.controller('SelectGameTypeMenuCtrl', ['$scope', '$rootScope',
 	}
 ]);
 
-connectFourApp.controller('RemoteGameStartingMenuCtrl', ['$scope', '$rootScope',
-	function($scope, $rootScope) {
+connectFourApp.controller('RemoteGameStartingMenuCtrl', ['$scope', '$rootScope', 'socket',
+	function($scope, $rootScope, socket) {
 		
 		$scope.createUser = function() {
-			console.log("Create user");
-			$scope.userData = {};
+			socket.emit('createUser', $scope.username);
+
+			socket.on('userCreated', function(newUserData) {
+				$scope.$apply(function() {
+					$scope.userData = newUserData;
+				});
+			});
+
+			//TODO: Server-side decides the player who will start
+			socket.on('opponentFound', function(data) {
+				gameStateManager.startNewGame({
+					startingPlayer: data.startingPlayer.color
+				});
+			});
 		}
 	}
 ]);

@@ -9,9 +9,19 @@ connectFourApp.constant('appConstantValues', {
     playerType: {
     	RED: "red",
     	BLACK: "black"
-    }
+    },
+    socketURL: "http://localhost"
 });
 
+
+connectFourApp.factory('socket', ['appConstantValues',
+	function(appConstantValues) {
+
+		var socket = io.connect(appConstantValues.socketURL);
+
+		return socket;
+	}
+]);
 
 connectFourApp.factory('GameSlotData', ['appConstantValues', 
 	function(appConstantValues) {
