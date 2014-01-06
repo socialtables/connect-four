@@ -2,9 +2,11 @@ connectFourApp.constant('appConstantValues', {
     gameStates: {
     	START: "START",
     	INPROGRESS: "INPROGRESS",
+    	WAITING: "WAITING",
     	WINNER: "WINNER",
     	DRAW: "DRAW",
-    	RESTART: "RESTART"
+    	RESTART: "RESTART",
+    	OPPONENTWINS: "OPPONENTWINS"
     },
     playerType: {
     	RED: "red",
@@ -330,13 +332,15 @@ connectFourApp.factory('gameBoardClientSideModel', ['appConstantValues', 'GameSl
 ]);
 
 
-connectFourApp.factory('gameStateManager', ['appConstantValues', 'GameBoardResource', 'gameBoardClientSideModel', 
-	function(appConstantValues, GameBoardResource, gameBoardClientSideModel) {
+connectFourApp.factory('gameStateManager', ['appConstantValues', 'GameBoardResource', 'gameBoardClientSideModel', 'socket',
+	function(appConstantValues, GameBoardResource, gameBoardClientSideModel, socket) {
 		
 		var currentState = appConstantValues.gameStates.START;
 		var currentPlayer = { // NOTE: Making 'currentPlayer' an object in order to take advantage of Angular's two-way data binding feature
 			type: null
 		};
+		var isRemoteGame = false;
+		var opponentPlayerInfo;
 
 		return {
 			getCurrentState: function() {
@@ -361,14 +365,64 @@ connectFourApp.factory('gameStateManager', ['appConstantValues', 'GameBoardResou
 						currentState = appConstantValues.gameStates.INPROGRESS;
 					});
 			},
+			startNewRemoteGame: function(args) {
+				isRemoteGame = true;
+				
+				if(args.isStartingPlayer) {
+					currentPlayer = args.userInfo;
+					currentState = appConstantValues.gameStates.INPROGRESS;
+				} else {
+					currentPlayer = args.opponentInfo;
+					currentState = appConstantValues.gameStates.WAITING;
+				}
+
+				socket.on('gameStateChange', function(data) {
+					/*
+
+						data.lastInsertedChecker = {
+							playerType:,
+							columnIndex:	
+						}
+
+						data.newGameState
+
+					*/
+					gameBoardClientSideModel.insertChecker(data.lastInsertedChecker);
+					if(data.newGameState === appConstantValues.gameStates.INPROGRESS) {
+						currentPlayer = args.userInfo;
+					}
+					currentState = data.newGameState;
+				});
+			},
 			checkStateAndAdvanceGame: function() {
-				GameBoardResource.update({ id: gameBoardClientSideModel.id }, gameBoardClientSideModel.serverData);
-				currentState = gameBoardClientSideModel.determineState();
-				if(currentState === appConstantValues.gameStates.INPROGRESS) {
-					_toggleCurrentPlayer();
-				};
+				if(isRemoteGame) {
+					_checkStateAndAdvanceGameForRemoteGame();
+				} else {
+					_checkStateAndAdvanceGameForSingleBrowser();
+				}
 			}
 		};
+
+		function _checkStateAndAdvanceGameForRemoteGame() {
+			var newGameState = gameBoardClientSideModel.determineState();
+
+			socket.emit("newGameState", newGameState);
+
+			if(currentState === appConstantValues.gameStates.INPROGRESS) {
+				currentPlayer = opponentInfo;
+				currentState = appConstantValues.gameStates.WAITING;
+			} else {
+				currentState = newGameState;
+			}
+		}
+
+		function _checkStateAndAdvanceGameForSingleBrowser() {
+			GameBoardResource.update({ id: gameBoardClientSideModel.id }, gameBoardClientSideModel.serverData);
+			currentState = gameBoardClientSideModel.determineState();
+			if(currentState === appConstantValues.gameStates.INPROGRESS) {
+				_toggleCurrentPlayer();
+			};			
+		}
 
 		function _toggleCurrentPlayer() {
 			currentPlayer.type = _getOppositePlayerType(currentPlayer.type);

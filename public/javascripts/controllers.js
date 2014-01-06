@@ -81,8 +81,10 @@ connectFourApp.controller('RemoteGameStartingMenuCtrl', ['$scope', '$rootScope',
 
 			//TODO: Server-side decides the player who will start
 			socket.on('opponentFound', function(data) {
-				gameStateManager.startNewGame({
-					startingPlayer: data.startingPlayer.color
+				gameStateManager.startNewRemoteGame({
+					userInfo: data.userInfo,
+					opponentInfo: data.opponentInfo 
+					isStartingPlayer: data.isStartingPlayer,
 				});
 			});
 		}
