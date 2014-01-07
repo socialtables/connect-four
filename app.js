@@ -62,7 +62,6 @@ io.sockets.on('connection', function(socket) {
 				playersWaitingForOpponent.forEach(function(socket, index) {
 					_emitOpponentFoundMessage(socket, index);
 				});
-				//playersWaitingForOpponent = [];
 			}
 		});
 	}); //End of 'createUser' listener
@@ -82,7 +81,7 @@ function _emitOpponentFoundMessage(socket, index) {
 			isStartingPlayer: _isStartingPlayer(index)
 		});
 
-		_bindToMakeMoveEvent(socket);
+		_bindToMakeMoveEvent(socket, index);
 	});
 }
 
@@ -102,14 +101,18 @@ function _findOpponentInfo(index) {
 	return playersWaitingForOpponent[oppositePlayerIndex];
 }
 
-function _bindToMakeMoveEvent(socket) {
+function _bindToMakeMoveEvent(socket, index) {
 	socket.on('makeMove', function(data) {
 		socket.get('opponentInfo', function (err, opponentInfo) {
-	      console.log("Got the opponentInfo");
-	      // opponentSocket.emit('opponentMadeMove.' + opponentInfo.id, {
-	      // 	lastInsertedChecker: data.lastInsertedChecker,
-	      // 	newGameState: data.newGameState
-	      // });
+	     	
+	    	// opponentSocket.emit('opponentMadeMove.' + opponentInfo.id, {
+	     //  		lastInsertedChecker: data.lastInsertedChecker,
+	     //  		newGameState: data.newGameState
+	     //  	});
+			console.log("DEBUG: Index is: " + index);
+			if(index == 1) {
+				playersWaitingForOpponent = []; 
+			}
 	    });
 	});
 }
