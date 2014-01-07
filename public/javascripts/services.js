@@ -19,11 +19,11 @@ connectFourApp.constant('appConstantValues', {
 connectFourApp.factory('socket', ['appConstantValues',
 	function(appConstantValues) {
 
-		/* TODO: Remove this object after properly loading socket.io as a client-side dependency */
-		var io = {
-			connect: function() {}
-		}
-		/*****************************************************************************************/
+		// /* TODO: Remove this object after properly loading socket.io as a client-side dependency */
+		// var io = {
+		// 	connect: function() {}
+		// }
+		// /*****************************************************************************************/
 
 		var socket = io.connect(appConstantValues.socketURL);
 
@@ -67,6 +67,12 @@ connectFourApp.factory('gameBoardClientSideModel', ['appConstantValues', 'GameSl
 			get serverData() {
 				// NOTE: Returns representation of game board data used to persist to the server-side
 				return serverData;
+			},
+			get lastInsertedChecker() {
+				return {
+					playerType: recentCheckerPlayer,
+					columnIndex: recentCheckerPos.column
+				};
 			},
 			reset: function(serverResponse) {
 				id = serverResponse.id;
@@ -373,27 +379,17 @@ connectFourApp.factory('gameStateManager', ['appConstantValues', 'GameBoardResou
 			},
 			startNewRemoteGame: function(args) {
 				isRemoteGame = true;
+				opponentPlayerInfo = args.opponentInfo;
 				
 				if(args.isStartingPlayer) {
 					currentPlayer = args.userInfo;
 					currentState = appConstantValues.gameStates.INPROGRESS;
 				} else {
-					currentPlayer = args.opponentInfo;
+					currentPlayer = opponentPlayerInfo;
 					currentState = appConstantValues.gameStates.WAITING;
 				}
 
-				socket.on('opponentMadeMove', function(data) {
-					/*
-						TODO:
-
-						data.lastInsertedChecker = {
-							playerType:,
-							columnIndex:	
-						}
-
-						data.newGameState
-
-					*/
+				socket.on('opponentMadeMove.' + opponentPlayerInfo.id, function(data) {
 					gameBoardClientSideModel.insertChecker(data.lastInsertedChecker);
 					if(data.newGameState === appConstantValues.gameStates.INPROGRESS) {
 						currentPlayer = args.userInfo;
@@ -411,23 +407,19 @@ connectFourApp.factory('gameStateManager', ['appConstantValues', 'GameBoardResou
 		};
 
 		function _checkStateAndAdvanceGameForRemoteGame() {
-			var newGameState = gameBoardClientSideModel.determineState();
+			var newGameState = opponentNewGameState = gameBoardClientSideModel.determineState();
 
-			/*
-				TODO:
+			if(newGameState === appConstantValues.gameStates.WINNER) {
+				opponentNewGameState = appConstantValues.gameStates.OPPONENTWINS;
+			}
 
-				data.lastInsertedChecker = {
-					playerType:,
-					columnIndex:	
-				}
-
-				data.newGameState
-
-			*/
-			socket.emit("makeMove", newGameState);
+			socket.emit('makeMove', {
+				lastInsertedChecker: gameBoardClientSideModel.lastInsertedChecker,
+				newGameState: opponentNewGameState
+			});
 
 			if(currentState === appConstantValues.gameStates.INPROGRESS) {
-				currentPlayer = opponentInfo;
+				currentPlayer = opponentPlayerInfo;
 				currentState = appConstantValues.gameStates.WAITING;
 			} else {
 				currentState = newGameState;

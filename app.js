@@ -43,46 +43,88 @@ server.listen(app.get('port'), function(){
 // socket.io for multiplayer games
 var io = require("socket.io").listen(server);
 var uuid = require("uuid");
-var firstUserJoined = false;
+var playersWaitingForOpponent = [];
 
 io.sockets.on('connection', function(socket) {
-
 	socket.on('createUser', function(username) {
-
 		var newUserInfo = {
 			id: uuid.v4(),
 			name: username,
 			type: _determinePlayerType()
 		};
 
-		firstUserJoined = true;
+		playersWaitingForOpponent.push(socket);
 
 		socket.set('userInfo', newUserInfo, function() {
 			socket.emit('userCreated', newUserInfo);
-			// TODO: Find/assign an opponent
-			socket.set('opponentInfo', opponentInfo, function() {
-				socket.emit('opponentFound', {
-					userInfo: {},
-					opponentInfo: {},
-					isStartingPlayer: {}
-				});
-			});
 			
-			socket.on('makeMove', function(data) {
-				// TODO
-				// Check data.newGameState to see new game state
-				// Find out this player's opponent
-				// emit an 'opponentMadeMove' message to this player's opponent
-			});
-		});
-
-		function _determinePlayerType() {
-			if(!firstUserJoined) {
-				return 'red';
-			} else {
-				return 'black';
+			if(playersWaitingForOpponent.length === 2) {
+				playersWaitingForOpponent.forEach(function(socket, index) {
+					_emitOpponentFoundMessage(socket, index);
+				});
+				//playersWaitingForOpponent = [];
 			}
-		}
-
+		});
 	}); //End of 'createUser' listener
 }); //End of 'connection' listener
+
+/*******************
+
+	  Helpers
+
+********************/
+function _emitOpponentFoundMessage(socket, index) {
+	var opponentInfo = _findOpponentInfo(index);
+	socket.set('opponentInfo', opponentInfo, function() {
+		socket.emit('opponentFound', {
+			userInfo: socket.get('userInfo'),
+			opponentInfo: opponentInfo,
+			isStartingPlayer: _isStartingPlayer(index)
+		});
+
+		_bindToMakeMoveEvent(socket);
+	});
+}
+
+function _isStartingPlayer(index) {
+	if(index === 0) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+function _findOpponentInfo(index) {
+	var oppositePlayerIndex = 0; 
+	if(index === 0) {
+		oppositePlayerIndex = 1;
+	}
+	return playersWaitingForOpponent[oppositePlayerIndex];
+}
+
+function _bindToMakeMoveEvent(socket) {
+	socket.on('makeMove', function(data) {
+		socket.get('opponentInfo', function (err, opponentInfo) {
+	      console.log("Got the opponentInfo");
+	      // opponentSocket.emit('opponentMadeMove.' + opponentInfo.id, {
+	      // 	lastInsertedChecker: data.lastInsertedChecker,
+	      // 	newGameState: data.newGameState
+	      // });
+	    });
+	});
+}
+
+var _determinePlayerType = (function() {
+	var fnHasNotBeenInvoked = true;
+
+	return function() {
+
+		if(fnHasNotBeenInvoked) {
+			fnHasNotBeenInvoked = false;
+			return 'red';
+		} else {
+			fnHasNotBeenInvoked = true
+			return 'black';
+		}
+	}
+})();

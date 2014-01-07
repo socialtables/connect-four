@@ -78,12 +78,12 @@
     <script id="showRemoteGameStartingMenuTemplate" type="text/ng-template">
       <div ng-controller="RemoteGameStartingMenuCtrl" class='text-center'>
         <p>Create a username</p>
-        <form ng-submit="createUser()">
+        <form ng-submit="createUser()" ng-hide="userData">
           <label for="username">Username:</label>
           <input type="text" id="username" ng-model="username"></input>
           <button class='btn btn-primary' type="submit">Create</button>
         </form>
-        <div ng-show="userData" >
+        <div ng-show="userData">
           <p>Welcome {{ userData.name }}!</p>
           <p class="text-muted">Waiting for an oppponent...</p>
         </div>
