@@ -154,7 +154,7 @@ function ConnectFourGame(id, grid) {
         }
         // Now the tough one -- doing the diagonals.
         for (var i = 0; i < grid.length; i++) {
-            // iterate backwards
+            // Iterate backwards to go from bottom to top
             for (var j = (grid[i].length - 1); j >= 0; j--) {
                 var current = grid[i][j];
                 if (current === null) {
@@ -224,7 +224,7 @@ function ConnectFourViewModel() {
      *
      * Insert a message into the notifications 'tray', with an optional
      * alert type (e.g. green for success, red for warning). Since these are
-     * transaction messages, they self-destruct after 5 seconds.
+     * transactional messages, they self-destruct after 5 seconds.
      */
     self.displayTimedNotification = function(message, alertType) {
         var notification = new ConnectFourNotification(message, alertType);
@@ -285,7 +285,7 @@ function ConnectFourViewModel() {
 
         var stored = false;
         var column = game.grid[x];
-        // Now remember, because 0,0 is the *top* left of the grid, we iterate
+        // Note because 0,0 is the *top* left of the grid, we iterate
         // backwards to fill it from the bottom up
         for (var i = (column.length - 1); i >= 0; i--) {
             if (!column[i].value()) {
