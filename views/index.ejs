@@ -1,13 +1,105 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Connect 4</title>
+    <link rel="stylesheet" href="stylesheets/foundation.css" />
+    <link rel="stylesheet" href="stylesheets/style.css" />
+    <script src="js/vendor/modernizr.js"></script>
   </head>
   <body>
-    <h1><%= title %></h1>
-    <p>Your mission is to replace this page with a badass <a href="http://en.wikipedia.org/wiki/Connect_Four">Connect 4</a> game.</p>
-    <p>We've given you the basic back end that you will be communicating with. Refer to the docs and guidelines in the <a href="https://github.com/socialtables/connect-four">Github repo</a>. Your job is to implement the user interface and visual representation of the game.</p>
-    <p>Good Luck!</p>
+
+    <div class="notifications" data-bind="foreach: currentNotifications">
+      <span class="radius label" data-bind="css: extraClass, text: message"></span>
+    </div>
+
+    <div class="row">
+      <div class="small-12 columns">
+        <div class="panel">
+
+          <div class="row">
+            <div class="small-3 small-centered columns">
+              <h1>Connect 4</h1>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="small-6 small-centered columns">
+              <button data-bind="click: startNewGame, enable: (currentGame() == null)" class="success button">New Game</button>
+              <button data-bind="click: saveGame, enable: currentGame" class="button">Save Game</button>
+              <button data-bind="click: quitGame, enable: currentGame" class="alert button">Quit Game</button>
+            </div>
+          </div>
+
+          <div class="row collapse">
+            <div class="small-2 columns">
+              <span class="prefix label-p1">Player One</span>
+            </div>
+            <div class="small-3 columns">
+              <input type="text" placeholder="Name" data-bind="value: playerOneName"/>
+            </div>
+
+            <div class="small-offset-2 small-2 columns">
+              <span class="prefix label-p2">Player Two</span>
+            </div>
+            <div class="small-3 columns">
+              <input type="text" placeholder="Name" data-bind="value: playerTwoName"/>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="row" data-bind="fadeVisible: (currentGame() == null)">
+      <div class="row collapse small-10 small-centered columns">
+        <div class="small-8 columns">
+          <input type="text" placeholder="Game ID" data-bind="value: loadGameId"/>
+        </div>
+        <div class="small-4 columns">
+          <a href="#" class="button postfix" data-bind="click: loadGame">Load Saved Game</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" data-bind="fadeVisible: currentGame">
+      <div class="panel small-6 columns">
+        <div class="small-10 small-centered columns instructions" data-bind="if: (currentGame() && !gameWinner())">
+          <p style="font-size: 120%">It's <span data-bind="text: currentPlayerName"></span>'s turn.</p>
+
+          <p>Click anywhere in a column to drop your piece into that column -- it will appear
+          atop any pieces already in the column, or at the bottom of the column if the column
+          is empty.</p>
+
+          <p>(<a href="http://www.hasbro.com/common/documents/dad2614d1c4311ddbd0b0800200c9a66/1EF6874419B9F36910222EB9858E8CB8.pdf">Rules</a>)</p>
+        </div>
+        <div class="small-10 small-centered columns instructions" data-bind="if: gameWinner">
+          <p style="font-size: 125%">Congratulations <span data-bind="text: currentPlayerName"></span>! You've won!</p>
+        </div>
+      </div>
+      <div class="small-6 columns">
+        <div id="grid" class="row">
+          <table class="small-centered">
+            <tbody data-bind="foreach: currentGameRows">
+              <tr data-bind="foreach: columns">
+                <td data-bind="css: valueForCSS, rowColumnClasses: $data, click: $root.selectCell"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <script src="js/vendor/jquery.js"></script>
+    <script src="js/vendor/underscore.js"></script>
+    <script src="js/vendor/knockout.js"></script>
+    <script src="js/connect-four/utils.js"></script>
+    <script src="js/connect-four/bindings.js"></script>
+    <script src="js/connect-four/main.js"></script>
+    <script type="text/javascript">
+      // Call this at the page level so it's clear from the HTML what'll happen
+      ko.applyBindings(new ConnectFourViewModel());
+    </script>
   </body>
 </html>
