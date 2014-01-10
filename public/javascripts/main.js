@@ -14,7 +14,7 @@ $(function() {
 	var declareWinner= function(player)
 	{
 		$(".players").hide();
-		return $(".info-div").html("<div class='message alert  alert-success'>"+player+" Won!</div>")	
+		return $(".info-box").html("<div class='message alert  alert-success'>"+player+" Won!</div>")	
 	};
 	// updates player's turn
 	var updateInfoBox=function(color){

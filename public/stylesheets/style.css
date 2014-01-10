@@ -53,10 +53,9 @@ a {
 
 .message{
 	color:white;
-	font-size:200%;
-	margin-top:20px;
+	font-size:150%;
 	text-align:center;
-
+	color:orange;
 }
 .arrow-info{
 	height:40px;
