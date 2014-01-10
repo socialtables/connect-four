@@ -9,7 +9,7 @@ $(function() {
 		$(".info-box").show()
 		$(".board").show();
 		$(".players").show();
-		$(".info-box").text("First Pick Your Color!")
+		$(".info-box").text("Click Player's Button then arrows")
 		$.get("/new",{},function(data){
 			grid=data.data;
 			gameId=data.id;
@@ -26,15 +26,14 @@ $(function() {
 	});
 	var declareWinner= function(player)
 	{
-		// $(".info-box").hide();
-		
 		$(".players").hide();
-
 		return $(".info-box").html("<div class='message alert  alert-success'>"+player+" Won!</div>")	
 	};
-
-
+	var updateInfoBox=function(color){
+		return $(".info-box").text(color+" player's turn, click "+color+" button");
+	}
 	var getConnectFour=function(column,row){
+
 		//checks columns Bottom
 		if(row<=2)
 		{
@@ -108,13 +107,12 @@ $(function() {
 			}
 
 		}
-
 	};
 
    
    	var redToken=function(){
    		$(".token-enterance").on("click",".token",function(){
-			
+			updateInfoBox("Blue");
            $(this).effect( "shake",{direction:"up",times:"1"});
 			var column=$(this).attr("id").toString();
 			var columnId=$("."+column).data("id");
@@ -124,8 +122,6 @@ $(function() {
 					$("."+column).children().eq(i).addClass("token-red");
 					grid[columnId][i]="red";
 					getConnectFour(columnId,i);
-					$(".btn-red").hide();
-					$(".btn-blue").show();
 					$(".token-enterance").off("click");
 					return;
 				}
@@ -136,6 +132,7 @@ $(function() {
    	var blueToken =function(){
 		$(".token-enterance").on("click",".token",function(){
 			console.log("clicked blue token")
+			updateInfoBox("Red");
 			$(this).effect( "shake",{direction:"up",times:"1"});
 			var column=$(this).attr("id").toString();
 			var columnId=$("."+column).data("id");
@@ -145,8 +142,6 @@ $(function() {
 					$("."+column).children().eq(i).addClass("token-blue");
 					grid[columnId][i]="blue";
 					getConnectFour(columnId,i);
-					$(".btn-blue").hide();
-					$(".btn-red").show();
 					$(".token-enterance").off("click");
 					return;
 				}

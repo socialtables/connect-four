@@ -33,16 +33,21 @@ a {
 }
 .info-box{
 	color:white;
-	font-size:200%;
+	font-size:150%;
 	margin-top:20px;
 	text-align:center;
+	width:200px;
+
 }
 .game-info{
 	margin-top:100px;
 }
-.container{
-	margin-top:20px;
+.board{
+	
 	width:500px;
+	clear:both;
+	float:right;
+
 }
 
 .message{
@@ -70,6 +75,14 @@ a {
 	border-right: 30px solid transparent;
 	border-top: 60px solid black;
 	background-color:white;
+}
+.head-container{
+ width:300px;
+ display:inline-block;
+ 
+}
+.game-info{
+	width:300px;
 }
 .players{
 	margin-bottom:20px;
