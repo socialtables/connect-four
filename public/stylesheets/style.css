@@ -36,12 +36,15 @@ a {
 	font-size:200%;
 	margin-top:20px;
 	text-align:center;
-
+}
+.game-info{
+	margin-top:100px;
 }
 .container{
 	margin-top:20px;
 	width:500px;
 }
+
 .message{
 	color:white;
 	font-size:200%;

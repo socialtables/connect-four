@@ -18,6 +18,8 @@ $(function() {
 	$(".buttons").on("click",".save-game",function(){
 		$(".board").hide();
 		$(".info-box").hide();
+		$(".head-container").append("<div class='game-info alert  alert-info'>"+gameId+"  Game Saved !</div>");	
+	     $(".game-info").fadeOut(2500);
 		$.post("/save/"+gameId,{data:grid},function(data){
 			console.log(data);
 		});
