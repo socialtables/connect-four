@@ -4,6 +4,8 @@ var games = {};
 exports.save = function(req, res){
 	if(games[req.params.id]){
 		games[req.params.id] = req.body;
+		console.log("server",req.body);
+		console.log(games);
 		res.json({"msg":"saved"});
 	}
 	else{

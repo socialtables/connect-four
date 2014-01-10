@@ -1,3 +1,4 @@
+
 body {
   padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
@@ -5,4 +6,56 @@ body {
 
 a {
   color: #00B7FF;
+}
+
+.col{
+	height:60px;
+	width:60px;
+	background-color: peachpuff;
+	border-radius:60px;
+}
+.column1{
+	float:left;
+
+}
+
+.token-red{
+	background-color:red;
+}
+.token-blue{
+	background-color:blue;
+}
+.token-enterance{
+	width:420px;
+	height:60px;
+	margin:0px;
+	/*background-color:wheat;*/
+}
+.container{
+	margin-top:100px;
+	width:500px;
+}
+.message{
+	color:white;
+	font-size:200%;
+	margin-top:20px;
+	text-align:center;
+}
+.token{
+	float:left;
+	/*height:60px;
+	width:60px;
+	background-color:white;
+	border:1px solid black;*/
+	width: 0; 
+	height: 0; 
+	border-left: 30px dashed transparent;
+	border-right: 30px solid transparent;
+	border-top: 60px solid black;
+}
+.players{
+	margin-bottom:20px;
+}
+.change-color{
+	border-top: 60px solid red;
 }

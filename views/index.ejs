@@ -1,13 +1,99 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
-    <h1><%= title %></h1>
-    <p>Your mission is to replace this page with a badass <a href="http://en.wikipedia.org/wiki/Connect_Four">Connect 4</a> game.</p>
-    <p>We've given you the basic back end that you will be communicating with. Refer to the docs and guidelines in the <a href="https://github.com/socialtables/connect-four">Github repo</a>. Your job is to implement the user interface and visual representation of the game.</p>
-    <p>Good Luck!</p>
-  </body>
+    <head>
+        <title><%= title %></title>
+        <link rel='stylesheet' href='/stylesheets/style.css' />
+    </head>
+    <body>
+        <h1><%= title %></h1>
+         <div class="container">
+            <div class="buttons ">
+                <button type="button" class="btn btn-danger btn-new-game">New Game</button>
+                <button type="button" class="btn btn-primary save-game">Save Game</button>
+                <div class="message alert info-box  alert-success">Click New Game !</div>
+            </div>
+        </div>
+
+        <div class="container board">
+             <div class="buttons players">
+                <button type="button" class="btn btn-danger btn-red">Red Player</button>
+                <button type="button" class="btn btn-primary btn-blue">Blue Player</button>
+
+            </div>
+            <div class="token-enterance">
+                <div class="token" id="col1"></div>
+                <div class="token" id="col2"></div>
+                <div class="token" id="col3"></div>
+                <div class="token" id="col4"></div>
+                <div class="token" id="col5"></div>
+                <div class="token" id="col6"></div>
+                <div class="token" id="col7"></div>
+            </div>
+            <div class="column1 col1" data-id="0">
+                <div class="row-1 col" data-id="0"></div>
+                <div class="row-2 col" data-id="1"></div>
+                <div class="row-3 col" data-id="2"></div>
+                <div class="row-4 col" data-id="3"></div>
+                <div class="row-5 col" data-id="4"></div>
+                <div class="row-6 col" data-id="5"></div>
+                
+            </div>
+            <div class="column1 col2" data-id="1">
+                <div class="row-1 col" data-id="0"></div>
+                <div class="row-2 col" data-id="1"></div>
+                <div class="row-3 col" data-id="2"></div>
+                <div class="row-4 col" data-id="3"></div>
+                <div class="row-5 col" data-id="4"></div>
+                <div class="row-6 col" data-id="5"></div>     
+            </div>
+            <div class="column1 col3" data-id="2">
+                <div class="row-1 col" data-id="0"></div>
+                <div class="row-2 col" data-id="1"></div>
+                <div class="row-3 col" data-id="2"></div>
+                <div class="row-4 col" data-id="3"></div>
+                <div class="row-5 col" data-id="4"></div>
+                <div class="row-6 col" data-id="5"></div>                
+            </div>
+            <div class="column1 col4" data-id="3">
+                <div class="row-1 col" data-id="0"></div>
+                <div class="row-2 col" data-id="1"></div>
+                <div class="row-3 col" data-id="2"></div>
+                <div class="row-4 col" data-id="3"></div>
+                <div class="row-5 col" data-id="4"></div>
+                <div class="row-6 col" data-id="5"></div>                
+            </div>
+            <div class="column1 col5" data-id="4">
+                <div class="row-1 col" data-id="0"></div>
+                <div class="row-2 col" data-id="1"></div>
+                <div class="row-3 col" data-id="2"></div>
+                <div class="row-4 col" data-id="3"></div>
+                <div class="row-5 col" data-id="4"></div>
+                <div class="row-6 col" data-id="5"></div>                
+            </div>
+            <div class="column1 col6" data-id="5">
+                <div class="row-1 col" data-id="0"></div>
+                <div class="row-2 col" data-id="1"></div>
+                <div class="row-3 col" data-id="2"></div>
+                <div class="row-4 col" data-id="3"></div>
+                <div class="row-5 col" data-id="4"></div>
+                <div class="row-6 col" data-id="5"></div>                
+            </div>
+            <div class="column1 col7" data-id="6">
+                <div class="row-1 col" data-id="0"></div>
+                <div class="row-2 col" data-id="1"></div>
+                <div class="row-3 col" data-id="2"></div>
+                <div class="row-4 col" data-id="3"></div>
+                <div class="row-5 col" data-id="4"></div>
+                <div class="row-6 col" data-id="5"></div>                
+            </div>
+
+
+
+
+
+
+        <link rel="stylesheet", href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"/>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+        <script src="/javascripts/main.js"></script>
+    </body>
 </html>
