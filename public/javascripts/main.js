@@ -10,7 +10,7 @@ $(function() {
 		$(".board").show();
 		$(".btn-red").show();
 		$(".btn-blue").show();
-		$(".message").text("Pick Your Color!")
+		$(".info-box").text("Pick Your Color!")
 		$.get("/new",{},function(data){
 			grid=data.data;
 			gameId=data.id;
