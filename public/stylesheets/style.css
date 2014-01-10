@@ -47,7 +47,8 @@ a {
 }
 .board{	
 	clear:both;
-	display:inline-block;
+	width:500px;
+	/*display:inline-block;*/
 }
 
 .message{
@@ -78,7 +79,7 @@ a {
 }
 .head-container{
  width:300px;
- display:inline-block;
+/* display:inline-block;*/
 
 
 }
@@ -87,4 +88,5 @@ a {
 }
 .players{
 	margin-bottom:20px;
+	text-align:center;
 }
