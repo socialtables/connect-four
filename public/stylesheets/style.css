@@ -31,8 +31,15 @@ a {
 	margin:0px;
 	/*background-color:wheat;*/
 }
+.info-box{
+	color:white;
+	font-size:200%;
+	margin-top:20px;
+	text-align:center;
+
+}
 .container{
-	margin-top:100px;
+	margin-top:20px;
 	width:500px;
 }
 .message{
@@ -40,8 +47,15 @@ a {
 	font-size:200%;
 	margin-top:20px;
 	text-align:center;
+
+}
+.arrow-info{
+	height:40px;
+	font-size:200%;
+	text-align:center;	
 }
 .token{
+	/*box-shadow:10px 10px 5px #888888;;*/
 	float:left;
 	/*height:60px;
 	width:60px;
@@ -52,6 +66,7 @@ a {
 	border-left: 30px dashed transparent;
 	border-right: 30px solid transparent;
 	border-top: 60px solid black;
+	background-color:white;
 }
 .players{
 	margin-bottom:20px;

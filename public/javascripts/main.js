@@ -8,9 +8,8 @@ $(function() {
 		$("div").removeClass("token-red");
 		$(".info-box").show()
 		$(".board").show();
-		$(".btn-red").show();
-		$(".btn-blue").show();
-		$(".info-box").text("Pick Your Color!")
+		$(".players").show();
+		$(".info-box").text("First Pick Your Color!")
 		$.get("/new",{},function(data){
 			grid=data.data;
 			gameId=data.id;
@@ -25,8 +24,11 @@ $(function() {
 	});
 	var declareWinner= function(player)
 	{
-		$(".info-box").hide();
-		return $(".players").html("<div class='message alert  alert-success'>"+player+" Won !</div>")	
+		// $(".info-box").hide();
+		
+		$(".players").hide();
+
+		return $(".info-box").html("<div class='message alert  alert-success'>"+player+" Won!</div>")	
 	};
 
 
@@ -111,7 +113,7 @@ $(function() {
    	var redToken=function(){
    		$(".token-enterance").on("click",".token",function(){
 			
-
+           $(this).effect( "shake",{direction:"up",times:"1"});
 			var column=$(this).attr("id").toString();
 			var columnId=$("."+column).data("id");
 			for(var i=5;0<=i;i--){
@@ -132,6 +134,7 @@ $(function() {
    	var blueToken =function(){
 		$(".token-enterance").on("click",".token",function(){
 			console.log("clicked blue token")
+			$(this).effect( "shake",{direction:"up",times:"1"});
 			var column=$(this).attr("id").toString();
 			var columnId=$("."+column).data("id");
 		   		for(var i=5;0<=i;i--){
@@ -155,7 +158,7 @@ $(function() {
     $(".buttons").on("click",".btn-red",function(){	
     	$(".btn-red").hide();
 		$(".btn-blue").show();
-    	$(".message").text("Red is playing Now !")
+    	$(".info-box").text("Red is playing Now !")
     	// $(".message").css("background-color","red");
         redToken();
        
@@ -163,7 +166,7 @@ $(function() {
 	$(".buttons").on("click",".btn-blue",function(){
 		$(".btn-blue").hide();
 		$(".btn-red").show();
-		$(".message").text("Blue is playing Now !")
+		$(".info-box").text("Blue is playing Now !")
 		// $(".message").css("background-color","blue");
 		blueToken();
 	});
