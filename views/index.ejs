@@ -4,92 +4,95 @@
         <title><%= title %></title>
         <link rel='stylesheet' href='/stylesheets/style.css' />
     </head>
-    <body>
+    <body>  
+        <h1 class="header"><%= title %></h1>
         <div class="container">
-            <h1><%= title %></h1>
-             <div class="head-container">
-
-                <div class="buttons">
-                    <button type="button" class="btn btn-danger btn-new-game">New Game</button>
-                    <button type="button" class="btn  btn-primary save-game">Save Game</button>
-                    <div class="info-box alert info-box  alert-success">Click New Game to Start !</div>
-                </div>
+         <div class="head-container container">
+            <div class="buttons">
+                <button type="button" class="btn btn-danger btn-new-game">New Game</button>
+                <button type="button" class="btn  btn-primary save-game">Save Game</button>
+                <div class="info-box alert info-box  alert-success">Click New Game to Start !</div>
             </div>
-
-            <div class="container board">
-                <div class="buttons players">
-                    <button type="button" class="btn btn-lg btn-danger btn-red">Red Player</button>
-                    <button type="button" class="btn btn-lg btn-primary btn-blue">Blue Player</button>
-                </div>
-                <div class="arrow-info">Please Click Arrows to Insert Tokens</div>
-                <div class="token-enterance">
-                    <div class="token" id="col1"></div>
-                    <div class="token" id="col2"></div>
-                    <div class="token" id="col3"></div>
-                    <div class="token" id="col4"></div>
-                    <div class="token" id="col5"></div>
-                    <div class="token" id="col6"></div>
-                    <div class="token" id="col7"></div>
-                </div>
-                <div class="column1 col1" data-id="0">
-                    <div class="row-1 col" data-id="0"></div>
-                    <div class="row-2 col" data-id="1"></div>
-                    <div class="row-3 col" data-id="2"></div>
-                    <div class="row-4 col" data-id="3"></div>
-                    <div class="row-5 col" data-id="4"></div>
-                    <div class="row-6 col" data-id="5"></div>
-                    
-                </div>
-                <div class="column1 col2" data-id="1">
-                    <div class="row-1 col" data-id="0"></div>
-                    <div class="row-2 col" data-id="1"></div>
-                    <div class="row-3 col" data-id="2"></div>
-                    <div class="row-4 col" data-id="3"></div>
-                    <div class="row-5 col" data-id="4"></div>
-                    <div class="row-6 col" data-id="5"></div>     
-                </div>
-                <div class="column1 col3" data-id="2">
-                    <div class="row-1 col" data-id="0"></div>
-                    <div class="row-2 col" data-id="1"></div>
-                    <div class="row-3 col" data-id="2"></div>
-                    <div class="row-4 col" data-id="3"></div>
-                    <div class="row-5 col" data-id="4"></div>
-                    <div class="row-6 col" data-id="5"></div>                
-                </div>
-                <div class="column1 col4" data-id="3">
-                    <div class="row-1 col" data-id="0"></div>
-                    <div class="row-2 col" data-id="1"></div>
-                    <div class="row-3 col" data-id="2"></div>
-                    <div class="row-4 col" data-id="3"></div>
-                    <div class="row-5 col" data-id="4"></div>
-                    <div class="row-6 col" data-id="5"></div>                
-                </div>
-                <div class="column1 col5" data-id="4">
-                    <div class="row-1 col" data-id="0"></div>
-                    <div class="row-2 col" data-id="1"></div>
-                    <div class="row-3 col" data-id="2"></div>
-                    <div class="row-4 col" data-id="3"></div>
-                    <div class="row-5 col" data-id="4"></div>
-                    <div class="row-6 col" data-id="5"></div>                
-                </div>
-                <div class="column1 col6" data-id="5">
-                    <div class="row-1 col" data-id="0"></div>
-                    <div class="row-2 col" data-id="1"></div>
-                    <div class="row-3 col" data-id="2"></div>
-                    <div class="row-4 col" data-id="3"></div>
-                    <div class="row-5 col" data-id="4"></div>
-                    <div class="row-6 col" data-id="5"></div>                
-                </div>
-                <div class="column1 col7" data-id="6">
-                    <div class="row-1 col" data-id="0"></div>
-                    <div class="row-2 col" data-id="1"></div>
-                    <div class="row-3 col" data-id="2"></div>
-                    <div class="row-4 col" data-id="3"></div>
-                    <div class="row-5 col" data-id="4"></div>
-                    <div class="row-6 col" data-id="5"></div>                
-                </div>
-
         </div>
+
+        <div class="container board">  
+            <h2 >New Game</h2> 
+            <div class="buttons players">
+                <button type="button" class="btn btn-lg btn-danger btn-red">Red Player</button>
+                <button type="button" class="btn btn-lg btn-primary btn-blue">Blue Player</button>
+            </div>
+            <div class="arrow-info">Please Click Arrows to Insert Tokens</div>
+             <!-- Tokens enter from this section -->
+            <div class="token-enterance">
+                <div class="token" id="col1"></div>
+                <div class="token" id="col2"></div>
+                <div class="token" id="col3"></div>
+                <div class="token" id="col4"></div>
+                <div class="token" id="col5"></div>
+                <div class="token" id="col6"></div>
+                <div class="token" id="col7"></div>
+            </div>
+            <!-- 7x6 2D array representation
+                each div has it is own data-id 
+                corresponding the 2D array
+             -->
+            <div class="column1 col1" data-id="0">
+                <div class="row-1 col" data-id="0"></div>
+                <div class="row-2 col" data-id="1"></div>
+                <div class="row-3 col" data-id="2"></div>
+                <div class="row-4 col" data-id="3"></div>
+                <div class="row-5 col" data-id="4"></div>
+                <div class="row-6 col" data-id="5"></div>              
+            </div>
+            <div class="column1 col2" data-id="1">
+                <div class="row-1 col" data-id="0"></div>
+                <div class="row-2 col" data-id="1"></div>
+                <div class="row-3 col" data-id="2"></div>
+                <div class="row-4 col" data-id="3"></div>
+                <div class="row-5 col" data-id="4"></div>
+                <div class="row-6 col" data-id="5"></div>     
+            </div>
+            <div class="column1 col3" data-id="2">
+                <div class="row-1 col" data-id="0"></div>
+                <div class="row-2 col" data-id="1"></div>
+                <div class="row-3 col" data-id="2"></div>
+                <div class="row-4 col" data-id="3"></div>
+                <div class="row-5 col" data-id="4"></div>
+                <div class="row-6 col" data-id="5"></div>                
+            </div>
+            <div class="column1 col4" data-id="3">
+                <div class="row-1 col" data-id="0"></div>
+                <div class="row-2 col" data-id="1"></div>
+                <div class="row-3 col" data-id="2"></div>
+                <div class="row-4 col" data-id="3"></div>
+                <div class="row-5 col" data-id="4"></div>
+                <div class="row-6 col" data-id="5"></div>                
+            </div>
+            <div class="column1 col5" data-id="4">
+                <div class="row-1 col" data-id="0"></div>
+                <div class="row-2 col" data-id="1"></div>
+                <div class="row-3 col" data-id="2"></div>
+                <div class="row-4 col" data-id="3"></div>
+                <div class="row-5 col" data-id="4"></div>
+                <div class="row-6 col" data-id="5"></div>                
+            </div>
+            <div class="column1 col6" data-id="5">
+                <div class="row-1 col" data-id="0"></div>
+                <div class="row-2 col" data-id="1"></div>
+                <div class="row-3 col" data-id="2"></div>
+                <div class="row-4 col" data-id="3"></div>
+                <div class="row-5 col" data-id="4"></div>
+                <div class="row-6 col" data-id="5"></div>                
+            </div>
+            <div class="column1 col7" data-id="6">
+                <div class="row-1 col" data-id="0"></div>
+                <div class="row-2 col" data-id="1"></div>
+                <div class="row-3 col" data-id="2"></div>
+                <div class="row-4 col" data-id="3"></div>
+                <div class="row-5 col" data-id="4"></div>
+                <div class="row-6 col" data-id="5"></div>                
+            </div>
+     </div>
 
 
 
