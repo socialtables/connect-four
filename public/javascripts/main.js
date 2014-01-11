@@ -114,12 +114,12 @@ $(function() {
    	var insertRedToken=function(){
    		$(".token-enterance").on("click",".token",function(){
 			updateInfoBox("Blue");
-           	$(this).effect( "shake",{direction:"up",times:"1"});
 			var column=$(this).attr("id").toString();
 			var columnId=$("."+column).data("id");	
 			for(var i=5;0<=i;i--){
 				if(grid[columnId][i]===null)
 				{
+					$(this).effect( "shake",{direction:"up",times:"1"});
 					$("."+column).children().eq(i).addClass("token-red");
 					grid[columnId][i]="red";
 					getConnectFour(columnId,i);
@@ -130,21 +130,20 @@ $(function() {
 			//when there is no space on board it alerts user
 			if(grid[columnId][0]!==null)
 			{
-				alert("Don't you see it is full")
+				$(".info-box").text("No Space Pick Another Column");
 			} 
 		});
    	};
    	// as same as insertRedToken but inserts blue tokens
    	var insertBlueToken =function(){
 		$(".token-enterance").on("click",".token",function(){
-			console.log("clicked blue token")
-			updateInfoBox("Red");
-			$(this).effect( "shake",{direction:"up",times:"1"});
+			updateInfoBox("Red");		
 			var column=$(this).attr("id").toString();
 			var columnId=$("."+column).data("id");
 		   		for(var i=5;0<=i;i--){
 					if(grid[columnId][i]===null)
 					{
+						$(this).effect( "shake",{direction:"up",times:"1"});
 						$("."+column).children().eq(i).addClass("token-blue");
 						grid[columnId][i]="blue";
 						getConnectFour(columnId,i);
@@ -154,7 +153,7 @@ $(function() {
 				} 
 				if(grid[columnId][0]!==null)
 				{
-					alert("Don't you see it is full")
+				 $(".info-box").text("No Space Pick Another Column")
 				}  			
 		});
    	};
@@ -186,13 +185,13 @@ $(function() {
 	});
 
     // click red button creates a token at inserted location
-    $(".buttons").on("click",".btn-red",function(){	
+    $(".players").on("click",".btn-red",function(){	
     	$(".btn-red").hide();
 		$(".btn-blue").show();
     	$(".info-box").text("Red is playing Now !");
         insertRedToken();      
 	});
-	$(".buttons").on("click",".btn-blue",function(){
+	$(".players").on("click",".btn-blue",function(){
 		$(".btn-blue").hide();
 		$(".btn-red").show();
 		$(".info-box").text("Blue is playing Now !")
