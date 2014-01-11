@@ -388,13 +388,12 @@ connectFourApp.factory('gameStateManager', ['$rootScope', 'appConstantValues', '
 						}
 
 						socket.on('opponentMadeMove', function(data) {
-							console.log("Received opponent move");
-							console.log(data);
-							console.log("------------------------");
-
 							gameBoardClientSideModel.insertChecker(data.lastInsertedChecker);
+							
 							if(data.newGameState === appConstantValues.gameStates.INPROGRESS) {
 								currentPlayer = args.userInfo;
+							} else {
+								currentPlayer = opponentPlayerInfo;
 							}
 							currentState = data.newGameState;
 

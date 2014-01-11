@@ -2,7 +2,6 @@ connectFourApp.controller('GameBoardSectionCtrl', ['$rootScope', '$scope', 'game
 	function($rootScope, $scope, gameStateManager, gameBoardClientSideModel, appConstantValues) {
 
 		$scope.$watch(gameStateManager.getCurrentState, function(newState) {
-			console.log(newState);
 			$scope.data = gameBoardClientSideModel.gameBoardData;
 		});
 
@@ -100,7 +99,7 @@ connectFourApp.controller('MenusSectionCtrl', ['$scope', '$rootScope', 'gameStat
 		$rootScope.showSelectGameTypeMenu = true;
 
 		$scope.$watch(gameStateManager.getCurrentState, function(newState) {
-			if(newState === appConstantValues.gameStates.INPROGRESS) {
+			if(newState === appConstantValues.gameStates.INPROGRESS || newState === appConstantValues.gameStates.WAITING) {
 				$rootScope.showStartMenu = false;
 				$rootScope.showGameInfo = true;
 			}
@@ -137,8 +136,10 @@ connectFourApp.controller('GameInfoCtrl', ['$scope', 'gameStateManager', 'appCon
         $scope.inProgress = true;
 
 		$scope.$watch(gameStateManager.getCurrentState, function(newState) {
+			$scope.currentPlayer = gameStateManager.getCurrentPlayer();
+
 			_resetScopeVariables();
-			
+
 			if(newState !== appConstantValues.gameStates.INPROGRESS) {
 				$scope.inProgress = false;
 			}
@@ -188,7 +189,7 @@ connectFourApp.controller('GameInfoCtrl', ['$scope', 'gameStateManager', 'appCon
 		}
 
 		function _updateWinnersScoreOnScope() {
-			if($scope.winner === appConstantValues.playerType.RED) {
+			if($scope.currentPlayer === appConstantValues.playerType.RED) {
 				$scope.redPlayerScore++;
 			} else {
 				$scope.blackPlayerScore++;
