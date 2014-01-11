@@ -9,6 +9,7 @@
 $(function() {
 	var grid;
 	var gameId;
+	var savedGames=[];
 	$(".board").hide();
 	// winner is added to DOM
 	var declareWinner= function(player)
@@ -20,6 +21,7 @@ $(function() {
 	var updateInfoBox=function(color){
 		return $(".info-box").text(color+"'s turn,click "+color+" button");
 	}
+
 	/**
  	* The game board is represented by a 7x6 2D array.
  	* Empty array is populated either "red" or "blue" values
@@ -102,7 +104,33 @@ $(function() {
 			}
 		}
 	};
-
+    var renderSavedGame =function (arr2D)
+    {
+    	console.log("array",arr2D)
+    	$("div").removeClass("token-blue");
+		$("div").removeClass("token-red");
+    	$(".game-ids-board").hide();
+		$(".info-box").show();
+		$(".btn-red").show();
+		$(".btn-blue").show();
+		$(".players").show();
+		$(".board").show();
+		for(var column=0;column<arr2D.length;column++)
+		{
+			console.log("checking");
+			for(var row=0;row<arr2D[column].length;row++)
+			{
+				if(arr2D[column][row]==="red")
+				{
+					$(".col"+column).children(".row-"+row).addClass("token-red");
+				}
+				if(arr2D[column][row]==="blue")
+				{
+					$(".col"+column).children(".row-"+row).addClass("token-blue");
+				}
+			}
+		}
+    };
 	/**
  	* with help of data-id attributtes 
     * each div has a data-id on grid
@@ -120,7 +148,7 @@ $(function() {
 				if(grid[columnId][i]===null)
 				{
 					$(this).effect( "shake",{direction:"up",times:"1"});
-					$("."+column).children().eq(i).addClass("token-red");
+					$("." + column).children().eq(i).addClass("token-red");
 					grid[columnId][i]="red";
 					getConnectFour(columnId,i);
 					$(".token-enterance").off("click");
@@ -139,7 +167,7 @@ $(function() {
 		$(".token-enterance").on("click",".token",function(){
 			updateInfoBox("Red");		
 			var column=$(this).attr("id").toString();
-			var columnId=$("."+column).data("id");
+			var columnId=$("." + column).data("id");
 		   		for(var i=5;0<=i;i--){
 					if(grid[columnId][i]===null)
 					{
@@ -161,12 +189,12 @@ $(function() {
 	$(".buttons").on("click",".btn-new-game",function(){
 		$("div").removeClass("token-blue");
 		$("div").removeClass("token-red");
+		$(".game-ids-board").hide();
 		$(".info-box").show();
 		$(".btn-red").show();
 		$(".btn-blue").show();
 		$(".players").show();
 		$(".board").show();
-		
 		$(".info-box").text("Pick Your Color")
 		$.get("/new",{},function(data){
 			grid=data.data;
@@ -177,11 +205,33 @@ $(function() {
 	$(".buttons").on("click",".save-game",function(){
 		$(".board").hide();
 		$(".info-box").hide();
-		$(".head-container").append("<div class='game-info alert  alert-info'>"+gameId+"  Game Saved !</div>");	
+		$(".game-ids-board").hide();
+		$(".head-container").append("<div class='game-info alert  alert-info ' data-gameid='"+gameId+"'>"+gameId+"  Game Saved !</div>");	
 	    $(".game-info").fadeOut(2500);
 		$.post("/save/"+gameId,{data:grid},function(data){
-			console.log(data);
+			savedGames.push(data.gameId);
+			console.log(savedGames);
 		});
+	});
+	$(".game-ids-board").on("click",".game-ids",function(){
+		var gameIde=$(this).data("gameid");
+		$.get("/detail/"+gameIde,{},function(data){
+			var savedGrid=data.data.data;
+			renderSavedGame(savedGrid);
+			
+		});
+
+	});
+	$(".buttons").on("click",".saved-game",function(){
+		$(".board").hide();
+		$(".info-box").hide();
+		$(".game-ids-board").empty();
+		$(".game-ids-board").show();
+        for(var i=0;i<savedGames.length;i++){
+			$(".game-ids-board").append("<a><div class='game-ids alert  alert-info' href='#' data-gameid='"+savedGames[i]+"'> Game Id:"+savedGames[i]+" !</div></a>");
+
+        };
+ 
 	});
 
     // click red button creates a token at inserted location
@@ -197,4 +247,5 @@ $(function() {
 		$(".info-box").text("Blue is playing Now !")
 		insertBlueToken();
 	});
+
 });

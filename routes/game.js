@@ -6,7 +6,7 @@ exports.save = function(req, res){
 		games[req.params.id] = req.body;
 		console.log("server",req.body);
 		console.log(games);
-		res.json({"msg":"saved"});
+		res.send({gameId:req.params.id});
 	}
 	else{
 		res.json(400, {"msg": "invalid id"});
@@ -15,7 +15,7 @@ exports.save = function(req, res){
 
 exports.detail = function(req, res){
 	if(games[req.params.id]){
-		res.json({"data":games[req.params.id]});
+		res.send({"data":games[req.params.id]});
 	}
 	else{
 		res.json(400, {"msg": "invalid id"});
