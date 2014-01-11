@@ -338,8 +338,8 @@ connectFourApp.factory('gameBoardClientSideModel', ['appConstantValues', 'GameSl
 ]);
 
 
-connectFourApp.factory('gameStateManager', ['appConstantValues', 'GameBoardResource', 'gameBoardClientSideModel', 'socket',
-	function(appConstantValues, GameBoardResource, gameBoardClientSideModel, socket) {
+connectFourApp.factory('gameStateManager', ['$rootScope', 'appConstantValues', 'GameBoardResource', 'gameBoardClientSideModel', 'socket',
+	function($rootScope, appConstantValues, GameBoardResource, gameBoardClientSideModel, socket) {
 		
 		var currentState = appConstantValues.gameStates.START;
 		var currentPlayer = { // NOTE: Making 'currentPlayer' an object in order to take advantage of Angular's two-way data binding feature
@@ -375,25 +375,35 @@ connectFourApp.factory('gameStateManager', ['appConstantValues', 'GameBoardResou
 				isRemoteGame = true;
 				opponentPlayerInfo = args.opponentInfo;
 				
-				if(args.isStartingPlayer) {
-					currentPlayer = args.userInfo;
-					currentState = appConstantValues.gameStates.INPROGRESS;
-				} else {
-					currentPlayer = opponentPlayerInfo;
-					currentState = appConstantValues.gameStates.WAITING;
-				}
+				GameBoardResource.create().$promise
+					.then(function(response) {
+						gameBoardClientSideModel.reset(response);
 
-				console.log(currentState);
+						if(args.isStartingPlayer) {
+							currentPlayer = args.userInfo;
+							currentState = appConstantValues.gameStates.INPROGRESS;
+						} else {
+							currentPlayer = opponentPlayerInfo;
+							currentState = appConstantValues.gameStates.WAITING;
+						}
 
-				socket.on('opponentMadeMove', function(data) {
-					gameBoardClientSideModel.insertChecker(data.lastInsertedChecker);
-					if(data.newGameState === appConstantValues.gameStates.INPROGRESS) {
-						currentPlayer = args.userInfo;
-					}
-					currentState = data.newGameState;
-				});
+						socket.on('opponentMadeMove', function(data) {
+							console.log("Received opponent move");
+							console.log(data);
+							console.log("------------------------");
+
+							gameBoardClientSideModel.insertChecker(data.lastInsertedChecker);
+							if(data.newGameState === appConstantValues.gameStates.INPROGRESS) {
+								currentPlayer = args.userInfo;
+							}
+							currentState = data.newGameState;
+
+							$rootScope.$apply(); // Run angular's digest cycles to propogate state change
+						});
+					});	
 			},
 			checkStateAndAdvanceGame: function() {
+				GameBoardResource.update({ id: gameBoardClientSideModel.id }, gameBoardClientSideModel.serverData);
 				if(isRemoteGame) {
 					_checkStateAndAdvanceGameForRemoteGame();
 				} else {
@@ -414,7 +424,7 @@ connectFourApp.factory('gameStateManager', ['appConstantValues', 'GameBoardResou
 				newGameState: opponentNewGameState
 			});
 
-			if(currentState === appConstantValues.gameStates.INPROGRESS) {
+			if(newGameState === appConstantValues.gameStates.INPROGRESS) {
 				currentPlayer = opponentPlayerInfo;
 				currentState = appConstantValues.gameStates.WAITING;
 			} else {
@@ -423,7 +433,6 @@ connectFourApp.factory('gameStateManager', ['appConstantValues', 'GameBoardResou
 		}
 
 		function _checkStateAndAdvanceGameForSingleBrowser() {
-			GameBoardResource.update({ id: gameBoardClientSideModel.id }, gameBoardClientSideModel.serverData);
 			currentState = gameBoardClientSideModel.determineState();
 			if(currentState === appConstantValues.gameStates.INPROGRESS) {
 				_toggleCurrentPlayer();

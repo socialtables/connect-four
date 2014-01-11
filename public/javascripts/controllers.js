@@ -82,6 +82,8 @@ connectFourApp.controller('RemoteGameStartingMenuCtrl', ['$scope', '$rootScope',
 
 			//TODO: Server-side decides the player who will start
 			socket.on('opponentFound', function(data) {
+				$rootScope.showRemoteGameStartingMenu = false;
+
 				gameStateManager.startNewRemoteGame({
 					userInfo: data.userInfo,
 					opponentInfo: data.opponentInfo,
@@ -135,6 +137,8 @@ connectFourApp.controller('GameInfoCtrl', ['$scope', 'gameStateManager', 'appCon
         $scope.inProgress = true;
 
 		$scope.$watch(gameStateManager.getCurrentState, function(newState) {
+			_resetScopeVariables();
+			
 			if(newState !== appConstantValues.gameStates.INPROGRESS) {
 				$scope.inProgress = false;
 			}
