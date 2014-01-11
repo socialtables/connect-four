@@ -43,7 +43,6 @@ server.listen(app.get('port'), function(){
 // socket.io for multiplayer games
 var io = require("socket.io").listen(server);
 var uuid = require("uuid");
-var playersWaitingForOpponent = [];
 
 io.sockets.on('connection', function(socket) {
 	socket.on('createUser', function(username) {
@@ -53,15 +52,15 @@ io.sockets.on('connection', function(socket) {
 			type: _determinePlayerType()
 		};
 
-		playersWaitingForOpponent.push(socket);
-
 		socket.set('userInfo', newUserInfo, function() {
 			socket.emit('userCreated', newUserInfo);
-			
-			if(playersWaitingForOpponent.length === 2) {
-				playersWaitingForOpponent.forEach(function(socket, index) {
-					_emitOpponentFoundMessage(socket, index);
-				});
+			//TODO: var roomName = generateRoomName();
+			var roomName = 'room0';
+			socket.join(roomName);
+
+			var roomHasTwoPlayers = io.sockets.clients(roomName).length === 2;
+			if(roomHasTwoPlayers) {
+				_matchupPlayersInRoom(roomName);
 			}
 		});
 	}); //End of 'createUser' listener
@@ -72,16 +71,20 @@ io.sockets.on('connection', function(socket) {
 	  Helpers
 
 ********************/
-function _emitOpponentFoundMessage(socket, index) {
-	var opponentInfo = _findOpponentInfo(index);
-	socket.set('opponentInfo', opponentInfo, function() {
-		socket.emit('opponentFound', {
-			userInfo: socket.get('userInfo'),
-			opponentInfo: opponentInfo,
-			isStartingPlayer: _isStartingPlayer(index)
-		});
+function _matchupPlayersInRoom(roomName) {
+	var playersInRoom = io.sockets.clients(roomName);
 
-		_bindToMakeMoveEvent(socket, index);
+	playersInRoom.forEach(function(socket, index) {
+		socket.set('roomName', roomName, function() {			
+			socket.get('userInfo', function(err, userInfo) {
+				console.log("Dat user info: " + userInfo);
+				var opponentSocket = _getOpponentSocket(playersInRoom, index);
+				opponentSocket.get('userInfo', function(err, opponentInfo) {
+					_sendOpponentFoundMessage(socket, index, userInfo, opponentInfo);
+					_bindToMakeMoveEvent(socket, index);
+				});
+			});
+		});
 	});
 }
 
@@ -93,26 +96,29 @@ function _isStartingPlayer(index) {
 	}
 }
 
-function _findOpponentInfo(index) {
+function _sendOpponentFoundMessage(socket, index, userInfo, opponentInfo) {
+	socket.emit('opponentFound', {
+		userInfo: userInfo,
+		opponentInfo: opponentInfo,
+		isStartingPlayer: _isStartingPlayer(index)
+	});
+}
+
+function _getOpponentSocket(playersInRoom, playerIndex) {
 	var oppositePlayerIndex = 0; 
-	if(index === 0) {
+	if(playerIndex === 0) {
 		oppositePlayerIndex = 1;
 	}
-	return playersWaitingForOpponent[oppositePlayerIndex];
+	return playersInRoom[oppositePlayerIndex];
 }
 
 function _bindToMakeMoveEvent(socket, index) {
 	socket.on('makeMove', function(data) {
-		socket.get('opponentInfo', function (err, opponentInfo) {
-	     	
-	    	// opponentSocket.emit('opponentMadeMove.' + opponentInfo.id, {
-	     //  		lastInsertedChecker: data.lastInsertedChecker,
-	     //  		newGameState: data.newGameState
-	     //  	});
-			console.log("DEBUG: Index is: " + index);
-			if(index == 1) {
-				playersWaitingForOpponent = []; 
-			}
+		socket.get('roomName', function (err, roomName) {
+	    	socket.broadcast.to(roomName).emit('opponentMadeMove', {
+	      		lastInsertedChecker: data.lastInsertedChecker,
+	      		newGameState: data.newGameState
+	      	});
 	    });
 	});
 }

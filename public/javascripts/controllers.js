@@ -2,6 +2,7 @@ connectFourApp.controller('GameBoardSectionCtrl', ['$rootScope', '$scope', 'game
 	function($rootScope, $scope, gameStateManager, gameBoardClientSideModel, appConstantValues) {
 
 		$scope.$watch(gameStateManager.getCurrentState, function(newState) {
+			console.log(newState);
 			$scope.data = gameBoardClientSideModel.gameBoardData;
 		});
 
@@ -67,8 +68,8 @@ connectFourApp.controller('SelectGameTypeMenuCtrl', ['$scope', '$rootScope',
 	}
 ]);
 
-connectFourApp.controller('RemoteGameStartingMenuCtrl', ['$scope', '$rootScope', 'socket',
-	function($scope, $rootScope, socket) {
+connectFourApp.controller('RemoteGameStartingMenuCtrl', ['$scope', '$rootScope', 'socket', 'gameStateManager',
+	function($scope, $rootScope, socket, gameStateManager) {
 		
 		$scope.createUser = function() {
 			socket.emit('createUser', $scope.username);

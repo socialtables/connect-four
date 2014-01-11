@@ -18,13 +18,7 @@ connectFourApp.constant('appConstantValues', {
 
 connectFourApp.factory('socket', ['appConstantValues',
 	function(appConstantValues) {
-
-		// /* TODO: Remove this object after properly loading socket.io as a client-side dependency */
-		// var io = {
-		// 	connect: function() {}
-		// }
-		// /*****************************************************************************************/
-
+		
 		var socket = io.connect(appConstantValues.socketURL);
 
 		return socket;
@@ -389,7 +383,9 @@ connectFourApp.factory('gameStateManager', ['appConstantValues', 'GameBoardResou
 					currentState = appConstantValues.gameStates.WAITING;
 				}
 
-				socket.on('opponentMadeMove.' + opponentPlayerInfo.id, function(data) {
+				console.log(currentState);
+
+				socket.on('opponentMadeMove', function(data) {
 					gameBoardClientSideModel.insertChecker(data.lastInsertedChecker);
 					if(data.newGameState === appConstantValues.gameStates.INPROGRESS) {
 						currentPlayer = args.userInfo;
