@@ -163,9 +163,12 @@ $(function() {
 		$("div").removeClass("token-blue");
 		$("div").removeClass("token-red");
 		$(".info-box").show();
-		$(".board").show();
+		$(".btn-red").show();
+		$(".btn-blue").show();
 		$(".players").show();
-		$(".info-box").text("Click Player's Button")
+		$(".board").show();
+		
+		$(".info-box").text("Pick Your Color")
 		$.get("/new",{},function(data){
 			grid=data.data;
 			gameId=data.id;
