@@ -43,6 +43,7 @@ server.listen(app.get('port'), function(){
 // socket.io for multiplayer games
 var io = require("socket.io").listen(server);
 var uuid = require("uuid");
+var roomName = _generateRoomName();
 
 io.sockets.on('connection', function(socket) {
 	socket.on('createUser', function(username) {
@@ -54,13 +55,12 @@ io.sockets.on('connection', function(socket) {
 
 		socket.set('userInfo', newUserInfo, function() {
 			socket.emit('userCreated', newUserInfo);
-			//TODO: var roomName = generateRoomName();
-			var roomName = 'room0';
 			socket.join(roomName);
 
 			var roomHasTwoPlayers = io.sockets.clients(roomName).length === 2;
 			if(roomHasTwoPlayers) {
 				_matchupPlayersInRoom(roomName);
+				roomName = _generateRoomName();
 			}
 		});
 	}); //End of 'createUser' listener
@@ -71,13 +71,16 @@ io.sockets.on('connection', function(socket) {
 	  Helpers
 
 ********************/
+function _generateRoomName() {
+	return 'room.' + uuid.v4();
+}
+
 function _matchupPlayersInRoom(roomName) {
 	var playersInRoom = io.sockets.clients(roomName);
 
 	playersInRoom.forEach(function(socket, index) {
 		socket.set('roomName', roomName, function() {			
 			socket.get('userInfo', function(err, userInfo) {
-				console.log("Dat user info: " + userInfo);
 				var opponentSocket = _getOpponentSocket(playersInRoom, index);
 				opponentSocket.get('userInfo', function(err, opponentInfo) {
 					_sendOpponentFoundMessage(socket, index, userInfo, opponentInfo);

@@ -149,14 +149,14 @@
             </br>
             You are the victor!
           </p>
-          <p class="game-prompt" ng-show="isLooser">
+          <p id="youLostMsg" class="game-prompt" ng-show="isLooser">
             You lost!
           </p>
           <p class="game-prompt" ng-show="isWaiting">
             Waiting for opponent to make a move
           </p>
-          <button type="button" class="btn btn-danger btn-lg" ng-click="restart(currentPlayer.type)" ng-hide="winner">Restart</button>
-          <button type="button" class="btn btn-success btn-lg" ng-click="playAgain(winner)" ng-show="winner">Play Again</button>
+          <button type="button" class="btn btn-danger btn-lg" ng-click="restart(currentPlayer.type)" ng-hide="winner || isLooser">Restart</button>
+          <button type="button" class="btn btn-success btn-lg" ng-click="playAgain()" ng-show="winner || isLooser">Play Again</button>
         <div>
       <div>
     </script>

@@ -347,6 +347,7 @@ connectFourApp.factory('gameStateManager', ['$rootScope', 'appConstantValues', '
 		};
 		var isRemoteGame = false;
 		var opponentPlayerInfo;
+		var userPlayerInfo;
 
 		return {
 			getCurrentState: function() {
@@ -363,6 +364,25 @@ connectFourApp.factory('gameStateManager', ['$rootScope', 'appConstantValues', '
 					startingPlayer: oppositePlayerType
 				});
 			},
+			playAgain: function() {
+				if(isRemoteGame) {
+					var newGameArgs = {
+						opponentInfo: opponentPlayerInfo,
+						userInfo: userPlayerInfo,
+						isStartingPlayer: false
+					};
+
+					if(currentState === appConstantValues.gameStates.WINNER) {
+						newGameArgs.isStartingPlayer = true;
+					}
+
+					this.startNewRemoteGame(newGameArgs);
+				} else {
+					this.startNewGame({
+						startingPlayer: currentPlayer.type
+					});
+				}
+			},
 			startNewGame: function(args) {
 				currentPlayer.type = args.startingPlayer;
 				GameBoardResource.create().$promise
@@ -374,30 +394,33 @@ connectFourApp.factory('gameStateManager', ['$rootScope', 'appConstantValues', '
 			startNewRemoteGame: function(args) {
 				isRemoteGame = true;
 				opponentPlayerInfo = args.opponentInfo;
+				userPlayerInfo = args.userInfo;
 				
 				GameBoardResource.create().$promise
 					.then(function(response) {
 						gameBoardClientSideModel.reset(response);
 
 						if(args.isStartingPlayer) {
-							currentPlayer = args.userInfo;
+							currentPlayer = userPlayerInfo;
 							currentState = appConstantValues.gameStates.INPROGRESS;
 						} else {
 							currentPlayer = opponentPlayerInfo;
 							currentState = appConstantValues.gameStates.WAITING;
 						}
 
-						socket.on('opponentMadeMove', function(data) {
-							gameBoardClientSideModel.insertChecker(data.lastInsertedChecker);
-							
-							if(data.newGameState === appConstantValues.gameStates.INPROGRESS) {
-								currentPlayer = args.userInfo;
-							} else {
-								currentPlayer = opponentPlayerInfo;
-							}
-							currentState = data.newGameState;
+						socket
+							.removeAllListeners('opponentMadeMove')
+							.on('opponentMadeMove', function(data) {
+								gameBoardClientSideModel.insertChecker(data.lastInsertedChecker);
 
-							$rootScope.$apply(); // Run angular's digest cycles to propogate state change
+								if(data.newGameState === appConstantValues.gameStates.INPROGRESS) {
+									currentPlayer = userPlayerInfo;
+								} else {
+									currentPlayer = opponentPlayerInfo;
+								}
+								currentState = data.newGameState;
+
+								$rootScope.$apply(); // Run angular's digest cycles to propogate state change
 						});
 					});	
 			},

@@ -165,11 +165,9 @@ connectFourApp.controller('GameInfoCtrl', ['$scope', 'gameStateManager', 'appCon
 			gameStateManager.restartGame();
 		}
 
-		$scope.playAgain = function(winner) {
+		$scope.playAgain = function() {
 			_resetScopeVariables();
-			gameStateManager.startNewGame({
-				startingPlayer: winner
-			});	
+			gameStateManager.playAgain();	
 		}
 
 		$scope.isRedCurrentPlayer = function() {
@@ -189,7 +187,7 @@ connectFourApp.controller('GameInfoCtrl', ['$scope', 'gameStateManager', 'appCon
 		}
 
 		function _updateWinnersScoreOnScope() {
-			if($scope.currentPlayer === appConstantValues.playerType.RED) {
+			if($scope.currentPlayer.type === appConstantValues.playerType.RED) {
 				$scope.redPlayerScore++;
 			} else {
 				$scope.blackPlayerScore++;
