@@ -9,7 +9,7 @@
 $(function() {
 	var grid;
 	var gameId;
-	var savedGames=[];
+	var savedGames={};
 	$(".board").hide();
 	// winner is added to DOM
 	var declareWinner= function(player)
@@ -209,7 +209,7 @@ $(function() {
 		$(".head-container").append("<div class='game-info alert  alert-info ' data-gameid='"+gameId+"'>"+gameId+"  Game Saved !</div>");	
 	    $(".game-info").fadeOut(2500);
 		$.post("/save/"+gameId,{data:grid},function(data){
-			savedGames.push(data.gameId);
+			savedGames[data.gameId]=data.gameId;
 			console.log(savedGames);
 		});
 	});
@@ -217,23 +217,19 @@ $(function() {
 		var gameIde=$(this).data("gameid");
 		$.get("/detail/"+gameIde,{},function(data){
 			var savedGrid=data.data.data;
-			renderSavedGame(savedGrid);
-			
+			renderSavedGame(savedGrid);	
 		});
-
 	});
 	$(".buttons").on("click",".saved-game",function(){
 		$(".board").hide();
 		$(".info-box").hide();
 		$(".game-ids-board").empty();
 		$(".game-ids-board").show();
-        for(var i=0;i<savedGames.length;i++){
-			$(".game-ids-board").append("<a><div class='game-ids alert  alert-info' href='#' data-gameid='"+savedGames[i]+"'> Game Id:"+savedGames[i]+" !</div></a>");
-
+        for(var key in savedGames){
+			$(".game-ids-board").append("<a><div class='game-ids alert  alert-info' href='#' data-gameid='"+savedGames[key]+"'> Game Id:"+savedGames[key]+" !</div></a>");
         };
  
 	});
-
     // click red button creates a token at inserted location
     $(".players").on("click",".btn-red",function(){	
     	$(".btn-red").hide();
