@@ -1,3 +1,4 @@
+
 body {
   padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
@@ -6,3 +7,93 @@ body {
 a {
   color: #00B7FF;
 }
+.header{
+	margin-left:58px;
+}
+.col{
+	height:60px;
+	width:60px;
+	background-color: peachpuff;
+	border-radius:60px;
+}
+.column1{
+	float:left;
+}
+
+.token-red{
+	background-color:red;
+}
+.token-blue{
+	background-color:blue;
+}
+.token-enterance{
+	width:420px;
+	height:60px;
+	margin:0px;
+	/*background-color:wheat;*/
+}
+.info-box{
+	color:white;
+	font-size:150%;
+	margin-top:20px;
+	text-align:center;
+	width:200px;
+	height:92px;
+   margin-left:130px;
+}
+.game-info{
+	margin-top:100px;
+	width:200px;
+}
+.board{	
+	clear:both;
+	width:500px;
+	/*display:inline-block;*/
+}
+
+.message{
+	color:white;
+	font-size:150%;
+	text-align:center;
+	color:orange;
+}
+.arrow-info{
+	height:40px;
+	font-size:200%;
+	text-align:center;	
+}
+.token{
+	/*box-shadow:10px 10px 5px #888888;;*/
+	float:left;
+	/*height:60px;
+	width:60px;
+	background-color:white;
+	border:1px solid black;*/
+	width: 0; 
+	height: 0; 
+	border-left: 30px dashed transparent;
+	border-right: 30px solid transparent;
+	border-top: 60px solid black;
+	background-color:white;
+}
+.head-container{
+ width:500px;
+ text-align:center;
+/* display:inline-block;*/
+}
+.game-ids{
+	margin-top:20px;
+	text-align:center;
+	width:400px;
+}
+.game-ids-board{
+	width:500px;
+}
+.game-info{
+	width:300px;
+}
+.players{
+	margin-bottom:20px;
+	text-align:center;
+}
+

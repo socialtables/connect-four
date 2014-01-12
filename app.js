@@ -31,8 +31,8 @@ if ('development' == app.get('env')) {
 app.get('/', routes.index);
 
 app.get('/new', game.new);
-app.post('/:id', game.save);
-app.get('/:id', game.detail);
+app.post('/save/:id', game.save);
+app.get('/detail/:id', game.detail);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
