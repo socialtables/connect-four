@@ -81,29 +81,43 @@
 	cursor: pointer;
 }
 
-.game-board-slot.selected-cell {
-	opacity: 0.78;
-}
-
-.game-board-slot.player-red-selected-slot {
-	background-color: red;
-}
-
-.game-board-slot.player-black-selected-slot {
-	background-color: black;
-}
-
-.game-board-slot.winning-slot {
-	background-color: rgb(0, 173, 0);
-}
-
 .game-board-slot {
+	position: relative;
 	height: 55px;
 	width: 55px;
 	margin: 8px;
 	border-radius: 50%;
 	border: solid 1px rgb(182, 182, 182);
 	background-color: white;
+}
+
+.checker {
+	height: 53px;
+	width: 53px;
+	border-radius: 50%;
+	border: solid 0.9px rgb(182, 182, 182);
+	position: absolute;
+	bottom: 0px;
+	right: 0;
+	opacity: 0.78;
+	transition: background-color linear 0.05s, bottom linear 0.6s;
+}
+
+.checker.ng-hide { 
+	bottom: 400px;
+	display:block!important;
+}
+
+.red-checker {
+	background-color: red;
+}
+
+.black-checker {
+	background-color: black;
+}
+
+.winning-checker {
+	background-color: green;
 }
 
 #columnFullMsg {

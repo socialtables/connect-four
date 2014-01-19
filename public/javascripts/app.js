@@ -1,1 +1,1 @@
-var connectFourApp = angular.module('connectFourApp', ['ngResource']);
+var connectFourApp = angular.module('connectFourApp', ['ngResource', 'ngAnimate']);
