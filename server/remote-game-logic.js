@@ -26,6 +26,7 @@ function _bindSocketEventHandlers() {
 			socket.set('userInfo', newUserInfo, function() {
 				socket.emit('userCreated', newUserInfo);
 				socket.join(roomName);
+
 				var roomHasTwoPlayers = io.sockets.clients(roomName).length === 2;
 				if(roomHasTwoPlayers) {
 					_matchupPlayersInRoom(roomName);
@@ -33,6 +34,18 @@ function _bindSocketEventHandlers() {
 				}
 			});
 		}); //End of 'createUser' listener
+
+		socket.on('disconnect', function() {
+			socket.get('roomName', function(err, room) {
+				var numberOfPlayersInRoom = io.sockets.clients(room).length;
+
+				if(numberOfPlayersInRoom === 2) {
+					socket.broadcast.to(room).emit('opponentDisconnected');
+				}
+
+				socket.leave(room);
+			});
+		});
 	}); //End of 'connection' listener
 }
 

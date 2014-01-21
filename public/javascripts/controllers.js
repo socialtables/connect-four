@@ -144,19 +144,24 @@ connectFourApp.controller('GameInfoCtrl', ['$scope', 'gameStateManager', 'appCon
 				$scope.inProgress = false;
 			}
 
-			if(newState === appConstantValues.gameStates.WINNER) {
-				$scope.winner = $scope.currentPlayer.type;
-				_updateWinnersScoreOnScope();
-			} else if(newState === appConstantValues.gameStates.DRAW) {
-				$scope.isDraw = true;
-				$scope.numOfDraws++;
-			} else if(newState === appConstantValues.gameStates.WAITING) {
-				$scope.isWaiting = true;
-			} else if(newState === appConstantValues.gameStates.OPPONENTWINS) {
-				$scope.isLooser = true;
-				_updateWinnersScoreOnScope();
-			} else {
-				/* Default case */
+			switch(newState) {
+				case appConstantValues.gameStates.WINNER:
+					$scope.winner = $scope.currentPlayer.type;
+					_updateWinnersScoreOnScope();
+					break;
+				case appConstantValues.gameStates.DRAW:
+					$scope.isDraw = true;
+					$scope.numOfDraws++;
+					break;
+				case appConstantValues.gameStates.WAITING:
+					$scope.isWaiting = true;
+					break;
+				case appConstantValues.gameStates.OPPONENTWINS:
+					$scope.isLooser = true;
+					break;
+				case appConstantValues.gameStates.OPPONENT_DISCONNECTS:
+					$scope.opponentDisconnected = true;
+					break;
 			}
 		});
 
@@ -195,7 +200,7 @@ connectFourApp.controller('GameInfoCtrl', ['$scope', 'gameStateManager', 'appCon
 		}
 
 		function _resetScopeVariables() {
-			$scope.isWaiting = $scope.isLooser = $scope.isDraw = false;
+			$scope.isWaiting = $scope.isLooser = $scope.isDraw = $scope.opponentDisconnected = false;
 			$scope.winner = null;
 			$scope.inProgress = true;
 		}

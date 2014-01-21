@@ -6,7 +6,8 @@ connectFourApp.constant('appConstantValues', {
     	WINNER: "WINNER",
     	DRAW: "DRAW",
     	RESTART: "RESTART",
-    	OPPONENTWINS: "OPPONENTWINS"
+    	OPPONENTWINS: "OPPONENTWINS",
+    	OPPONENT_DISCONNECTS: "OPPONENT_DISCONNECTS"
     },
     playerType: {
     	RED: "red",
@@ -421,7 +422,11 @@ connectFourApp.factory('gameStateManager', ['$rootScope', 'appConstantValues', '
 								currentState = data.newGameState;
 
 								$rootScope.$apply(); // Run angular's digest cycles to propogate state change
-						});
+							})
+							.on("opponentDisconnected", function() {
+								currentState = appConstantValues.gameStates.OPPONENT_DISCONNECTS;
+								$rootScope.$apply();	
+							});
 					});	
 			},
 			checkStateAndAdvanceGame: function() {
