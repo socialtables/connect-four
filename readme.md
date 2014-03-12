@@ -11,7 +11,7 @@ There are several variations of the game, but for this project we're using the b
 ## Objectives for Project Completion
 - Make the app beautiful.
 - Make the app responsive. It should look good on phones and tablets.
-- The user interface needs to work well for phones, tables, and laptops.
+- The user interface needs to work well for phones, tablets, and laptops.
 - Add animation to game pieces being dropped.
 
 ## Basic Functional Requirements
