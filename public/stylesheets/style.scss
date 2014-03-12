@@ -1,0 +1,76 @@
+/*
+ * Custom styles for Connect Four
+ */
+
+// Define colors for the players in variables, since they will be used more than
+// once
+$player-color-p1:  #F00;
+$player-color-p2:  #FF0;
+
+/* Labels for each player with the color of their playing piece */
+span.label-p1 {
+    background: $player-color-p1;
+}
+
+span.label-p2 {
+    background: $player-color-p2;
+}
+
+/* Regular Foundation labels are far too small */
+span.label {
+    font-size: 100%;
+}
+
+/* This class mostly gives indications in HTML -- not used in CSS anymore. */
+div.instructions {
+
+}
+
+/* A notifications 'tray' affixed to the top left for visibility. */
+div.notifications {
+    position: fixed;
+    top: 16px; left: 16px;
+    z-index: 2;
+}
+
+/* Ensure notifications stack atop one another */
+div.notifications span {
+    display: block;
+}
+
+/* The Connect Four grid itself */
+#grid {
+    table {
+        border: 1px solid #333;
+        background: #55F; // blue, like I remember it
+
+        tr {
+            /* Since table cells represent Connect Four cells, ensure they're
+               uniformly square and present a circular window to the world */
+            td {
+                height: 64px;
+                width: 64px;
+                border: 1px solid #333;
+                // border-radius hacks
+                $radius:  32px;
+                -moz-border-radius: $radius;
+                -webkit-border-radius: $radius;
+                -ms-border-radius: $radius;
+                -o-border-radius: $radius;
+                border-radius: $radius;
+            }
+
+            .cell-empty {
+                background: #FFF;
+            }
+
+            .cell-p1 {
+                background: $player-color-p1;
+            }
+
+            .cell-p2 {
+                background: $player-color-p2;
+            }
+        }
+    }
+}

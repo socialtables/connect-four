@@ -1,8 +1,48 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-}
+/*
+ * Custom styles for Connect Four
+ */
+/* Labels for each player with the color of their playing piece */
+span.label-p1 {
+  background: red; }
 
-a {
-  color: #00B7FF;
-}
+span.label-p2 {
+  background: yellow; }
+
+/* Regular Foundation labels are far too small */
+span.label {
+  font-size: 100%; }
+
+/* This class mostly gives indications in HTML -- not used in CSS anymore. */
+/* A notifications 'tray' affixed to the top left for visibility. */
+div.notifications {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  z-index: 2; }
+
+/* Ensure notifications stack atop one another */
+div.notifications span {
+  display: block; }
+
+/* The Connect Four grid itself */
+#grid table {
+  border: 1px solid #333;
+  background: #55F; }
+  #grid table tr {
+    /* Since table cells represent Connect Four cells, ensure they're
+       uniformly square and present a circular window to the world */ }
+    #grid table tr td {
+      height: 64px;
+      width: 64px;
+      border: 1px solid #333;
+      -moz-border-radius: 32px;
+      -webkit-border-radius: 32px;
+      -ms-border-radius: 32px;
+      -o-border-radius: 32px;
+      border-radius: 32px; }
+    #grid table tr .cell-empty {
+      background: #FFF; }
+    #grid table tr .cell-p1 {
+      background: red; }
+    #grid table tr .cell-p2 {
+      background: yellow; }
