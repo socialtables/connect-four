@@ -38,12 +38,10 @@ using the basic [Hasbro rules](http://www.hasbro.com/common/documents/dad2614d1c
 - If it doesn't load on MS Surface or Android Tablets, we won't know.
 
 ## Setup Instructions
-- We've created the backend server end points for you to interact
-  with.
-- Make sure you have node.js installed. Find it here:
-  [nodejs.org](http://nodejs.org)
-- Launch the node.js game server by typing `node app.js` in your
-  terminal
+- We've created the backend server end points for you to interact with.
+- Make sure you have node.js installed. Find it here: [nodejs.org](http://nodejs.org)
+- Install the dependencies by typing `npm install` in your terminal inside the project directory.
+- Launch the node.js game server by typing `node app.js` in your terminal.
 - Navigate to localhost:3000 to view the Connect 4 app
 - Modify the index.ejs file to create the user interface for the game
 
