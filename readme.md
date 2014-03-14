@@ -28,7 +28,8 @@ There are several variations of the game, but for this project we're using the b
 ## Setup Instructions
 - We've created the backend server end points for you to interact with.
 - Make sure you have node.js installed. Find it here: [nodejs.org](http://nodejs.org)
-- Launch the node.js game server by typing `node app.js` in your terminal
+- Install the dependencies by typing `npm install` in your terminal inside the project directory.
+- Launch the node.js game server by typing `node app.js` in your terminal.
 - Navigate to localhost:3000 to view the Connect 4 app
 - Modify the index.ejs file to create the user interface for the game
 
