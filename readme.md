@@ -8,7 +8,7 @@ The goal is to make a really sweet Connect Four app.
 There are several variations of the game, but for this project we're using the basic [Hasbro rules](http://www.hasbro.com/common/documents/dad2614d1c4311ddbd0b0800200c9a66/1EF6874419B9F36910222EB9858E8CB8.pdf)
 
 ## Objectives for Project Completion
-- Make the app beautiful.
+- Make the app look great.
 - Make the app responsive. It should look good on phones and tablets.
 - The user interface needs to work well for phones, tablets, and laptops.
 - Add animation to game pieces being dropped.
