@@ -14,37 +14,29 @@
       <span class="radius label" data-bind="css: extraClass, text: message"></span>
     </div>
 
+    <div class="container">
+
     <div class="row">
-      <div class="small-12 columns">
-        <div class="panel">
-
+      <div class="panel small-12 columns header">
+        <div>
+          <h1>CONNECT 4</h1>
           <div class="row">
-            <div class="small-3 small-centered columns">
-              <h1>Connect 4</h1>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="small-6 small-centered columns">
+            <div class="small-7 small-centered columns buttons">
               <button data-bind="click: startNewGame, enable: (currentGame() == null)" class="success button">New Game</button>
               <button data-bind="click: saveGame, enable: currentGame" class="button">Save Game</button>
               <button data-bind="click: quitGame, enable: currentGame" class="alert button">Quit Game</button>
             </div>
           </div>
 
-          <div class="row collapse">
-            <div class="small-2 columns">
-              <span class="prefix label-p1">Player One</span>
+          <div class="row collapse players">
+            <div class="small-5 columns">
+              <input type="text" placeholder="Player One" data-bind="value: playerOneName"/>
             </div>
-            <div class="small-3 columns">
-              <input type="text" placeholder="Name" data-bind="value: playerOneName"/>
+            <div class="small-2 columns vs">
+              <h3>VS</h3>
             </div>
-
-            <div class="small-offset-2 small-2 columns">
-              <span class="prefix label-p2">Player Two</span>
-            </div>
-            <div class="small-3 columns">
-              <input type="text" placeholder="Name" data-bind="value: playerTwoName"/>
+            <div class="small-5 columns">
+              <input type="text" placeholder="Player Two" data-bind="value: playerTwoName"/>
             </div>
           </div>
 
@@ -53,18 +45,18 @@
     </div>
 
     <div class="row" data-bind="fadeVisible: (currentGame() == null)">
-      <div class="row collapse small-10 small-centered columns">
-        <div class="small-8 columns">
+      <div class="row collapse small-12 small-centered columns load-game">
+        <div class="small-12 columns">
           <input type="text" placeholder="Game ID" data-bind="value: loadGameId"/>
         </div>
-        <div class="small-4 columns">
+        <div class="small-12 columns">
           <a href="#" class="button postfix" data-bind="click: loadGame">Load Saved Game</a>
         </div>
       </div>
     </div>
 
     <div class="row" data-bind="fadeVisible: currentGame">
-      <div class="panel small-6 columns">
+      <div class="panel small-12 columns">
         <div class="small-10 small-centered columns instructions" data-bind="if: (currentGame() && !gameWinner())">
           <p style="font-size: 120%">It's <span data-bind="text: currentPlayerName"></span>'s turn.</p>
 
@@ -78,8 +70,62 @@
           <p style="font-size: 125%">Congratulations <span data-bind="text: currentPlayerName"></span>! You've won!</p>
         </div>
       </div>
-      <div class="small-6 columns">
+      <div class="small-12 columns">
         <div id="grid" class="row">
+          <ul data-checkerbatch="1">
+            <li><div data-cell="0" class="animate"></div></li>
+            <li><div data-cell="1" class="animate"></div></li>
+            <li><div data-cell="2" class="animate"></div></li>
+            <li><div data-cell="3" class="animate"></div></li>
+            <li><div data-cell="4" class="animate"></div></li>
+            <li><div data-cell="5" class="animate"></div></li>
+            <li><div data-cell="6" class="animate"></div></li>
+          </ul>
+          <ul data-checkerbatch="2">
+            <li><div data-cell="0" class="animate"></div></li>
+            <li><div data-cell="1" class="animate"></div></li>
+            <li><div data-cell="2" class="animate"></div></li>
+            <li><div data-cell="3" class="animate"></div></li>
+            <li><div data-cell="4" class="animate"></div></li>
+            <li><div data-cell="5" class="animate"></div></li>
+            <li><div data-cell="6" class="animate"></div></li>
+          </ul>
+          <ul data-checkerbatch="3">
+            <li><div data-cell="0" class="animate"></div></li>
+            <li><div data-cell="1" class="animate"></div></li>
+            <li><div data-cell="2" class="animate"></div></li>
+            <li><div data-cell="3" class="animate"></div></li>
+            <li><div data-cell="4" class="animate"></div></li>
+            <li><div data-cell="5" class="animate"></div></li>
+            <li><div data-cell="6" class="animate"></div></li>
+          </ul>
+          <ul data-checkerbatch="4">
+            <li><div data-cell="0" class="animate"></div></li>
+            <li><div data-cell="1" class="animate"></div></li>
+            <li><div data-cell="2" class="animate"></div></li>
+            <li><div data-cell="3" class="animate"></div></li>
+            <li><div data-cell="4" class="animate"></div></li>
+            <li><div data-cell="5" class="animate"></div></li>
+            <li><div data-cell="6" class="animate"></div></li>
+          </ul>
+          <ul data-checkerbatch="5">
+            <li><div data-cell="0" class="animate"></div></li>
+            <li><div data-cell="1" class="animate"></div></li>
+            <li><div data-cell="2" class="animate"></div></li>
+            <li><div data-cell="3" class="animate"></div></li>
+            <li><div data-cell="4" class="animate"></div></li>
+            <li><div data-cell="5" class="animate"></div></li>
+            <li><div data-cell="6" class="animate"></div></li>
+          </ul>
+          <ul data-checkerbatch="6">
+            <li><div data-cell="0" class="animate"></div></li>
+            <li><div data-cell="1" class="animate"></div></li>
+            <li><div data-cell="2" class="animate"></div></li>
+            <li><div data-cell="3" class="animate"></div></li>
+            <li><div data-cell="4" class="animate"></div></li>
+            <li><div data-cell="5" class="animate"></div></li>
+            <li><div data-cell="6" class="animate"></div></li>
+          </ul>
           <table class="small-centered">
             <tbody data-bind="foreach: currentGameRows">
               <tr data-bind="foreach: columns">
@@ -90,6 +136,7 @@
         </div>
       </div>
     </div>
+  </div>
 
     <script src="js/vendor/jquery.js"></script>
     <script src="js/vendor/underscore.js"></script>
