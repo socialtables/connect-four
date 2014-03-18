@@ -26,6 +26,7 @@ function ConnectFourNotification(message, alertType) {
  * Mainly useful as a container for the ko.observable value, and for convenient
  * placement of styling methods.
  */
+
 function ConnectFourCell(x, y, value) {
     var self = this;
     self.x = x;
@@ -282,6 +283,12 @@ function ConnectFourViewModel() {
         var game = self.currentGame(),
             x = cell.x,
             y = cell.y;
+            if (self.currentPlayer() === 1) {
+                var playerClass = "checker-p2";
+            }
+            else {
+                var playerClass = "checker-p1";
+            }
 
         var stored = false;
         var column = game.grid[x];
@@ -306,8 +313,12 @@ function ConnectFourViewModel() {
             return;
         }
 
+        $(".animate").removeClass("checker-p1 checker-p2").addClass(playerClass);
+
         var nextPlayer = (self.currentPlayer() % 2) + 1;
         self.currentPlayer(nextPlayer);
+
+        $("#grid ul[data-checkerbatch="+ y +"] .animate[data-cell="+ x +"]").addClass("down");
     };
 
     /**
