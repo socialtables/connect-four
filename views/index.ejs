@@ -48,7 +48,13 @@
           <div id="gameBoard" ng-show="data">
             <div class="game-board-column" ng-repeat="column in data" ng-click="insertCheckerIntoColumn($index)">
               <div class="game-board-slot" ng-repeat="slot in column | reverse">
-                <div class="checker" ng-show="isSlotSelected(slot)" ng-class="{ 'red-checker': isSlotSelectedByRedPlayer(slot), 'black-checker': isSlotSelectedByBlackPlayer(slot), 'winning-checker': slot.isWinningSlot }"></div>
+                <div class="checker" ng-show="isSlotSelected(slot)" ng-class="{ 
+                'red-checker': isSlotSelectedByRedPlayer(slot) && !slot.isWinningSlot, 
+                'black-checker': isSlotSelectedByBlackPlayer(slot) && !slot.isWinningSlot,
+                'selected-checker': (isSlotSelectedByRedPlayer(slot) || isSlotSelectedByBlackPlayer(slot)) && !slot.isWinningSlot,
+                'winning-checker': slot.isWinningSlot
+                }">
+                </div>
               </div>
             </div>
           </div>
