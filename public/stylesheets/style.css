@@ -136,6 +136,7 @@
 .checker.ng-hide { 
 	bottom: 400px;
 	display:block!important;
+	opacity: 0;
 }
 
 .red-checker {
