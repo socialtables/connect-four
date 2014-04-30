@@ -237,3 +237,8 @@ div.notifications span {
 .p2Color {
   color: yellow;
 }
+
+/* Load button */
+.loadGame button {
+  margin-top: 2px;
+}

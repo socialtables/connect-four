@@ -47,9 +47,13 @@
       </div>
 
       <div class="row" data-bind="fadeVisible: (currentGame() == null)">
-        <div class="loadGame column full">
+        <div class="loadGame column three-fourths">
           <h4 class="prefix">LOAD GAME</h4>
           <input type="text" placeholder="Game ID" class="nameInput" data-bind="value: loadGameId"/>
+        </div>
+        <div class="loadGame column fourth">
+          <h4 class="prefix">&nbsp;</h4>
+          <button class="button postfix success" data-bind="click: loadGame">Load</button>
         </div>
       </div>
 
