@@ -1,7 +1,7 @@
 # Connect Four (Gen 2)
 
 This repo is for people who want to work at Social Tables. And whoever
-else wants to join in.
+else wants to join in.  You might also want to checkout out the [Gen 1 project](https://github.com/socialtables/connect-four/tree/version1)
 
 The goal is to make a really sweet Connect Four app. Check out the
 current version [on Heroku](http://damp-shore-9247.herokuapp.com/) --
