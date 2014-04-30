@@ -339,6 +339,7 @@ function ConnectFourViewModel() {
         // Send off the request and show the loading indicator
         $.ajax(params);
         self.showLoading();
+        setTimeout("$('.cell').height($('.cell').width());", 100);
     };
 
     /**
@@ -353,7 +354,7 @@ function ConnectFourViewModel() {
 
     /**
      * Save the current game to the backend.
-     * 
+     *
      * Serializes the current game grid to a simple array and notifies the user of
      * the game ID, in case the user wants to load the saved game in future. Since
      * this isn't critical to the flow of the game, don't interrupt with a loading
@@ -368,12 +369,12 @@ function ConnectFourViewModel() {
                 contentType: "application/json",  // must set manually, jQuery doesn't help
                 success: function(data, txtStatus, xhr) {
                     self.displayTimedNotification(
-                        "Saved ID '" + self.currentGame().id + "'", 
+                        "Saved ID '" + self.currentGame().id + "'",
                         "success");
                 },
                 error: function(xhr, txtStatus, err) {
                     self.displayTimedNotification(
-                        "Error saving game: " + xhr.responseJSON.msg, 
+                        "Error saving game: " + xhr.responseJSON.msg,
                         "alert");
                 }
             };
@@ -382,7 +383,7 @@ function ConnectFourViewModel() {
 
     /**
      * Load a saved game from the backend.
-     * 
+     *
      * Given a game ID (typed into the input box) attempt to load the game from
      * the server backend and continue play. Since this does affect gameplay,
      * use the loading indicator while running.
@@ -398,7 +399,7 @@ function ConnectFourViewModel() {
                     self.hideLoading();
                     self.currentGame(new ConnectFourGame(gameId, data.data));
                     self.displayTimedNotification(
-                        "Loaded '" + gameId + "'", 
+                        "Loaded '" + gameId + "'",
                         "success");
                     // Start play!
                     self.currentPlayer(1);
@@ -409,7 +410,7 @@ function ConnectFourViewModel() {
                     self.hideLoading();
                     self.currentGame(null);
                     self.displayTimedNotification(
-                        "Error loading game: " + xhr.responseJSON.msg, 
+                        "Error loading game: " + xhr.responseJSON.msg,
                         "alert");
                 }
             };

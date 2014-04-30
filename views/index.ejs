@@ -3,95 +3,90 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Connect 4</title>
-    <link rel="stylesheet" href="stylesheets/foundation.css" />
-    <link rel="stylesheet" href="stylesheets/style.css" />
+    <title>Connect Four</title>
+    <link rel="stylesheet" href="stylesheets/grid.css">
+    <link rel="stylesheet" href="stylesheets/style.css">
     <script src="js/vendor/modernizr.js"></script>
   </head>
   <body>
 
-    <div class="notifications" data-bind="foreach: currentNotifications">
-      <span class="radius label" data-bind="css: extraClass, text: message"></span>
-    </div>
+    <div class="container">
 
-    <div class="row">
-      <div class="small-12 columns">
-        <div class="panel">
+      <div class="notifications" data-bind="foreach: currentNotifications">
+        <span class="radius label" data-bind="text: message"></span>
+      </div>
 
-          <div class="row">
-            <div class="small-3 small-centered columns">
-              <h1>Connect 4</h1>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="small-6 small-centered columns">
-              <button data-bind="click: startNewGame, enable: (currentGame() == null)" class="success button">New Game</button>
-              <button data-bind="click: saveGame, enable: currentGame" class="button">Save Game</button>
-              <button data-bind="click: quitGame, enable: currentGame" class="alert button">Quit Game</button>
-            </div>
-          </div>
-
-          <div class="row collapse">
-            <div class="small-2 columns">
-              <span class="prefix label-p1">Player One</span>
-            </div>
-            <div class="small-3 columns">
-              <input type="text" placeholder="Name" data-bind="value: playerOneName"/>
-            </div>
-
-            <div class="small-offset-2 small-2 columns">
-              <span class="prefix label-p2">Player Two</span>
-            </div>
-            <div class="small-3 columns">
-              <input type="text" placeholder="Name" data-bind="value: playerTwoName"/>
-            </div>
-          </div>
-
+      <div class="row">
+        <div class="column full">
+          <h1 class="title">Connect 4</h1>
         </div>
       </div>
-    </div>
 
-    <div class="row" data-bind="fadeVisible: (currentGame() == null)">
-      <div class="row collapse small-10 small-centered columns">
-        <div class="small-8 columns">
-          <input type="text" placeholder="Game ID" data-bind="value: loadGameId"/>
+      <div class="row">
+        <div class="column third">
+          <button data-bind="click: startNewGame, enable: (currentGame() == null)" class="success button">New Game</button>
         </div>
-        <div class="small-4 columns">
-          <a href="#" class="button postfix" data-bind="click: loadGame">Load Saved Game</a>
+        <div class="column third">
+          <button data-bind="click: saveGame, enable: currentGame" class="default button">Save Game</button>
         </div>
-      </div>
-    </div>
-
-    <div class="row" data-bind="fadeVisible: currentGame">
-      <div class="panel small-6 columns">
-        <div class="small-10 small-centered columns instructions" data-bind="if: (currentGame() && !gameWinner())">
-          <p style="font-size: 120%">It's <span data-bind="text: currentPlayerName"></span>'s turn.</p>
-
-          <p>Click anywhere in a column to drop your piece into that column -- it will appear
-          atop any pieces already in the column, or at the bottom of the column if the column
-          is empty.</p>
-
-          <p>(<a href="http://www.hasbro.com/common/documents/dad2614d1c4311ddbd0b0800200c9a66/1EF6874419B9F36910222EB9858E8CB8.pdf">Rules</a>)</p>
-        </div>
-        <div class="small-10 small-centered columns instructions" data-bind="if: gameWinner">
-          <p style="font-size: 125%">Congratulations <span data-bind="text: currentPlayerName"></span>! You've won!</p>
+        <div class="column third">
+          <button data-bind="click: quitGame, enable: currentGame" class="alert button">Quit Game</button>
         </div>
       </div>
-      <div class="small-6 columns">
-        <div id="grid" class="row">
-          <table class="small-centered">
+
+      <div class="row nameInputRow">
+        <div class="column half">
+          <h4 class="prefix label-p1">Player One</h4>
+          <input type="text" placeholder="Name" data-bind="value: playerOneName" class="nameInput p1"/>
+        </div>
+        <div class="column half">
+          <h4 class="prefix label-p2">Player Two</h4>
+          <input type="text" placeholder="Name" data-bind="value: playerTwoName" class="nameInput p2"/>
+        </div>
+      </div>
+
+      <div class="row" data-bind="fadeVisible: (currentGame() == null)">
+        <div class="loadGame column full">
+          <h4 class="prefix">LOAD GAME</h4>
+          <input type="text" placeholder="Game ID" class="nameInput" data-bind="value: loadGameId"/>
+        </div>
+      </div>
+
+      <div class="row gameRow" data-bind="fadeVisible: currentGame">
+        <div id="grid" class="column full">
+          <table class="gridTable">
             <tbody data-bind="foreach: currentGameRows">
               <tr data-bind="foreach: columns">
-                <td data-bind="css: valueForCSS, rowColumnClasses: $data, click: $root.selectCell"></td>
+                <td class="cell" data-bind="css: valueForCSS, rowColumnClasses: $data, click: $root.selectCell"></td>
               </tr>
             </tbody>
           </table>
         </div>
       </div>
+
+      <div class="row">
+        <h2 class="youWin" data-bind="if: gameWinner">Congratulations <span data-bind="text: currentPlayerName"></span>!&nbsp; You've won!</h2>
+      </div>
+
+      <div class="row" data-bind="fadeVisible: currentGame">
+        <div class="column full">
+          <div class="instructionCont" data-bind="if: (currentGame() && !gameWinner())">
+            <h3 class="turnTicker">It's <span data-bind="text: currentPlayerName"></span>'s turn.</h3>
+            <p class="rules">Click anywhere in a column to drop your piece into that column &mdash; it will appear
+            atop any pieces already in the column, or at the bottom of the column if the column
+            is empty.
+            </p>
+            <a class="ruleButton" href="http://www.hasbro.com/common/documents/dad2614d1c4311ddbd0b0800200c9a66/1EF6874419B9F36910222EB9858E8CB8.pdf">Rules</a>
+            <br>&nbsp;
+          </div>
+        </div>
+      </div>
+
+    <!-- Container Close -->
     </div>
 
     <script src="js/vendor/jquery.js"></script>
+    <script src="js/vendor/jquery.easyModal.js"></script>
     <script src="js/vendor/underscore.js"></script>
     <script src="js/vendor/knockout.js"></script>
     <script src="js/connect-four/utils.js"></script>
@@ -100,6 +95,10 @@
     <script type="text/javascript">
       // Call this at the page level so it's clear from the HTML what'll happen
       ko.applyBindings(new ConnectFourViewModel());
+
+      $(window).resize(function() {
+        $(".cell").height($(".cell").width());
+      });
     </script>
   </body>
 </html>
