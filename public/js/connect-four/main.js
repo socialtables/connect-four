@@ -339,7 +339,7 @@ function ConnectFourViewModel() {
         // Send off the request and show the loading indicator
         $.ajax(params);
         self.showLoading();
-        setTimeout("$('.cell').height($('.cell').width());", 100);
+        setTimeout("$('.cell').height($('.cell').width()); smoothScroll.animateScroll( null, '#grid' );", 700);
     };
 
     /**

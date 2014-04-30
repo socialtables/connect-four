@@ -4,11 +4,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Connect Four</title>
+    <link rel="stylesheet" href="stylesheets/animate.css">
     <link rel="stylesheet" href="stylesheets/grid.css">
     <link rel="stylesheet" href="stylesheets/style.css">
     <script src="js/vendor/modernizr.js"></script>
   </head>
-  <body>
+  <body class="animated fadeInDown">
 
     <div class="container">
 
@@ -52,32 +53,27 @@
         </div>
       </div>
 
-      <div class="row gameRow" data-bind="fadeVisible: currentGame">
-        <div id="grid" class="column full">
-          <table class="gridTable">
-            <tbody data-bind="foreach: currentGameRows">
-              <tr data-bind="foreach: columns">
-                <td class="cell" data-bind="css: valueForCSS, rowColumnClasses: $data, click: $root.selectCell"></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
       <div class="row">
-        <h2 class="youWin" data-bind="if: gameWinner">Congratulations <span data-bind="text: currentPlayerName"></span>!&nbsp; You've won!</h2>
-      </div>
-
-      <div class="row" data-bind="fadeVisible: currentGame">
-        <div class="column full">
-          <div class="instructionCont" data-bind="if: (currentGame() && !gameWinner())">
-            <h3 class="turnTicker">It's <span data-bind="text: currentPlayerName"></span>'s turn.</h3>
+        <div class="column third">
+          <div class="instructionCont" data-bind="if: (currentGame() && !gameWinner())" data-bind="fadeVisible: currentGame">
+            <h3 class="turnTicker" data-bind="css: { p1Color: currentPlayer() == 1, p2Color: currentPlayer() == 2 }">It's <span data-bind="text: currentPlayerName"></span>'s turn.</h3>
             <p class="rules">Click anywhere in a column to drop your piece into that column &mdash; it will appear
             atop any pieces already in the column, or at the bottom of the column if the column
             is empty.
             </p>
             <a class="ruleButton" href="http://www.hasbro.com/common/documents/dad2614d1c4311ddbd0b0800200c9a66/1EF6874419B9F36910222EB9858E8CB8.pdf">Rules</a>
-            <br>&nbsp;
+          </div>
+          <h2 data-bind="if: gameWinner, css: { p1Color: currentPlayer() == 1, p2Color: currentPlayer() == 2 }" class="youWin">Congratulations <span data-bind="text: currentPlayerName"></span><br>You've won!</h2>
+        </div>
+        <div id="gridCont" class="gameRow" data-bind="visible: currentGame, css: { p1ColorH: currentPlayer() == 1, p2ColorH: currentPlayer() == 2 }">
+          <div id="grid" class="column two-thirds">
+            <table class="gridTable">
+              <tbody data-bind="foreach: currentGameRows">
+                <tr data-bind="foreach: columns">
+                  <td class="cell" data-bind="css: valueForCSS, rowColumnClasses: $data, click: $root.selectCell"></td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
@@ -89,6 +85,7 @@
     <script src="js/vendor/jquery.easyModal.js"></script>
     <script src="js/vendor/underscore.js"></script>
     <script src="js/vendor/knockout.js"></script>
+    <script src="js/vendor/smooth-scroll.js"></script>
     <script src="js/connect-four/utils.js"></script>
     <script src="js/connect-four/bindings.js"></script>
     <script src="js/connect-four/main.js"></script>
@@ -98,6 +95,15 @@
 
       $(window).resize(function() {
         $(".cell").height($(".cell").width());
+      });
+
+      smoothScroll.init({
+          speed: 1000, // Integer. How fast to complete the scroll in milliseconds
+          easing: 'easeInOutCubic', // Easing pattern to use
+          updateURL: false, // Boolean. Whether or not to update the URL with the anchor hash on scroll
+          offset: 0, // Integer. How far to offset the scrolling anchor location in pixels
+          callbackBefore: function ( toggle, anchor ) {}, // Function to run before scrolling
+          callbackAfter: function ( toggle, anchor ) {} // Function to run after scrolling
       });
     </script>
   </body>
