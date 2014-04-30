@@ -164,7 +164,7 @@ h4.prefix {
 /* A notifications 'tray' affixed to the top left for visibility. */
 div.notifications {
   position: fixed !important;
-  top: 16px;
+  bottom: 16px;
   right: 16px;
   left: 16px;
   z-index: 2;

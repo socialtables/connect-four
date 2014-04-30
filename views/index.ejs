@@ -9,13 +9,13 @@
     <link rel="stylesheet" href="stylesheets/style.css">
     <script src="js/vendor/modernizr.js"></script>
   </head>
-  <body class="animated fadeInDown">
+  <body>
 
-    <div class="container">
+    <div class="notifications" data-bind="foreach: currentNotifications">
+      <span class="radius label" data-bind="text: message"></span>
+    </div>
 
-      <div class="notifications" data-bind="foreach: currentNotifications">
-        <span class="radius label" data-bind="text: message"></span>
-      </div>
+    <div class="container animated fadeInDown">
 
       <div class="row">
         <div class="column full">
