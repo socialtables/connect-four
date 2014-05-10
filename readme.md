@@ -1,41 +1,14 @@
-# Connect Four (Gen 2)
+# Connect Four
 
 This repo is for people who want to work at Social Tables. And whoever
-else wants to join in.  You might also want to checkout out the [Gen 1 project](https://github.com/socialtables/connect-four/tree/version1)
+else wants to join in.  For those who want to start from scrach, you should check out the [Gen 1 project](https://github.com/socialtables/connect-four/tree/version1)
 
 The goal is to make a really sweet Connect Four app. Check out the
-current version [on Heroku](http://damp-shore-9247.herokuapp.com/) --
-we think this could look better, and we hope you do too.
+current version [on Heroku](http://damp-shore-9247.herokuapp.com/)
 
 ## Game Background
 There are several variations of the game, but for this project we're
 using the basic [Hasbro rules](http://www.hasbro.com/common/documents/dad2614d1c4311ddbd0b0800200c9a66/1EF6874419B9F36910222EB9858E8CB8.pdf)
-
-## Objectives for Project Completion
-- Make the app look great.
-- Make the app responsive. It should look good on phones and tablets.
-- The user interface needs to work well for phones, tablets, and
-  laptops.
-- Add animation to game pieces being dropped.
-
-## Guidelines
-- Your finished project does not need to look anything like the
-  current app.
-- You are free to make any changes to the client side code you
-  wish. However, we encourage you to avoid re-writing code without a
-  good reason.
-- You shouldn't have to touch the server-side code.
-- You can use any libraries you like.
-- We'll be judging your submission on Visual Design, User Interface,
-  and Front-End code.
-
-## Compatibility
-- We will be testing the game in Google Chrome on iPhone, iPad, and a
-  modern Android phone.
-- The app must be fully functional on at least one of the two
-  phones. If you don't have access to an iPad to test functionality,
-  make sure that the app still looks good at iPad resolutions.
-- If it doesn't load on MS Surface or Android Tablets, we won't know.
 
 ## Setup Instructions
 - We've created the backend server end points for you to interact with.
@@ -73,3 +46,9 @@ These were completed by @necaris in Gen 1 of this project.
   want
 - Submit a pull request to the master branch when you're
   done. Congrats!
+
+## Contributors
+- mcwhittemore: Game concept and API
+- necaris: Version 1 of Functional Game
+- jmoss20: Responsive Front-End Design
+- edkim: Documentation and Typos
