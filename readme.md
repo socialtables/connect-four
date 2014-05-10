@@ -1,10 +1,14 @@
 # Connect Four
 
 This repo is for people who want to work at Social Tables. And whoever
-else wants to join in.  For those who want to start from scrach, you should check out the [Gen 1 project](https://github.com/socialtables/connect-four/tree/version1)
+else wants to join in.  For those who want to start from the beginning, you should use the [Gen 1 project](https://github.com/socialtables/connect-four/tree/version1)
 
 The goal is to make a really sweet Connect Four app. Check out the
 current version [on Heroku](http://damp-shore-9247.herokuapp.com/)
+
+## Issues
+
+- We're now using issues to keep track of improvements we can make to the game. Please refer to those if you want some guidance on what we're looking to add next.
 
 ## Game Background
 There are several variations of the game, but for this project we're
