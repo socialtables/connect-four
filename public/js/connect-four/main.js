@@ -323,6 +323,68 @@ function ConnectFourViewModel() {
         self.currentPlayer(nextPlayer);
     };
 
+    self.currentPlayer.subscribe(function(player) {
+        if (self.playerCount() == 1 && player == 2) {
+            self.makeComputerMove();
+        };
+    });
+
+    /**
+     * Real basic AI for computer's moves.
+     *
+     */
+
+    self.makeComputerMove = function () {
+        var game = self.currentGame(),
+            maxDepth = 2;
+
+        // Set max depth for pursuing the search for best move.
+        var bestMove = self.findAValidMove(game.serializedGrid(), self.currentPlayer(), maxDepth);
+
+        // Imitate computer move by triggering `selectCell`
+        self.selectCell(game.grid[bestMove.x][0]);
+
+    }
+
+    // In theory, this function can be recursive to produce better results,
+    // but for now, it's not going any further.
+    self.findAValidMove = function (grid, turn, depth) {
+        var bestMove = 0,
+            bestScore = 0;
+
+        for (var i = 0; i < grid.length; i++) {
+
+
+            // If current column is not suitable for a new move.
+            if (grid[i][0] != null) {
+                continue;
+            }
+
+            // Clone a temporary grid, and use it for calculations. The method
+            // is not backwards compatible, and requires external library for
+            // legacy browsers.
+            var gridClone = JSON.parse(JSON.stringify(grid));
+            column = gridClone[i];
+
+            // Place a piece.
+            for (var j = column.length - 1; j >= 0; j--) {
+                if(column[j] == null) {
+                    column[j] = turn;
+                    break;
+                }
+            }
+
+            var score = scoreGameGrid(gridClone, _.zip.apply(_, gridClone));
+
+            // If our score is better then hers and our previous.
+            if (score[turn] >= score[3 - turn] && score[turn] > bestScore) {
+                bestScore = score[turn];
+                bestMove = i;
+            };
+        };
+        return {x: bestMove}
+    }
+
     /**
      * Resets game options and sets game status, so that the player can start
      * the game.

@@ -100,3 +100,86 @@ function searchDiagonally(x, y, grid) {
     // We've tried everything, no luck.
     return false;    
 }
+
+var scoreGameGrid = function (matrix, transposed) {
+
+    var column = null,
+        current,
+        streak = 0,
+        streakOf = null,
+        bestOf = {1: 0, 2: 0 }; // Player 1, 2
+    
+    /* Vertical checks */
+    for (var i = 0; i < matrix.length; i++) {
+        streakOf = null;
+        column = matrix[i];
+
+        for (var j = 0; j < column.length; j++) {
+            current = column[j];
+
+            if (current) {
+                // If we have a new piece, start counting.
+                if (streakOf == null) {
+                    streakOf = current;
+                    streak = 1;
+                }
+                // Keep counting as we have the same.
+                else if (streakOf == current) {
+                    ++streak;
+                }
+                // Otherwise, this one is useless anymore, ignore this column.
+                else {
+                    break;
+                }
+            }
+            else {
+                streakOf = null;
+            }
+        }
+        // Having a better score, save it.
+        if (bestOf[streakOf] < streak) bestOf[streakOf] = streak;
+    }
+
+    /* Horizontal checks */
+    for (var i = 0; i < transposed.length; i++) {
+        streakOf = null;
+        column = transposed[i];
+
+        for (var j = 0; j < column.length; j++) {
+            current = column[j];
+            if (current) {
+                // If we have a new piece, start counting.
+                if (streakOf == null) {
+                    streakOf = current;
+                    streak = 1;
+                }
+                // Keep counting as we have the same.
+                else if (streakOf == current) {
+                    ++streak;
+                }
+                // We have a different piece, this prevents previous one to
+                // get better, so we should ignore it. Well the other end can
+                // be open, but ignore it for now. Besides, start counting the
+                // new streak.
+                else {
+                    streakOf = current;
+                    streak = 1;
+                }
+            }
+            // We have an empty spot.
+            else {
+                if (bestOf[streakOf] < streak) bestOf[streakOf] = streak;
+                streakOf = null;
+            }
+        }
+        // Having a better score, save it.
+        if (bestOf[streakOf] < streak) bestOf[streakOf] = streak;
+    }
+
+    /* Diagonal checks */
+    // I don't do diagonal checks for the sake of simplicity. It's gonna be
+    // like reinventing the wheel, because there are much better algorithms.
+
+    return bestOf;
+}
+
