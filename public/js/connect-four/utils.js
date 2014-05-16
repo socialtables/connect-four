@@ -24,8 +24,7 @@ function containsStreakOfValues(matrix) {
                 // If the cell is empty or doesn't match the current streak, 
                 // we have to give up
                 streak = 0; 
-                streakOf = null;
-                continue;
+                streakOf = current; // sets to current state and continue only if empty
             } else if (!streakOf) {
                 // Perhaps start a new streak?
                 streakOf = current;
