@@ -9,12 +9,7 @@
  * 4 or more of the same value (indicating, in this case, the same player's
  * pieces) in a row.
  */
-/**
- * **Ricky** This is the culprit function. Bug arises when there is a switch
- * of colors starting a streak (row or column)
- */
 function containsStreakOfValues(matrix) {
-    console.log(matrix.toString())
     var streak = null,
         streakOf = null,
         current = null;
@@ -24,25 +19,21 @@ function containsStreakOfValues(matrix) {
         // left and we want to try from the bottom up
         for (var j = (matrix[i].length - 1); j >= 0; j--) {
             current = matrix[i][j];
-            // **Ricky** this if/elif holds issue. Can't just continue
-            if ((current === null) || (streakOf && (current != streakOf))) {
-                // If the cell is empty or doesn't match the current streak, 
-                // we have to give up
-                streak = 0; 
-                streakOf = current; // **Ricky** sets to either null or new streak
-                if(!streakOf){
-                    // **Ricky** only continue if cell is empty
-                    continue;
+            if (current) {
+                // if the space is not empty
+                if (current == streakOf){
+                    // if the space is part of the current streak
+                    streak++;
                 }
-            } else if (!streakOf) {
-                // Perhaps start a new streak?
-                streakOf = current;
+                else{
+                    streakOf = current;
+                    streak = 1;
+                    // we've started a new streak!
+                }
             }
-            if (current == streakOf) {
-                // Increment the current streak, if we've found a corresponding
-                // value.
-                streak++;
-                console.log(streak)
+            else {
+                streak = 0;
+                // the space is empty. starting back at 0
             }
             if (streak == 4) {
                 // That's a win!
