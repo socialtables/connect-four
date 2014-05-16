@@ -46,6 +46,12 @@ h1.title {
   border-radius: 3px;
 }
 
+.button:disabled, .button:disabled:hover, .button:disabled:active {
+  border-color: #777 !important;
+  color: #777 !important;
+  background-color: transparent !important;
+}
+
 .default:hover {
   border: solid 2px yellow;
   border-radius: 3px;
@@ -99,6 +105,30 @@ h4.prefix {
   text-align: left;
   display: block;
   margin: 0;
+  text-transform: uppercase;
+}
+
+/* New game options */
+.gameOptionsRow 
+{
+  margin-top: 20px;
+}
+
+.optionSelect {
+  width: 100%;
+  padding: 10px;
+  border: solid 2px white;
+  border-radius: 3px;
+  outline: none !important;
+  background-color: transparent;
+  font-size: 0.8rem;
+  color: white;
+  margin-bottom: 20px;
+}
+
+.optionSelect  option {
+  background-color: rgb(122, 183, 215);
+  color: white;
 }
 
 /* Player name inputs */

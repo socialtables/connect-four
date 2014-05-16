@@ -25,7 +25,7 @@
 
       <div class="row">
         <div class="column third">
-          <button data-bind="click: startNewGame, enable: (currentGame() == null)" class="success button">New Game</button>
+          <button data-bind="click: newGame, enable: (currentGame() == null && gameStatus() == null)" class="success button">New Game</button>
         </div>
         <div class="column third">
           <button data-bind="click: saveGame, enable: currentGame" class="default button">Save Game</button>
@@ -35,14 +35,40 @@
         </div>
       </div>
 
-      <div class="row nameInputRow">
+      <div class="row gameOptionsRow" data-bind="fadeVisible: (gameStatus() == GAME_STATE_SETUP)">
         <div class="column half">
-          <h4 class="prefix label-p1">Player One</h4>
+          <h4 class="prefix">Player Count</h4>
+          <select data-bind="value: playerCount" class="optionSelect">
+            <option value="1">Single Player vs. Computer</option>
+            <option value="2">Two Players (Turn based)</option>
+          </select>
+        </div>
+        <div class="column half" data-bind="fadeVisible: (playerCount() == 1)">
+          <h4 class="prefix">Player One Starts</h4>
+          <select data-bind="value: playerOneStarts" class="optionSelect">
+            <option value="1">Yes</option>
+            <option value="2">No, Computer Starts</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row nameInputRow" data-bind="fadeVisible: (gameStatus() == GAME_STATE_SETUP)">
+        <div class="column half">
+          <h4 class="prefix label-p1">Player One Name</h4>
           <input type="text" placeholder="Name" data-bind="value: playerOneName" class="nameInput p1"/>
         </div>
-        <div class="column half">
-          <h4 class="prefix label-p2">Player Two</h4>
+        <div class="column half" data-bind="fadeVisible: (playerCount() == 2)">
+          <h4 class="prefix label-p2">Player Two Name</h4>
           <input type="text" placeholder="Name" data-bind="value: playerTwoName" class="nameInput p2"/>
+        </div>
+      </div>
+
+      <div class="row" data-bind="fadeVisible: (gameStatus() == GAME_STATE_SETUP)">
+        <div class="column third shift">
+          <button data-bind="click: startGame" class="default button">Start Game</button>
+        </div>
+        <div class="column third">
+          <button data-bind="click: cancelGame" class="default button">Cancel</button>
         </div>
       </div>
 
@@ -95,7 +121,8 @@
     <script src="js/connect-four/main.js"></script>
     <script type="text/javascript">
       // Call this at the page level so it's clear from the HTML what'll happen
-      ko.applyBindings(new ConnectFourViewModel());
+      var game = new ConnectFourViewModel();
+      ko.applyBindings(game);
 
       $(window).resize(function() {
         $(".cell").height($(".cell").width());

@@ -14,6 +14,9 @@
  *
  * Includes properties for display and styling.
  */
+var GAME_STATE_SETUP = "setup";
+var GAME_STATE_PLAY = "play";
+
 function ConnectFourNotification(message, alertType) {
     var self = this;
     self.message = message;
@@ -185,6 +188,7 @@ function ConnectFourViewModel() {
     self.loadGameId = ko.observable(null);  // serves 'load game' input / button
 
     /* Game state */
+    self.gameStatus = ko.observable(null); // Can move this to ConnectFourGame
 
     // If a game is in progress, this holds a `ConnectFourGame` instance.
     self.currentGame = ko.observable(null);
@@ -205,19 +209,28 @@ function ConnectFourViewModel() {
 
     // Players' names, for friendliness and convenience in Knockout bindings
     // at the root level.
-    self.playerOneName = ko.observable(null);
-    self.playerTwoName = ko.observable(null);
+    self.playerOneName = ko.observable("Red");
+    self.playerTwoName = ko.observable("Yellow");
 
     self.currentPlayerName = ko.computed(function() {
         switch(self.currentPlayer()) {
             case 1:
               return self.playerOneName();
             case 2:
-              return self.playerTwoName();
+              return self.playerCount() == 1 ? "Computer" : self.playerTwoName();
             default:
               return null;
         }
     });
+
+    /* Game options */
+
+    // If player count is 1, then the game is 'Player 1 vs Computer'.
+    self.playerCount = ko.observable(null);
+
+    // If set to 1 (only possible with single player config), player starts
+    // the game, otherwise computer starts.
+    self.playerOneStarts = ko.observable(null);
 
     /**
      * Display a notification to the player(s) with a built-in timeout.
@@ -311,12 +324,31 @@ function ConnectFourViewModel() {
     };
 
     /**
+     * Resets game options and sets game status, so that the player can start
+     * the game.
+     *
+     */
+    self.newGame = function() {
+        self.playerCount(null);
+        self.playerOneStarts(null);
+        self.gameStatus(GAME_STATE_SETUP);
+    }
+
+    /**
+     * Cancel new game setup
+     */
+    self.cancelGame = function() {
+        self.gameStatus(null);
+    }
+
+    /**
      * Start a new game of Connect Four.
      *
      * Queries the backend for a new UUID and empty game grid, and sets up the
      * UI to match.
      */
-    self.startNewGame = function() {
+    self.startGame = function() {
+
         // Set up the AJAX request
         var params = {
             url: "/new",
@@ -326,12 +358,14 @@ function ConnectFourViewModel() {
                 // a data grid, which we can pass straight into the game
                 // constructor.
                 self.hideLoading();
+                self.gameStatus(GAME_STATE_PLAY);
                 self.currentGame(new ConnectFourGame(data.id, data.data));
                 // Start the game!
-                self.currentPlayer(1);
+                self.currentPlayer(parseInt(self.playerOneStarts()));
             },
             error: function(xhr, txtStatus, error) {
                 self.hideLoading();
+                self.gameStatus(null);
                 self.currentGame(null);
                 self.displayTimedNotification("Error creating new game!", "alert");
             }
@@ -346,6 +380,7 @@ function ConnectFourViewModel() {
      * Zero out any current state.
      */
     self.quitGame = function() {
+        self.gameStatus(null);
         self.currentGame(null);
         self.currentNotifications.removeAll();
         self.currentPlayer(null);
@@ -397,6 +432,7 @@ function ConnectFourViewModel() {
                     // On success, we expect simply a grid of positions --
                     // the ID is known to us already
                     self.hideLoading();
+                    self.gameStatus(GAME_STATE_PLAY);
                     self.currentGame(new ConnectFourGame(gameId, data.data));
                     self.displayTimedNotification(
                         "Loaded '" + gameId + "'",
