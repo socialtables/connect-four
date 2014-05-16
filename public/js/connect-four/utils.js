@@ -162,6 +162,8 @@ var scoreGameGrid = function (matrix, transposed) {
                 // be open, but ignore it for now. Besides, start counting the
                 // new streak.
                 else {
+                    // Only if this is a win.
+                    if (streak == 4) bestOf[streakOf] = streak;
                     streakOf = current;
                     streak = 1;
                 }

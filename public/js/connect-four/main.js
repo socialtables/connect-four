@@ -349,7 +349,7 @@ function ConnectFourViewModel() {
     // In theory, this function can be recursive to produce better results,
     // but for now, it's not going any further.
     self.findAValidMove = function (grid, turn, depth) {
-        var bestMove = 0,
+        var bestMove = null,
             bestScore = 0;
 
         for (var i = 0; i < grid.length; i++) {
@@ -359,6 +359,8 @@ function ConnectFourViewModel() {
             if (grid[i][0] != null) {
                 continue;
             }
+
+            if(bestMove == null) bestMove = i;
 
             // Clone a temporary grid, and use it for calculations. The method
             // is not backwards compatible, and requires external library for
@@ -376,8 +378,8 @@ function ConnectFourViewModel() {
 
             var score = scoreGameGrid(gridClone, _.zip.apply(_, gridClone));
 
-            // If our score is better then hers and our previous.
-            if (score[turn] >= score[3 - turn] && score[turn] > bestScore) {
+            // If our score is better then our previous.
+            if (score[turn] > bestScore) {
                 bestScore = score[turn];
                 bestMove = i;
             };
