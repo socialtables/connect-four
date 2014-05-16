@@ -9,7 +9,12 @@
  * 4 or more of the same value (indicating, in this case, the same player's
  * pieces) in a row.
  */
+/**
+ * **Ricky** This is the culprit function. Bug arises when there is a switch
+ * of colors starting a streak (row or column)
+ */
 function containsStreakOfValues(matrix) {
+    console.log(matrix.toString())
     var streak = null,
         streakOf = null,
         current = null;
@@ -19,12 +24,16 @@ function containsStreakOfValues(matrix) {
         // left and we want to try from the bottom up
         for (var j = (matrix[i].length - 1); j >= 0; j--) {
             current = matrix[i][j];
+            // **Ricky** this if/elif holds issue. Can't just continue
             if ((current === null) || (streakOf && (current != streakOf))) {
                 // If the cell is empty or doesn't match the current streak, 
                 // we have to give up
                 streak = 0; 
-                streakOf = null;
-                continue;
+                streakOf = current; // **Ricky** sets to either null or new streak
+                if(!streakOf){
+                    // **Ricky** only continue if cell is empty
+                    continue;
+                }
             } else if (!streakOf) {
                 // Perhaps start a new streak?
                 streakOf = current;
@@ -33,6 +42,7 @@ function containsStreakOfValues(matrix) {
                 // Increment the current streak, if we've found a corresponding
                 // value.
                 streak++;
+                console.log(streak)
             }
             if (streak == 4) {
                 // That's a win!
