@@ -85,12 +85,12 @@ h1.title {
 
 /* Labels for each player with the color of their playing piece */
 h4.label-p1 {
-  color: white;
+  color: red;
   text-transform: uppercase;
 }
 
 h4.label-p2 {
-  color: white;
+  color: yellow;
   text-transform: uppercase;
 }
 
