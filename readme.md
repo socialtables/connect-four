@@ -8,7 +8,7 @@ current version [on Heroku](http://damp-shore-9247.herokuapp.com/)
 
 ## Issues
 
-- We're now using issues to keep track of improvements we can make to the game. Please refer to those if you want some guidance on what we're looking to add next.
+- We're now using issues to keep track of improvements we can make to the game. Please refer to those if you want some guidance on what we're looking to add next. Please submit solutions as pull requests.
 
 ## Game Background
 There are several variations of the game, but for this project we're
