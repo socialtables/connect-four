@@ -28,6 +28,7 @@ html { font-size: 100%; }
   .column.fourth { width: 25%; }
   .column.three-fourths { width: 75%; }
   .column.flow-opposite { float: right; }
+  .column.third.shift { margin-left: 16.6%; }
 }
 
 /* Large screens (1024px) */

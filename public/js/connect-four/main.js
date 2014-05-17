@@ -14,6 +14,9 @@
  *
  * Includes properties for display and styling.
  */
+var GAME_STATE_SETUP = "setup";
+var GAME_STATE_PLAY = "play";
+
 function ConnectFourNotification(message, alertType) {
     var self = this;
     self.message = message;
@@ -185,6 +188,7 @@ function ConnectFourViewModel() {
     self.loadGameId = ko.observable(null);  // serves 'load game' input / button
 
     /* Game state */
+    self.gameStatus = ko.observable(null); // Can move this to ConnectFourGame
 
     // If a game is in progress, this holds a `ConnectFourGame` instance.
     self.currentGame = ko.observable(null);
@@ -205,19 +209,28 @@ function ConnectFourViewModel() {
 
     // Players' names, for friendliness and convenience in Knockout bindings
     // at the root level.
-    self.playerOneName = ko.observable(null);
-    self.playerTwoName = ko.observable(null);
+    self.playerOneName = ko.observable("Red");
+    self.playerTwoName = ko.observable("Yellow");
 
     self.currentPlayerName = ko.computed(function() {
         switch(self.currentPlayer()) {
             case 1:
               return self.playerOneName();
             case 2:
-              return self.playerTwoName();
+              return self.playerCount() == 1 ? "Computer" : self.playerTwoName();
             default:
               return null;
         }
     });
+
+    /* Game options */
+
+    // If player count is 1, then the game is 'Player 1 vs Computer'.
+    self.playerCount = ko.observable(null);
+
+    // If set to 1 (only possible with single player config), player starts
+    // the game, otherwise computer starts.
+    self.playerOneStarts = ko.observable(null);
 
     /**
      * Display a notification to the player(s) with a built-in timeout.
@@ -310,13 +323,96 @@ function ConnectFourViewModel() {
         self.currentPlayer(nextPlayer);
     };
 
+    self.currentPlayer.subscribe(function(player) {
+        if (self.playerCount() == 1 && player == 2) {
+            self.makeComputerMove();
+        };
+    });
+
+    /**
+     * Real basic AI for computer's moves.
+     *
+     */
+
+    self.makeComputerMove = function () {
+        var game = self.currentGame(),
+            maxDepth = 2;
+
+        // Set max depth for pursuing the search for best move.
+        var bestMove = self.findAValidMove(game.serializedGrid(), self.currentPlayer(), maxDepth);
+
+        // Imitate computer move by triggering `selectCell`
+        self.selectCell(game.grid[bestMove.x][0]);
+
+    }
+
+    // In theory, this function can be recursive to produce better results,
+    // but for now, it's not going any further.
+    self.findAValidMove = function (grid, turn, depth) {
+        var bestMove = null,
+            bestScore = 0;
+
+        for (var i = 0; i < grid.length; i++) {
+
+
+            // If current column is not suitable for a new move.
+            if (grid[i][0] != null) {
+                continue;
+            }
+
+            if(bestMove == null) bestMove = i;
+
+            // Clone a temporary grid, and use it for calculations. The method
+            // is not backwards compatible, and requires external library for
+            // legacy browsers.
+            var gridClone = JSON.parse(JSON.stringify(grid));
+            column = gridClone[i];
+
+            // Place a piece.
+            for (var j = column.length - 1; j >= 0; j--) {
+                if(column[j] == null) {
+                    column[j] = turn;
+                    break;
+                }
+            }
+
+            var score = scoreGameGrid(gridClone, _.zip.apply(_, gridClone));
+
+            // If our score is better then our previous.
+            if (score[turn] > bestScore) {
+                bestScore = score[turn];
+                bestMove = i;
+            };
+        };
+        return {x: bestMove}
+    }
+
+    /**
+     * Resets game options and sets game status, so that the player can start
+     * the game.
+     *
+     */
+    self.newGame = function() {
+        self.playerCount(null);
+        self.playerOneStarts(null);
+        self.gameStatus(GAME_STATE_SETUP);
+    }
+
+    /**
+     * Cancel new game setup
+     */
+    self.cancelGame = function() {
+        self.gameStatus(null);
+    }
+
     /**
      * Start a new game of Connect Four.
      *
      * Queries the backend for a new UUID and empty game grid, and sets up the
      * UI to match.
      */
-    self.startNewGame = function() {
+    self.startGame = function() {
+
         // Set up the AJAX request
         var params = {
             url: "/new",
@@ -326,12 +422,14 @@ function ConnectFourViewModel() {
                 // a data grid, which we can pass straight into the game
                 // constructor.
                 self.hideLoading();
+                self.gameStatus(GAME_STATE_PLAY);
                 self.currentGame(new ConnectFourGame(data.id, data.data));
                 // Start the game!
-                self.currentPlayer(1);
+                self.currentPlayer(parseInt(self.playerOneStarts()));
             },
             error: function(xhr, txtStatus, error) {
                 self.hideLoading();
+                self.gameStatus(null);
                 self.currentGame(null);
                 self.displayTimedNotification("Error creating new game!", "alert");
             }
@@ -346,6 +444,7 @@ function ConnectFourViewModel() {
      * Zero out any current state.
      */
     self.quitGame = function() {
+        self.gameStatus(null);
         self.currentGame(null);
         self.currentNotifications.removeAll();
         self.currentPlayer(null);
@@ -397,6 +496,7 @@ function ConnectFourViewModel() {
                     // On success, we expect simply a grid of positions --
                     // the ID is known to us already
                     self.hideLoading();
+                    self.gameStatus(GAME_STATE_PLAY);
                     self.currentGame(new ConnectFourGame(gameId, data.data));
                     self.displayTimedNotification(
                         "Loaded '" + gameId + "'",
