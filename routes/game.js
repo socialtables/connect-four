@@ -43,23 +43,54 @@ exports.new = function(req, res){
 exports.validate = function(req, res){
 	var board = req.body;
 	var valid = true;
-	var mustHavePiece = false;
-	var player1count = 0;
-	var player2count = 0;
-	var difference;
 
+	if(gravityMissing(board) == true){
+		valid = false;
+		console.log("gravityMissing") 
+	}
+
+	if(wrongPlays(board) == true){
+		valid = false;
+	}
+
+
+	if(valid == true){
+		res.json(200, {"msg": "Board is valid!"})
+	} else{
+		res.json(200, {"msg": "This board is messed up!"})
+	}
+
+}
+
+gravityMissing = function(board){
+	var mustHavePiece = false;
+	var gravity = true
+	console.log("gravityMissing started")
 	board.forEach(function(row) {
 		row.forEach(function(space) {
+			console.log(space)
+			console.log(mustHavePiece)
 			if(mustHavePiece == true && space == null){
-				valid = false
+				gravity = false;
 			}
 
 			if(space != null){
-				mustHavePiece = true
+				mustHavePiece = true;
 			}
 		})
-		mustHavePiece = false
+		mustHavePiece = false;
 	})
+
+	if(gravity == false){
+		return true;
+	}else{
+		return false;
+	}
+}
+
+wrongPlays = function(board){
+	var player1count = 0;
+	var player2count = 0;
 
 	board.forEach(function(row) {
 		row.forEach(function(space) {
@@ -68,21 +99,9 @@ exports.validate = function(req, res){
 			} else if(space == 2)
 				player2count++
 		})
-	})
+	});
 
-	difference = player1count - player2count
-
-	if(difference > 1 || difference < -1){
-		valid = false
-	}
-
-	if(valid == true){
-		res.json(200, {"msg": "Board is valid!"})
-	} else{
-		res.json(200, {"msg": "This board is messed up!"})
-	}
-
-
-
-
+	if(player1count - player2count > 1) {return true;}
+	if(player1count - player2count < 0) {return true;}
+	return false
 }
