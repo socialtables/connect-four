@@ -17,14 +17,16 @@ function containsStreakOfValues(matrix) {
         streak = 0;
         // Iterate backwards since in the Connect Four grid 0,0 is the *top*
         // left and we want to try from the bottom up
-        for (var j = (matrix[i].length - 1); j >= 0; j--) {
+        // *Used the regular forward iteration*
+        for (var j = 0; j < matrix[i].length; j++) {
             current = matrix[i][j];
             if ((current === null) || (streakOf && (current != streakOf))) {
                 // If the cell is empty or doesn't match the current streak, 
                 // we have to give up
                 streak = 0; 
-                streakOf = null;
-                continue;
+                streakOf = current; // sets to current state and continue only if empty
+                if(!streakOf){ continue;
+                }
             } else if (!streakOf) {
                 // Perhaps start a new streak?
                 streakOf = current;
@@ -34,7 +36,7 @@ function containsStreakOfValues(matrix) {
                 // value.
                 streak++;
             }
-            if (streak == 4) {
+            if (streak >= 4) {
                 // That's a win!
                 return true;
             }
