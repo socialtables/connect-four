@@ -143,7 +143,6 @@ function ConnectFourGame(id, grid) {
     self.isWon = function() {
         // First do the easy check - a string of 4 or more in a columnn in the
         // grid
-    
         var grid = self.serializedGrid();
         if (containsStreakOfValues(grid)) {
             return true;
@@ -178,7 +177,7 @@ function ConnectFourGame(id, grid) {
  */
 function ConnectFourViewModel() {
   var self = this;
-  
+
   self.playerSelection = ko.observable(false)
   self.numOfPlayers = ko.observable(0)
   self.lastMove = ko.observable(null)
@@ -435,12 +434,14 @@ function ConnectFourViewModel() {
         self.showLoading();
     };
 
+  // Sets if the game is 1 player or 2 player
   self.setPlayerCount = function(val, event) {
     self.playerSelection(false);
     self.startNewGame();
     event.target.innerHTML == '1 player' ? self.numOfPlayers(1) : self.numOfPlayers(2);
   }
 
+  // Findes the longest run
   self.findBestMove = function(player){
     var serialized_grid = self.currentGame().serializedGrid();
     var runs = [
@@ -450,7 +451,7 @@ function ConnectFourViewModel() {
       },
       {key: 'verticalRun', value: checkRuns(player, self.lastMove().x, self.lastMove().y, 0, 1, serialized_grid)  // vertical
       },
-      {key: 'horizontalRun', value: checkRuns(player, self.lastMove().x, self.lastMove().y, 1, 0, serialized_grid)
+      {key: 'horizontalRun', value: checkRuns(player, self.lastMove().x, self.lastMove().y, 1, 0, serialized_grid) //horizontal
       }
       ]
     var sortedRuns = _.sortBy(runs, function(run){return run.value})
@@ -458,7 +459,9 @@ function ConnectFourViewModel() {
     
   }
 
+  // Makes a move depending on the direction of the run
   self.makeCpuMove = function(runDirection){
+    console.log(runDirection)
     var board = self.currentGame().grid,
     lastMove = self.lastMove(),
     futureMove;
@@ -475,7 +478,7 @@ function ConnectFourViewModel() {
     }
 
     if (runDirection.key == 'horizontalRun'){
-  
+      // keeps from using a column that does not exist
       if (lastMove.x == board.length - 1){
         var move = board[lastMove.x - 1][lastMove.y]
       } else {
@@ -500,6 +503,7 @@ function ConnectFourViewModel() {
   }
 
   self.validMove = function(futureMove){
+    console.log(futureMove)
     var board = self.currentGame().grid,
     lastMove = self.lastMove();
     
