@@ -100,3 +100,28 @@ function searchDiagonally(x, y, grid) {
     // We've tried everything, no luck.
     return false;    
 }
+
+checkRuns = function(player, col, row, colStep, rowStep, board) {
+  var runCount = 0;  
+  // check from 3 chips before to 3 chips after the specified chip
+  // this covers all possible runs of 4 chips that include the specified chip
+  for (var step = -3; step <= 3; step++) {
+    if (getPlayerForChipAt(col + step * colStep, row + step * rowStep, board) === player) {
+      runCount++;
+    } else {
+      if(step === 0) {
+        // no room left for a win
+        break;
+      }
+    }
+    }
+    return runCount;
+  }
+
+getPlayerForChipAt = function(col, row, board) {
+  var player = undefined;
+  if (board[col] !== undefined && board[col][row] !== undefined) {
+    player = board[col][row];
+  }
+  return player;
+}
