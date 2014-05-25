@@ -9,10 +9,12 @@
  * 4 or more of the same value (indicating, in this case, the same player's
  * pieces) in a row.
  */
-function containsStreakOfValues(matrix) {
+function containsStreakOfValues(matrix, streakLength) {
     var streak = null,
         streakOf = null,
         current = null;
+        streakLength = streakLength || 4;
+
     for (var i = 0; i < matrix.length; i++) {
         streak = 0;
         // Iterate backwards since in the Connect Four grid 0,0 is the *top*
@@ -34,7 +36,7 @@ function containsStreakOfValues(matrix) {
                 // value.
                 streak++;
             }
-            if (streak == 4) {
+            if (streak == streakLength) {
                 // That's a win!
                 return true;
             }
@@ -52,12 +54,13 @@ function containsStreakOfValues(matrix) {
  * since we start at the bottom and so should catch the first item of any 
  * diagonal run before we see the others.
  */
-function searchDiagonally(x, y, grid) {
+function searchDiagonally(x, y, grid, streakLength) {
     var current = grid[x][y],
         iter_x = x,
         iter_y = y,
         max_x = grid.length - 1,
         streak = 0;
+        streakLength = streakLength || 4;
 
     // First, search decreasing in both indices -- upwards and to the left,
     // in the virtual game space. 
@@ -68,7 +71,7 @@ function searchDiagonally(x, y, grid) {
         }
         // Optimistic -- keep going.
         streak++;
-        if (streak == 4) {
+        if (streak == streakLength) {
             // Winning condition reached!
             return true;
         }
@@ -89,7 +92,7 @@ function searchDiagonally(x, y, grid) {
         }
         // Optimistic...
         streak++;
-        if (streak == 4) {
+        if (streak == streakLength) {
             // Winning condition reached!
             return true;
         }
