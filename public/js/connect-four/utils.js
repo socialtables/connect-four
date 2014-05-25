@@ -5,6 +5,40 @@
  */
 
 /**
+* Check whether there are any streaks in the grid
+*
+* Tests the internal grid using utility functions in `utils.js`, which
+* are in theory reusable even though currently they have the Connect Four
+* 4-in-a-row win condition hardcoded into them.
+*/
+function checkGridForStreaks(grid, streakLength) {
+    // First do the easy check - a string of 4 or more in a columnn in the
+    if (containsStreakOfValues(grid, streakLength)) {
+        return true;
+    }
+    // Now check for the same in a row -- by transposing rows & columns
+    var transposed = _.zip.apply(_, grid);
+    if (containsStreakOfValues(transposed, streakLength)) {
+        return true;
+    }
+    // Now the tough one -- doing the diagonals.
+    for (var i = 0; i < grid.length; i++) {
+        // Iterate backwards to go from bottom to top
+        for (var j = (grid[i].length - 1); j >= 0; j--) {
+            var current = grid[i][j];
+            if (current === null) {
+                continue;
+            }
+            if (searchDiagonally(i, j, grid, streakLength)) {
+                return true;
+            }
+        }
+    }
+    return false;
+};
+
+
+/**
  * Determine if a row of the given matrix contains a winning 'streak', i.e.
  * 4 or more of the same value (indicating, in this case, the same player's
  * pieces) in a row.
