@@ -396,4 +396,24 @@ function ConnectFourViewModel() {
         $.ajax(params);
         self.showLoading();
     };
+
+    /**
+     * Get the winning move if one is available for the current user
+     *
+     * 
+     */
+    self.getWinningMove = function() {
+        var winningMoves = [];
+
+
+
+        // Check if any winning moves were found.
+        if (winningMoves.length == 0) {
+            // Since they weren't, let the player know.
+            self.displayTimedNotification(
+                "Sorry, there are no winning moves at this time.",
+                "alert");
+        }
+
+    };
 }
