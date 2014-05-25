@@ -136,37 +136,16 @@ function ConnectFourGame(id, grid) {
     /**
      * Check whether the game has been won.
      *
-     * Tests the internal grid using utility functions in `utils.js`, which
-     * are in theory reusable even though currently they have the Connect Four
-     * 4-in-a-row win condition hardcoded into them.
+     * Uses the checkGridForStreaks utility method, which uses various utility
+     * methods to check the playing grid for streaks of a certian length.
+     * In this case we're checking for streaks of the length of 4 (which in
+     * this case is a winning streak).
      */
     self.isWon = function() {
-        // First do the easy check - a string of 4 or more in a columnn in the
-        // grid
         var grid = self.serializedGrid();
-        if (containsStreakOfValues(grid)) {
-            return true;
-        }
-        // Now check for the same in a row -- by transposing rows & columns
-        var transposed = _.zip.apply(_, grid);
-        if (containsStreakOfValues(transposed)) {
-            return true;
-        }
-        // Now the tough one -- doing the diagonals.
-        for (var i = 0; i < grid.length; i++) {
-            // Iterate backwards to go from bottom to top
-            for (var j = (grid[i].length - 1); j >= 0; j--) {
-                var current = grid[i][j];
-                if (current === null) {
-                    continue;
-                }
-                if (searchDiagonally(i, j, grid)) {
-                    return true;
-                }
-            }
-        }
-        return false;
+        return checkGridForStreaks(grid, 4);
     };
+
 }
 
 /**
