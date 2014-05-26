@@ -373,6 +373,8 @@ function ConnectFourViewModel() {
      * Zero out any current state.
      */
     self.quitGame = function() {
+        clearTimeout(self.saveMeTimeout);
+        self.hintable(false);
         self.currentGame(null);
         self.currentNotifications.removeAll();
         self.currentPlayer(null);
