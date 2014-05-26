@@ -313,8 +313,6 @@ function ConnectFourViewModel() {
         : (function() {
           if (won) {
             self.gameWinner(self.currentPlayer());
-            clearTimeout(self.saveMeTimeout);
-            self.hintable(false);
             return affectedCell;
           }
 
@@ -326,15 +324,11 @@ function ConnectFourViewModel() {
 
     self.next = function() {
 
-      self.hintable(false);
+      self.hintable(true);
       self.clearHints();
-      clearTimeout(self.saveMeTimeout);
-
-      self.saveMeTimeout = setTimeout(function() {
-        self.hintable(true);
-      }, 2500);
 
       return self.currentPlayer( (self.currentPlayer() % 2) + 1 );
+
     };
 
     /**
@@ -373,7 +367,6 @@ function ConnectFourViewModel() {
      * Zero out any current state.
      */
     self.quitGame = function() {
-        clearTimeout(self.saveMeTimeout);
         self.hintable(false);
         self.currentGame(null);
         self.currentNotifications.removeAll();

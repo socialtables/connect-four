@@ -200,7 +200,7 @@ function saveMe() {
   return [
     'button',{
       class: 'button default save-me',
-      'data-bind': 'click: saveMe, fadeVisible: hintable'
+      'data-bind': 'click: saveMe, visible: hintable'
     }, 'Save Me'
   ];
 }
