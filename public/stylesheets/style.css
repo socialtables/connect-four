@@ -83,6 +83,10 @@ h1.title {
   margin-bottom: 10px;
 }
 
+.save-me {
+  margin: 10px 0;
+}
+
 /* Labels for each player with the color of their playing piece */
 h4.label-p1 {
   color: white;
@@ -214,6 +218,11 @@ div.notifications span {
 
 #grid table tr .cell-empty {
   background: transparent;
+}
+
+#grid table tr .cell-empty.hint {
+  background: rgba( 255, 255, 255, .5);
+  transition: all 1s ease;
 }
 
 #grid table tr .cell-p1 {
