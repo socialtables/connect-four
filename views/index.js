@@ -1,6 +1,5 @@
 var h = require('hoquet'),
-    util = require('util'),
-    fs = require('fs');
+    util = require('util');
 
 exports.index = function(context) {
   return h.doc('html5', [
