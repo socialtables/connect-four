@@ -312,6 +312,7 @@ function ConnectFourViewModel() {
         })()
         : (function() {
           if (won) {
+            self.hintable(false);
             self.gameWinner(self.currentPlayer());
             return affectedCell;
           }
