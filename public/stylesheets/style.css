@@ -228,8 +228,16 @@ div.notifications span {
   background-color: rgba(255,0,0,0.5);
 }
 
+#gridCont.p1ColorH > #grid > .gridTable > tbody > tr > td.cell-p1-hint:hover {
+  background-color: rgba(255,0,0,1);
+}
+
 #gridCont.p2ColorH  > #grid > .gridTable > tbody > tr td.cell-empty:hover {
   background-color: rgba(255,255,0,0.6);
+}
+
+#gridCont.p2ColorH > #grid > .gridTable > tbody > tr > td.cell-p2-hint:hover {
+    background-color: rgba(255,255,0,1);
 }
 
 #grid table tr .cell-empty {

@@ -49,12 +49,12 @@ function containsStreakOfValues(matrix, streakLength) {
         current = null;
         streakLength = streakLength || 4;
 
-    for (var i = 0; i < matrix.length; i++) {
+    for (var c = 0; c < matrix.length; c++) {
         streak = 0;
         // Iterate backwards since in the Connect Four grid 0,0 is the *top*
         // left and we want to try from the bottom up
-        for (var j = (matrix[i].length - 1); j >= 0; j--) {
-            current = matrix[i][j];
+        for (var r = (matrix[c].length - 1); r >= 0; r--) {
+            current = matrix[c][r];
             if ((current === null) || (streakOf && (current != streakOf))) {
                 // If the cell is empty or doesn't match the current streak, 
                 // we have to give up
@@ -78,6 +78,61 @@ function containsStreakOfValues(matrix, streakLength) {
     }
     // We've tried every row -- no luck.
     return false;
+}
+
+/**
+ * Find streaks of a given length, and return the cell identifier for the following
+ * spot if it is currently empty.
+ */
+function findStreakOfValues(matrix, streakLength) {
+    var streak = null,
+        streakOf = null,
+        current = null,
+        streakFound = false,
+        streakEndings = [];
+    streakLength = streakLength || 4;
+
+    for (var c = 0; c < matrix.length; c++) {
+        streak = 0;
+        // Iterate backwards since in the Connect Four grid 0,0 is the *top*
+        // left and we want to try from the bottom up
+        for (var r = (matrix[c].length - 1); r >= 0; r--) {
+            current = matrix[c][r];
+            if ((current === null) || (streakOf && (current != streakOf))) {
+                // Check if a streak was found
+                if (streakFound) {
+                    // Verify that the current spot is empty, before adding it
+                    if (current === null) {
+                        streakEndings.push({ col: c, row: r, player: streakOf });
+                    }
+                    streakFound = false;
+                }
+
+                // If the cell is empty or doesn't match the current streak,
+                // we have to give up
+                streak = 0;
+                streakOf = null;
+                continue;
+            } else if (!streakOf) {
+                // Perhaps start a new streak?
+                streakOf = current;
+            }
+            if (current == streakOf) {
+                // Increment the current streak, if we've found a corresponding
+                // value.
+                streak++;
+            }
+            if (streak == streakLength) {
+                // That's a streak of 3, if the next one is empty, it might be the one
+                streakFound = true;
+            }
+        }
+        // In case a streak was found at the top of a column reset to false as a streak
+        // can't be carried over to the next column
+        streakFound = false;
+    }
+
+    return streakEndings;
 }
 
 /**

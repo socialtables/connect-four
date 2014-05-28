@@ -143,7 +143,8 @@ function ConnectFourGame(id, grid) {
      */
     self.isWon = function() {
         var grid = self.serializedGrid();
-        return checkGridForStreaks(grid, 4);
+        var won = checkGridForStreaks(grid, 4);
+        return won;
     };
 
 }
@@ -251,6 +252,8 @@ function ConnectFourViewModel() {
      * @param {ConnectFourCell} cell The cell the player clicked on.
      */
     self.selectCell = function(cell) {
+        self.hideWinningMove();
+
         if (self.gameWinner()) {
             self.displayTimedNotification(
                 "Game is over. Please quit this game and start a new one.",
@@ -403,17 +406,53 @@ function ConnectFourViewModel() {
      * 
      */
     self.getWinningMove = function() {
-        var winningMoves = [];
+        var winningSpots = [];
+        var grid = self.currentGame().serializedGrid();
+        var streakLength = 3;
 
+        // First do the easy check - a string of 3 in a columnn with an empty space above
+        var possibleSpots = findStreakOfValues(grid, 3);
 
+        // Now the tough one -- doing the diagonals.
+        for (var i = 0; i < grid.length; i++) {
+            // Iterate backwards to go from bottom to top
+            for (var j = (grid[i].length - 1); j >= 0; j--) {
+                _.union(possibleSpots, searchDiagonally(i, j, grid, streakLength));
+            }
+        }
+
+        winningSpots = _.filter(possibleSpots, function(cell){
+            return (cell.player == self.currentPlayer());
+        });
 
         // Check if any winning moves were found.
-        if (winningMoves.length == 0) {
+        if (winningSpots.length == 0) {
             // Since they weren't, let the player know.
             self.displayTimedNotification(
                 "Sorry, there are no winning moves at this time.",
                 "alert");
+        } else {
+            // Since they weren't, let the player know.
+            //self.displayTimedNotification(
+            //    "There might be a winning move",
+            //    "success");
+
+            _.each(winningSpots, function(cell){
+                $(".row-" + cell.row + ".col-" + cell.col).addClass("cell-p" + self.currentPlayer() + "-hint");
+            });
+
         }
 
     };
+
+    /**
+     * Hide winning move
+     *
+     *
+     */
+    self.hideWinningMove = function() {
+        $(".cell-p1-hint").removeClass("cell-p1-hint");
+        $(".cell-p2-hint").removeClass("cell-p2-hint");
+    };
+
 }
