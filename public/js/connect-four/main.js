@@ -413,11 +413,15 @@ function ConnectFourViewModel() {
         // First do the easy check - a string of 3 in a columnn with an empty space above
         var possibleSpots = findStreakOfValues(grid, 3);
 
+        // Next check for horizontal matches
+        var transposed = _.zip.apply(_, grid);
+        possibleSpots = _.union(possibleSpots, findStreakOfValues(transposed, 3, true));
+
         // Now the tough one -- doing the diagonals.
         for (var i = 0; i < grid.length; i++) {
             // Iterate backwards to go from bottom to top
             for (var j = (grid[i].length - 1); j >= 0; j--) {
-                _.union(possibleSpots, searchDiagonally(i, j, grid, streakLength));
+                possibleSpots = _.union(possibleSpots, findDiagonalStreak(i, j, grid, streakLength));
             }
         }
 
