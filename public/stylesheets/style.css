@@ -57,29 +57,29 @@ h1.title {
   color: white !important;
 }
 
-.success:active {
+.button.success:active {
   background-color: green !important;
   color: white !important;
 }
 
-.success:hover {
+.button.success:hover {
   border: solid 2px green;
   color: green;
   border-radius: 3px;
 }
 
-.alert:active {
+.button.alert:active {
   background-color: #d20000 !important;
   color: white !important;
 }
 
-.alert:hover {
+.button.alert:hover {
   border: solid 2px #d20000;
   color: #d20000;
   border-radius: 3px;
 }
 
-.alert {
+.button.alert {
   margin-bottom: 10px;
 }
 
@@ -151,7 +151,27 @@ h4.prefix {
 .ruleButton {
   text-decoration: none;
   color: white;
-  border-bottom: dashed 1px white !important;
+  border-bottom: dashed 1px white;
+}
+
+.ruleButton:hover {
+    color: yellow;
+    border-bottom-color: yellow;
+}
+
+.ruleButton.success:hover {
+    color: green;
+    border-bottom-color: green;
+}
+
+.ruleButton.alert:hover {
+    color: red;
+    border-bottom-color: red;
+}
+
+.helpMeWin {
+    float: right;
+    cursor: pointer;
 }
 
 /* Instructions */
@@ -208,8 +228,16 @@ div.notifications span {
   background-color: rgba(255,0,0,0.5);
 }
 
+#gridCont.p1ColorH > #grid > .gridTable > tbody > tr > td.cell-p1-hint:hover {
+  background-color: rgba(255,0,0,1);
+}
+
 #gridCont.p2ColorH  > #grid > .gridTable > tbody > tr td.cell-empty:hover {
   background-color: rgba(255,255,0,0.6);
+}
+
+#gridCont.p2ColorH > #grid > .gridTable > tbody > tr > td.cell-p2-hint:hover {
+    background-color: rgba(255,255,0,1);
 }
 
 #grid table tr .cell-empty {
@@ -222,6 +250,16 @@ div.notifications span {
 
 #grid table tr .cell-p2 {
   background: yellow;
+}
+
+#grid table tr .cell-p1-hint {
+    background: rgba(250,0,0,0.4);
+    box-shadow: 0px 0px 2px 2px rgba(250,0,0,1);
+}
+
+#grid table tr .cell-p2-hint {
+    background: rgba(250,250,0,0.3);
+    box-shadow: 0px 0px 2px 2px rgba(250,250,0,1);
 }
 
 /* Win text */
