@@ -1,14 +1,14 @@
 /**
- * Custom bindings to KnockoutJS to make the Connect Four game better / easier
- * to build.
- */
+* Custom bindings to KnockoutJS to make the Connect Four game better / easier
+* to build.
+*/
 
 /**
- * Fade elements in and out of visibility when bound data changes.
- * 
- * Improve on the starkness of the `visible` binding. Based on the `slideVisible`
- * example in the Knockout docs.
- */
+* Fade elements in and out of visibility when bound data changes.
+*
+* Improve on the starkness of the `visible` binding. Based on the `slideVisible`
+* example in the Knockout docs.
+*/
 ko.bindingHandlers.fadeVisible = {
     // if the item becomes visible / invisible, slide it in and out of view
     // using jQuery
@@ -28,12 +28,12 @@ ko.bindingHandlers.fadeVisible = {
 };
 
 /**
- * Provide row and column class labels for individual cells in the Connect
- * Four grid.
- * 
- * Potentially useful for things like highlighting a row or column, or animating
- * some aspect of gameplay (like dropping a piece in).
- */
+* Provide row and column class labels for individual cells in the Connect
+* Four grid.
+*
+* Potentially useful for things like highlighting a row or column, or animating
+* some aspect of gameplay (like dropping a piece in).
+*/
 ko.bindingHandlers.rowColumnClasses = {
     init: function (element, valueAccessor) {
         var cell = ko.unwrap(valueAccessor()),

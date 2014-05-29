@@ -224,6 +224,14 @@ div.notifications span {
   background: yellow;
 }
 
+#grid table tr .cell-p1help {
+  background: red;
+}
+
+#grid table tr .cell-p2help{
+  background: yellow;
+}
+
 /* Win text */
 .youWin {
   margin-top: 60px;
@@ -242,3 +250,6 @@ div.notifications span {
 .loadGame button {
   margin-top: 2px;
 }
+
+
+
