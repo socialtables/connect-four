@@ -171,6 +171,7 @@ function searchDiagonally(x, y, grid) {
 * This function operates very similarly to the ContainsStreakofValues function above
 * with some minor changes :)
 */
+
 function test(matrix,ArrayOfValues,streakof){
     var streak = null,
         streakOf = streakof,
@@ -189,13 +190,10 @@ function test(matrix,ArrayOfValues,streakof){
               //if space is not empty
                 if(current == streakOf){
 
-                  //if space part of current streak
 
 
-                    
-                    ArrayOfValues.push([i,j,current]); //push the xval, yval, and value to the array
-                    
-                    
+                    ArrayOfValues.push([i,j,current])
+
                     
                     
                     streak++; //and then increment
@@ -206,21 +204,20 @@ function test(matrix,ArrayOfValues,streakof){
 
                     
                     
-                    
+                    ArrayOfValues.push([i,j,current]);
                     ArrayOfValues = []; //clean up the array just in case
-                    ArrayOfValues.push([i,j,current]); //push the new starting coordinates and value 
+                     //push the new starting coordinates and value 
 
-                    streakOf = streakof;  //ensuring that we're only looking for either a streak of 1's or a streak of 2'streak
-                                          //depending on the parameter above
                     
-                    streak = 1;
+                    
+                    streak = 0;
 
                     //started new streak!
                 }
             }
 
             else {
-                //we lost the streak
+                
                 streak = 0;
                 ArrayOfValues = [];
             }
@@ -231,22 +228,26 @@ function test(matrix,ArrayOfValues,streakof){
                 
                 ArrayOfValues.reverse(); //readability purposes
 
-
+                
                 
                 
                 //If the top part of the column is open, and it does not go
                 //beyond the boundaries of the grid, 
                 //then this can be considered
                 //a valid solution
-                if((j-1> -1)){
+                
+                
+
+                if((j-1) > -1){
+
                     if(matrix[i][j-1] == (null||undefined)){
 
                         return ArrayOfValues;
                     }
-                    
-                }
                 
-        
+                }
+
+                
             }
 
 
@@ -269,11 +270,7 @@ function checkForRows(matrix,ArrayOfValues,streakof){
 
     for(var i=0; i<matrix.length;i++){
         streak = 0;
-
-        // Iterate backwards since in the Connect Four grid 0,0 is the *top*
-
-         // left and we want to try from the bottom up
-
+        ArrayOfValues = [];
         for(var j = (matrix[i].length -1); j>=0; j--){
 
             current = matrix[i][j];
@@ -289,12 +286,14 @@ function checkForRows(matrix,ArrayOfValues,streakof){
                 else{
 
 
-                    //streakOf = current;
-                
-                    streakOf = streakof;
-                    streak = 1;
+                    
 
                     ArrayOfValues.push([i,j,current]);
+                    ArrayOfValues = [];
+                    
+                    streak = 0;
+
+                    
                     
                 }
             }
@@ -305,9 +304,57 @@ function checkForRows(matrix,ArrayOfValues,streakof){
                 streak = 0;
                 ArrayOfValues = [];
             }
-
-
             if(streak == 2){
+
+
+
+                if((j-1) > -1){
+
+                    if(matrix[i][j-1] == (null||undefined)){
+
+                        if(matrix[i][j-2] == matrix[i][j]){
+                            ArrayOfValues.push([i,j,matrix[i][j-2]]);
+                            return ArrayOfValues;
+                        }
+
+                    }
+                    if((j+2) < 7){
+
+                        if(matrix[i][j+2] == (null||undefined)){
+
+                            if(matrix[i][j+3] == matrix[i][j]){
+                                ArrayOfValues.push([i,j,matrix[i][j+3]]);
+                                return ArrayOfValues;
+                            }
+
+                        }
+                    }     
+
+                }
+                if(matrix[i][j-1] == (null||undefined)){
+
+                    if(matrix[i][j-2] == matrix[i][j]){
+
+                        ArrayOfValues.push([i,j,matrix[i][j-2]]);
+                        return ArrayOfValues;
+                    }
+
+                }
+                if((j+2) < 7){
+
+                    if(matrix[i][j+2] == (null||undefined)){
+
+                        if(matrix[i][j+3] == matrix[i][j]){
+
+                            ArrayOfValues.push([i,j,matrix[i][j+3]]);
+                            return ArrayOfValues;
+                        }
+
+                    }
+                }     
+
+
+            
             //Now we check for potential solutions that can be fragmented. that is,
             //neither a column or a row. Something like this, for example:
             // player 1 = 1;
@@ -320,97 +367,55 @@ function checkForRows(matrix,ArrayOfValues,streakof){
             // 0 0 0 0 0 0
             // 0 1 0 1 1 0 --> this too
 
-                if(matrix[i][j+1] == (1||2)){
-
-                    if(matrix[i][j-1] == (null||undefined)){
-
-
-                        if(matrix[i][j-2] == (1||2)){
-
-                            ArrayOfValues.push([i,j-2,current]);
-
-                            return ArrayOfValues;
-
-                        }
-
-                    }
-
-                }
-
-                if(matrix[i][j+1] == (1||2)){
-
-                    if(matrix[i][j+2] == (null||undefined)){
-
-                        if(matrix[i][j+3] == (1||2)){
-
-                            ArrayOfValues.push([i,j+3,current]);
-                            return ArrayOfValues;
-                        }
-
-                    }
-
-                }
-
-
+                
             }
-
             if(streak == 3){
 
                 
                 ArrayOfValues.reverse();
                 
                 //We begin at the bottom of the grid 
-                if(i == 5){
-                    if((j-1)>-1){
-                        //if the left hand side of the row is free
-                        if(matrix[i][j-1] != (1||2)){
+                
+
+                if((j-1) > -1){ //if checking for a left value does not go beyond the array range
+
+                    if(matrix[i][j-1] == (null||undefined)){
+
+                        if(i == 5){
                             return ArrayOfValues;
                         }
-
-                        if((i+3) < 7){
-                            //if the right hand side of the row is free
-                            if(matrix[i][i+3] != (1||2)){
-                                return ArrayOfValues
-                            }
-                        }
-                    }
-                    if((i+3) < 7){
-                            //if the right hand side of the row is free
-                        if(matrix[i][i+3] != (1||2)){
-                            return ArrayOfValues
-                        }
-                    }
-                }
-                //if the row is not at the bottom of the grid
-                if((j-1) > -1){
-                    if(matrix[i][j-1] != (1||2)){
-                        //This check ensures that there is a piece to support the next
-                        if(matrix[i+1][j-1] == (1||2)){
+                        if(matrix[i+1][j-1] != (null||undefined)){
                             return ArrayOfValues;
                         }
                         
                     }
-                    if((i+3) < 7){
-
-                        if(matrix[i][i+3] != (1||2)){
-                            if(matrix[i+1][i+3] == (1||2)){
-                                return ArrayOfValues;
-                            }
+                    if(matrix[i][j+3] == (null||undefined)){
+                        if(i == 5){
+                            return ArrayOfValues;
                         }
+                        if(matrix[i+1][j+3] != (null||undefined)){
+                            return ArrayOfValues;
+                        }
+                        
                     }
+                    
+
                 }
-                if((i+3) < 7){
 
-                    if(matrix[i][i+3] != (1||2)){
+                if((j+3) < 7){
 
-                        if(matrix[i+1][i+3] == (1||2)){
+                    if(matrix[i][j+3] == (null||undefined)){
 
+                        if(i == 5){
+                            return ArrayOfValues;
+                        }
+                        if(matrix[i+1][j+3] != (null||undefined)){
                             return ArrayOfValues;
                         }
                     }
                 }
 
-
+                
                 //If there is a valid solution for a row
             }
 

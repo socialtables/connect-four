@@ -437,11 +437,13 @@ function ConnectFourViewModel() {
         var arrayForOneRow = new Array([]); //rows for player 1
         var arrayForTwoRow = new Array([]); //and rows for player 2
 
-        if(test1 != null){
-
+        if(test1 != null){     
             
+
+
             for(var i = 0; i<test1.length; i++){
 
+                self.displayTimedNotification(test1[i],"alert");
 
                 //population of the arrays begins here
                 //[i][0] is the xval, [i][1] is the yval, and [1][2] is the value of the cell
@@ -459,46 +461,58 @@ function ConnectFourViewModel() {
                 
             }
             //cleanup operations. making sure no extra chips made it into the streak
-            if(arrayForOne.length < 3){
-                delete arrayForOne;
-            }
-            if(arrayForTwo.length < 3){
-                delete arrayForTwo;
-            }
-            
-            for(var i=0;i<arrayForOne.length;i++){
-
-                //getting rid of undesirables such as nulls or undefines
-                if(isNaN(arrayForOne[i][0])){
-                    delete arrayForOne[i][0];
-                }
-                if(isNaN(arrayForOne[i][1])){
-                    delete arrayForOne[i][1];
-                }
-                if(isNaN(arrayForOne[i][2])){
-                    delete arrayForOne[i][2];
-                }
-                
-            }
-            for(var i=0;i<arrayForTwo.length;i++){
-
-                if(isNaN(arrayForTwo[i][0])){
-                    delete arrayForTwo[i][0];
-                }
-                if(isNaN(arrayForTwo[i][1])){
-                    delete arrayForTwo[i][1];
-                }
-                if(isNaN(arrayForTwo[i][2])){
-                    delete arrayForTwo[i][2];
-                }
-                
-                
-            }
             
             
-            if(self.currentPlayer() == 1){
+            for(var i = 0; i<arrayForOne.length; i++){
+
+                self.displayTimedNotification(arrayForOne[i],"alert");
+
+                if(arrayForOne[1] == (null||undefined)){
+                    
+                    break;
+                }
+                
+                if((arrayForOne[i][0] != arrayForOne[1][0]) || (arrayForOne[i][2] != arrayForOne[1][2])){
+                     arrayForOne.splice(i,1);
+                     
+                }
+                
+
+                //self.displayTimedNotification(arrayForOne.length,"alert");
+
+            }
+
+            for(var i = 0; i<arrayForTwo.length; i++){
+
+                self.displayTimedNotification(arrayForTwo[i],"alert");
+
+                if(arrayForTwo[1] == (null||undefined)){
+                    
+                    break;
+                }
 
                 
+                if((arrayForTwo[i][0] != arrayForTwo[1][0]) || (arrayForTwo[i][2] != arrayForTwo[1][2])){
+                     arrayForTwo.splice(i,1);
+                     
+                }
+                
+                //self.displayTimedNotification(arrayForTwo.length,"alert");
+            }
+
+            
+            if(arrayForOne.length < 3 && self.currentPlayer() == 1){
+                self.displayTimedNotification("There are currently no solutions", "alert");
+            }
+
+            if(arrayForTwo.length < 3 && self.currentPlayer() == 2){
+                self.displayTimedNotification("There are currently no solutions", "alert");
+            }
+            
+            if(self.currentPlayer() == 1 && arrayForOne.length >= 3){
+
+                self.displayTimedNotification("I'm here!");
+
                 var forCell = 3; //sets the temporary css class to cell-p1help
                 for(var i = 0; i<arrayForOne.length; i++){
 
@@ -510,7 +524,7 @@ function ConnectFourViewModel() {
                     self.setCell(new ConnectFourCell(xvar, yvar, forCell));
 
                     
-
+                    self.displayTimedNotification(xvar+" "+yvar,"alert");
                     //fade-in fade-out effect using Jquery
                 }
                 $(document).ready(function(){
@@ -537,7 +551,7 @@ function ConnectFourViewModel() {
         
 
 
-            if(self.currentPlayer() == 2){
+            if(self.currentPlayer() == 2 && arrayForTwo.length >= 3){
 
                 var forCell = 4;
                 for(var i = 0; i<arrayForTwo.length; i++){
@@ -548,7 +562,7 @@ function ConnectFourViewModel() {
                     
                     self.setCell(new ConnectFourCell(xvar, yvar, forCell));
 
-                    
+                    self.displayTimedNotification(xvar+" "+yvar,"alert");
 
                     
                 }
@@ -571,6 +585,11 @@ function ConnectFourViewModel() {
             
             
         }
+        if(test1 == null){
+            self.displayTimedNotification("There are currently no solutions", "alert");
+        }
+    
+
     
         
         if(test2 != null){
@@ -592,32 +611,50 @@ function ConnectFourViewModel() {
             }
             //cleanup
             for(var i=0;i<arrayForOneRow.length;i++){
-                if(isNaN(arrayForOneRow[i][0])){
-                    delete arrayForOneRow[i][0];
+                
+                self.displayTimedNotification(arrayForOneRow[i],"alert");
+
+                if(arrayForOneRow[1] == (null||undefined)){
+                    
+                    break;
                 }
-                if(isNaN(arrayForOneRow[i][1])){
-                    delete arrayForOneRow[i][1];
+
+                
+                if((arrayForOneRow[i][0] != arrayForOneRow[1][0]) || (arrayForOneRow[i][2] != arrayForOneRow[1][2])){
+                     arrayForOneRow.splice(i,1);
+                     
                 }
-                if(isNaN(arrayForOneRow[i][2])){
-                    delete arrayForOneRow[i][2];
-                }
+                
                 
                 
             }
             for(var i=0;i<arrayForTwoRow.length;i++){
-                if(isNaN(arrayForTwoRow[i][0])){
-                    delete arrayForTwoRow[i][0];
+                
+                self.displayTimedNotification(arrayForTwoRow[i],"alert");
+
+                if(arrayForTwoRow[1] == (null||undefined)){
+                    
+                    break;
                 }
-                if(isNaN(arrayForTwoRow[i][1])){
-                    delete arrayForTwoRow[i][1];
+
+                
+                if((arrayForTwoRow[i][0] != arrayForTwoRow[1][0]) || (arrayForTwoRow[i][2] != arrayForTwoRow[1][2])){
+                     arrayForTwoRow.splice(i,1);
+                     
                 }
-                if(isNaN(arrayForTwoRow[i][2])){
-                    delete arrayForTwoRow[i][2];
-                }
+                
                 
 
                 
-            };
+            }
+            
+            if(arrayForOneRow.length < 3 && self.currentPlayer() == 1){
+                self.displayTimedNotification("There are currently no solutions", "alert");
+            }
+
+            if(arrayForTwoRow.length < 3 && self.currentPlayer() == 2){
+                self.displayTimedNotification("There are currently no solutions", "alert");
+            }
             
             if(self.currentPlayer() == 1){
 
@@ -674,9 +711,14 @@ function ConnectFourViewModel() {
 
                     self.setCell(new ConnectFourCell(yvar, xvar, 2));
                 }
+            
             }
-        }
+        
+        } //cancel this one out to comment out only test2
     }
+        
+        
+    
             
 
 
