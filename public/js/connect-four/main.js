@@ -437,13 +437,20 @@ function ConnectFourViewModel() {
         var arrayForOneRow = new Array([]); //rows for player 1
         var arrayForTwoRow = new Array([]); //and rows for player 2
 
+        if(test1 == null && test2 == null){
+
+            self.displayTimedNotification("There are currently no solutions","alert");
+        }
+
+        
+
         if(test1 != null){     
             
 
 
             for(var i = 0; i<test1.length; i++){
 
-                self.displayTimedNotification(test1[i],"alert");
+                //self.displayTimedNotification(test1[i],"alert");
 
                 //population of the arrays begins here
                 //[i][0] is the xval, [i][1] is the yval, and [1][2] is the value of the cell
@@ -465,7 +472,7 @@ function ConnectFourViewModel() {
             
             for(var i = 0; i<arrayForOne.length; i++){
 
-                self.displayTimedNotification(arrayForOne[i],"alert");
+                //self.displayTimedNotification(arrayForOne[i],"alert");
 
                 if(arrayForOne[1] == (null||undefined)){
                     
@@ -484,7 +491,7 @@ function ConnectFourViewModel() {
 
             for(var i = 0; i<arrayForTwo.length; i++){
 
-                self.displayTimedNotification(arrayForTwo[i],"alert");
+                //self.displayTimedNotification(arrayForTwo[i],"alert");
 
                 if(arrayForTwo[1] == (null||undefined)){
                     
@@ -501,17 +508,13 @@ function ConnectFourViewModel() {
             }
 
             
-            if(arrayForOne.length < 3 && self.currentPlayer() == 1){
-                self.displayTimedNotification("There are currently no solutions", "alert");
-            }
-
-            if(arrayForTwo.length < 3 && self.currentPlayer() == 2){
-                self.displayTimedNotification("There are currently no solutions", "alert");
+            if(self.currentPlayer() == 1 && arrayForOne.length < 3){
+                self.displayTimedNotification("There are currently no winning solutions");
             }
             
             if(self.currentPlayer() == 1 && arrayForOne.length >= 3){
 
-                self.displayTimedNotification("I'm here!");
+                
 
                 var forCell = 3; //sets the temporary css class to cell-p1help
                 for(var i = 0; i<arrayForOne.length; i++){
@@ -524,7 +527,7 @@ function ConnectFourViewModel() {
                     self.setCell(new ConnectFourCell(xvar, yvar, forCell));
 
                     
-                    self.displayTimedNotification(xvar+" "+yvar,"alert");
+                    //self.displayTimedNotification(xvar+" "+yvar,"alert");
                     //fade-in fade-out effect using Jquery
                 }
                 $(document).ready(function(){
@@ -548,6 +551,10 @@ function ConnectFourViewModel() {
                 
             }
             
+
+            if(self.currentPlayer() == 2 && arrayForTwo.length < 3){
+                self.displayTimedNotification("There are currently no winning solutions");
+            }
         
 
 
@@ -562,7 +569,7 @@ function ConnectFourViewModel() {
                     
                     self.setCell(new ConnectFourCell(xvar, yvar, forCell));
 
-                    self.displayTimedNotification(xvar+" "+yvar,"alert");
+                    //self.displayTimedNotification(xvar+" "+yvar,"alert");
 
                     
                 }
@@ -585,18 +592,18 @@ function ConnectFourViewModel() {
             
             
         }
-        if(test1 == null){
-            self.displayTimedNotification("There are currently no solutions", "alert");
-        }
+        
     
 
     
         
         if(test2 != null){
 
-            //populate the row arrays
+            
             
             for(var i = 0; i<test2.length; i++){
+
+               
                 
                 if(test2[i][2] == 1){
                     arrayForOneRow.push([test2[i][0],test2[i][1],test2[i][2]]);
@@ -612,7 +619,7 @@ function ConnectFourViewModel() {
             //cleanup
             for(var i=0;i<arrayForOneRow.length;i++){
                 
-                self.displayTimedNotification(arrayForOneRow[i],"alert");
+                
 
                 if(arrayForOneRow[1] == (null||undefined)){
                     
@@ -630,7 +637,7 @@ function ConnectFourViewModel() {
             }
             for(var i=0;i<arrayForTwoRow.length;i++){
                 
-                self.displayTimedNotification(arrayForTwoRow[i],"alert");
+                
 
                 if(arrayForTwoRow[1] == (null||undefined)){
                     
@@ -649,21 +656,25 @@ function ConnectFourViewModel() {
             }
             
             if(arrayForOneRow.length < 3 && self.currentPlayer() == 1){
-                self.displayTimedNotification("There are currently no solutions", "alert");
+                
             }
 
             if(arrayForTwoRow.length < 3 && self.currentPlayer() == 2){
-                self.displayTimedNotification("There are currently no solutions", "alert");
+                
+            }
+
+            if(self.currentPlayer() == 1 && arrayForOneRow.length < 3){
+                self.displayTimedNotification("There are currently no winning solutions");
             }
             
-            if(self.currentPlayer() == 1){
+            if(self.currentPlayer() == 1 && arrayForOneRow.length >= 3){
 
                 var forCell = 3;
                 for(var i = 0; i<arrayForOneRow.length;i++){
                     xvar = arrayForOneRow[i][0];
                     yvar = arrayForOneRow[i][1];
 
-                    self.displayTimedNotification(xvar+" "+yvar,"alert");
+                    //self.displayTimedNotification(xvar+" "+yvar,"alert");
 
                     self.setCell(new ConnectFourCell(yvar, xvar, forCell)); //temporary CSS value set
                 }
@@ -684,14 +695,19 @@ function ConnectFourViewModel() {
                 }
 
             }
-            if(self.currentPlayer() == 2){
+
+            if(self.currentPlayer() == 2 && arrayForTwoRow.length < 3){
+                self.displayTimedNotification("There are currently no winning solutions");
+            }
+
+            if(self.currentPlayer() == 2 && arrayForTwoRow.length >= 3){
 
                 var forCell = 4;
                 for(var i = 0; i<arrayForTwoRow.length;i++){
                     xvar = arrayForTwoRow[i][0];
                     yvar = arrayForTwoRow[i][1];
 
-                    self.displayTimedNotification(xvar+" "+yvar,"alert");
+                    //self.displayTimedNotification(xvar+" "+yvar,"alert");
 
                     self.setCell(new ConnectFourCell(yvar, xvar, forCell));
 

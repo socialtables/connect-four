@@ -313,8 +313,17 @@ function checkForRows(matrix,ArrayOfValues,streakof){
                     if(matrix[i][j-1] == (null||undefined)){
 
                         if(matrix[i][j-2] == matrix[i][j]){
-                            ArrayOfValues.push([i,j,matrix[i][j-2]]);
-                            return ArrayOfValues;
+                            ArrayOfValues.push([i,j-2,matrix[i][j-2]]);
+
+                            if(i == 5){
+
+                                return ArrayOfValues;
+                            }
+
+                            if(matrix[i+1][j-1] != (null||undefined)){
+                                return ArrayOfValues;
+                            }
+                            
                         }
 
                     }
@@ -323,35 +332,46 @@ function checkForRows(matrix,ArrayOfValues,streakof){
                         if(matrix[i][j+2] == (null||undefined)){
 
                             if(matrix[i][j+3] == matrix[i][j]){
-                                ArrayOfValues.push([i,j,matrix[i][j+3]]);
-                                return ArrayOfValues;
+                                ArrayOfValues.push([i,j+3,matrix[i][j+3]]);
+
+                                if(i == 5){
+
+                                    return ArrayOfValues;
+                                }
+                                
+                                if(matrix[i+1][j+2] != (null||undefined)){
+
+                                    return ArrayOfValues;
+                                }
+
                             }
 
                         }
                     }     
 
                 }
-                if(matrix[i][j-1] == (null||undefined)){
 
-                    if(matrix[i][j-2] == matrix[i][j]){
-
-                        ArrayOfValues.push([i,j,matrix[i][j-2]]);
-                        return ArrayOfValues;
-                    }
-
-                }
                 if((j+2) < 7){
 
                     if(matrix[i][j+2] == (null||undefined)){
 
                         if(matrix[i][j+3] == matrix[i][j]){
 
-                            ArrayOfValues.push([i,j,matrix[i][j+3]]);
-                            return ArrayOfValues;
+                            ArrayOfValues.push([i,j+3,matrix[i][j+3]]);
+                            if(i == 5){
+
+                                return ArrayOfValues;
+                            }
+                            
+                            if(matrix[i+1][j+2] != (null||undefined)){
+
+                                return ArrayOfValues;
+                            }
                         }
 
                     }
-                }     
+                }
+
 
 
             
