@@ -34,6 +34,8 @@ function ConnectFourCell(x, y, value) {
     // used by a player, and if so which player.
     self.value = ko.observable(value);
 
+    self.hint = ko.observable(null);
+
     /**
      * Return the CSS class to use to mark ownership of the cell -- i.e. show
      * whether it's empty or filled by Player One or Two.
@@ -271,7 +273,7 @@ function ConnectFourViewModel() {
      *
      * @param {ConnectFourCell} cell The cell the player clicked on.
      */
-    self.selectCell = function(cell) {
+    self.selectCell = function(cell, event, hypothetical) {
         if (self.gameWinner()) {
             self.displayTimedNotification(
                 "Game is over. Please quit this game and start a new one.",
@@ -281,33 +283,53 @@ function ConnectFourViewModel() {
 
         var game = self.currentGame(),
             x = cell.x,
-            y = cell.y;
+            y = cell.y,
+            column = game.grid[x],
+            affectedCell,
+            won,
+            stored;
 
-        var stored = false;
-        var column = game.grid[x];
         // Note because 0,0 is the *top* left of the grid, we iterate
         // backwards to fill it from the bottom up
         for (var i = (column.length - 1); i >= 0; i--) {
             if (!column[i].value()) {
-                column[i].value(self.currentPlayer());
-                stored = true;
+                affectedCell = column[i];
+                affectedCell.value(self.currentPlayer());
                 break;
             }
         }
 
-        if (!stored) {
+        if (!affectedCell && !hypothetical) {
             self.displayTimedNotification("Invalid move. Please try again.", "alert");
             return;
         }
 
-        var won = self.currentGame().isWon();
-        if (won) {
-            self.gameWinner(self.currentPlayer());
-            return;
-        }
+        won = game.isWon();
 
-        var nextPlayer = (self.currentPlayer() % 2) + 1;
-        self.currentPlayer(nextPlayer);
+        return hypothetical ? (function() {
+          affectedCell && affectedCell.value(null);
+          return won && affectedCell;
+        })()
+        : (function() {
+          if (won) {
+            self.hintable(false);
+            self.gameWinner(self.currentPlayer());
+            return affectedCell;
+          }
+
+          self.next();
+          return affectedCell;
+        })();
+
+    };
+
+    self.next = function() {
+
+      self.hintable(true);
+      self.clearHints();
+
+      return self.currentPlayer( (self.currentPlayer() % 2) + 1 );
+
     };
 
     /**
@@ -346,6 +368,7 @@ function ConnectFourViewModel() {
      * Zero out any current state.
      */
     self.quitGame = function() {
+        self.hintable(false);
         self.currentGame(null);
         self.currentNotifications.removeAll();
         self.currentPlayer(null);
@@ -416,5 +439,41 @@ function ConnectFourViewModel() {
             };
         $.ajax(params);
         self.showLoading();
+    };
+
+    self.hintable = ko.observable(null);
+
+    self.clearHints = function() {
+      self.currentGame().grid.map(function(column) {
+        column.map(function(cell) {
+          cell.hint(false);
+        });
+      });
+    };
+
+    self.saveMe = function(event) {
+
+      var screwageIndex = 0;
+
+      self.currentPlayer( (self.currentPlayer() % 2) + 1 );
+
+      this.currentGame().grid.map(function(column) {
+        var cell;
+        if (cell = self.selectCell(column[0], event, true)) {
+          screwageIndex++;
+          cell.hint(true);
+        }
+      });
+
+      self.currentPlayer( (self.currentPlayer() % 2) + 1 );
+
+      return screwageIndex > 1 ? self.displayTimedNotification(
+        'You\'re screwed :(', 'error'
+      )
+      : screwageIndex ? false
+      : self.displayTimedNotification(
+        'Chill out; you\'re safe!', 'info'
+      );
+
     };
 }
