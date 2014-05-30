@@ -6,9 +6,9 @@ var views = require('../views'),
  */
 
 exports.index = function(req,res) {
-  res.send( views.index({
+  res.render('index', {
     title: 'Connect 4',
     menu: config.mainMenu,
     players: config.players
-  }));
+  });
 };
