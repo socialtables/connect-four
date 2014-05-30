@@ -19,20 +19,21 @@ function containsStreakOfValues(matrix) {
         // left and we want to try from the bottom up
         for (var j = (matrix[i].length - 1); j >= 0; j--) {
             current = matrix[i][j];
-            if ((current === null) || (streakOf && (current != streakOf))) {
-                // If the cell is empty or doesn't match the current streak, 
-                // we have to give up
-                streak = 0; 
-                streakOf = null;
-                continue;
-            } else if (!streakOf) {
-                // Perhaps start a new streak?
-                streakOf = current;
+            if (current) {
+                // if the space is not empty
+                if (current == streakOf){
+                    // if the space is part of the current streak
+                    streak++;
+                }
+                else{
+                    streakOf = current;
+                    streak = 1;
+                    // we've started a new streak!
+                }
             }
-            if (current == streakOf) {
-                // Increment the current streak, if we've found a corresponding
-                // value.
-                streak++;
+            else {
+                streak = 0;
+                // the space is empty. starting back at 0
             }
             if (streak == 4) {
                 // That's a win!
