@@ -31,6 +31,14 @@
 
   */
 
+ 
+
+ //function checkDiagonalLeft(matrix,ArrayOfValues){
+
+
+ //}
+
+
  function containsStreakOfValues(matrix) {
 
      var streak = null,
@@ -114,7 +122,7 @@
 * diagonal run before we see the others.
 */
 function searchDiagonally(x, y, grid) {
-    var current = grid[x][y],
+    var current = grid[x][y], //aka matrix
         iter_x = x,
         iter_y = y,
         max_x = grid.length - 1,
@@ -172,7 +180,7 @@ function searchDiagonally(x, y, grid) {
 * with some minor changes :)
 */
 
-function test(matrix,ArrayOfValues,streakof){
+function checkCol(matrix,ArrayOfValues,streakof){
     var streak = null,
         streakOf = streakof,
         current = null;
@@ -409,16 +417,20 @@ function checkForRows(matrix,ArrayOfValues,streakof){
                         }
                         
                     }
-                    if(matrix[i][j+3] == (null||undefined)){
-                        if(i == 5){
-                            return ArrayOfValues;
+                    if((j+3) < 7){
+
+                        if(matrix[i][j+3] == (null||undefined)){
+                            if(i == 5){
+                                return ArrayOfValues;
+                            }
+                            if(matrix[i+1][j+3] != (null||undefined)){
+                                return ArrayOfValues;
+                            }
+                            
                         }
-                        if(matrix[i+1][j+3] != (null||undefined)){
-                            return ArrayOfValues;
-                        }
-                        
+
                     }
-                    
+
 
                 }
 
@@ -427,6 +439,7 @@ function checkForRows(matrix,ArrayOfValues,streakof){
                     if(matrix[i][j+3] == (null||undefined)){
 
                         if(i == 5){
+
                             return ArrayOfValues;
                         }
                         if(matrix[i+1][j+3] != (null||undefined)){
@@ -434,6 +447,7 @@ function checkForRows(matrix,ArrayOfValues,streakof){
                         }
                     }
                 }
+                
 
                 
                 //If there is a valid solution for a row
@@ -447,5 +461,108 @@ function checkForRows(matrix,ArrayOfValues,streakof){
 
 }
 
+function checkDiagonalRight(x,y,matrix,ArrayOfValues,streakof){
+
+    var current = streakof, //aka matrix
+        i = x,
+        j = y,
+        max_x = matrix.length - 1,
+        streak = 0;
+
+    while ((i <= max_x) && (j >= 0)) {
+
+        if (matrix[i][j] != current) {
+            // Streak broken. Give up.
+            break;
+        }
+        // Optimistic...
+
+        ArrayOfValues.push([i,j,current]);
+
+        streak++;
+
+        if (streak == 3) {
+            
+            ArrayOfValues.reverse();
+
+            if((i-3) > -1){
+
+                if((j-3) > -1){
+
+                    if(matrix[i+1][j-1] != (null||undefined)){
+
+                        if(matrix[i-3][j+3] == (null||undefined)){
+
+                            return ArrayOfValues;
+                              //la chapita de abajo
+                        }
+                    }
+                    
+                }
+
+            }
+            if(matrix[i+1][j] != (null||undefined)){
+
+                if(matrix[i+1][j-1] == (null||undefined)){
+
+                    return ArrayOfValues;
+                }
 
 
+            }
+            
+
+
+        }
+        // Increment and continue the search.
+        i++;
+        j--;
+    }
+    
+}
+
+function checkDiagonalLeft(x,y,matrix,ArrayOfValues,streakof){
+
+    var current = streakof, //aka matrix
+        i = x,
+        j = y,
+        max_x = matrix.length - 1,
+        streak = 0;
+
+    // First, search decreasing in both indices -- upwards and to the left,
+    // in the virtual game space.
+    while ((i >= 0) && (j >= 0)) {
+        if (matrix[i][j] != current) {
+            // The streak's been broken. Give up.
+            break;
+        }
+        // Optimistic -- keep going.
+        ArrayOfValues.push([i,j,current]);
+
+        streak++;
+        if (streak == 3) {
+            //ArrayOfValues.push([i,j]);  3,3
+                 //ArrayOfValues.push([i,j-1]); 3,2
+                 //ArrayOfValues.push(matrix[i]);
+             ArrayOfValues.reverse();
+
+             if((i-1) > -1){
+
+                 if(matrix[i-1][j] != (null||undefined)){
+
+                     if(matrix[i-1][j-1] == (null||undefined)){
+
+                         return ArrayOfValues;
+                     }
+                 } 
+
+             }
+             
+                   
+        }
+        // Now increment and continue the search
+        i--;
+        j--;
+    }
+
+}

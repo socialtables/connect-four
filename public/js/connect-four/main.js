@@ -183,8 +183,8 @@ function ConnectFourGame(id, grid) {
         var result1 = null,
             result2 = null;
 
-        result1 = test(grid,theArray,1); //potential pairs of red chips
-        result2 = test(grid,theArray,2); //potential pairs of yellow chips
+        result1 = checkCol(grid,theArray,1); //potential pairs of red chips
+        result2 = checkCol(grid,theArray,2); //potential pairs of yellow chips
         
         if(result1 != null && result2 != null){
             theArray = result1.concat(result2);
@@ -200,6 +200,142 @@ function ConnectFourGame(id, grid) {
             return theArray;
         }  
         
+    };
+
+
+    self.itsDiagonal = function(theArray){
+        var grid = self.serializedGrid();
+        var result1 = new Array([]),
+            result2 = new Array([]),
+            result3 = new Array([]),
+            result4 = new Array([]),
+            reds1 = new Array([]),
+            reds2 = new Array([]);
+        var result = new Array([]);
+        var yellows1 = new Array([]);
+        var yellows2 = new Array([]);
+
+        
+        for(var i = 0; i < grid.length; i++){
+
+            //theArray = [];
+            for(var j = (grid[i].length -1); j>=0; j--){
+                theArray = [];
+                var current = grid[i][j];
+                if(current === null){
+
+                    continue;
+                }
+
+                result1.push(checkDiagonalRight(i,j,grid,theArray,1));
+                result2.push(checkDiagonalLeft(i,j,grid,theArray,1));
+                result3.push(checkDiagonalRight(i,j,grid,theArray,2));
+                result4.push(checkDiagonalLeft(i,j,grid,theArray,2));
+            }
+        }
+
+        //this next step ensures we get only the x, y and val values we need to make the 
+        //diagonal shine. Basically, a cleanup operation
+
+        if(result1 != undefined){
+
+            for(var i = 0; i<result1.length; i++){
+
+                if(result1[i] != undefined){
+
+                    for(var j=0; j < result1.length; j++){
+                        if(typeof result1[i][j] == 'object'){
+
+                            reds1.push(result1[i][j]);
+                            
+                        }
+                    }
+                       
+                }
+
+                
+                
+            }
+            reds1.splice(0,1);
+            
+            
+        }
+        
+        
+        //return reds1; //2,3,1 1,4,1 0,5,1
+        if(result2 != undefined){
+
+            for(var i = 0; i<result2.length; i++){
+
+                if(result2[i] != undefined){
+
+                    for(var j=0; j <result2.length; j++){
+
+                        if(typeof result2[i][j] == 'object'){
+
+                            reds2.push(result2[i][j]);
+                        }
+                    }
+                }
+
+                
+            }
+
+            reds2.splice(0,1);
+
+        }
+        //return reds2; //4,3,1 5,4,1 6,5,1
+        if(result3 != undefined){
+
+            for(var i = 0; i<result3.length; i++){
+
+                if(result3[i] !=  undefined){
+
+                    for(var j=0; j<result3.length; j++){
+
+                        if(typeof result3[i][j] == 'object'){
+                            yellows1.push(result3[i][j]);
+                        }
+                    }
+                }
+
+            }
+
+            yellows1.splice(0,1);
+
+
+        }
+        //return yellows1;
+        if(result4 != undefined){
+
+            for(var i = 0; i<result4.length; i++){
+
+                if(result4[i] != undefined){
+
+                    for(var j=0; j<result4.length; j++){
+
+                        if(typeof result4[i][j] == 'object'){
+
+                            yellows2.push(result4[i][j]);
+                        }
+                    }
+                }
+                 
+            }
+            yellows2.splice(0,1);
+        }
+
+        var transitory = reds1.concat(reds2);
+
+        var transitory2 = yellows1.concat(yellows2);
+
+        theArray = transitory.concat(transitory2);
+
+        return theArray;
+
+
+        
+
     };
 
     /**
@@ -427,6 +563,7 @@ function ConnectFourViewModel() {
         var player = self.currentPlayer();
         var test1 = self.currentGame().itsAColumn(anArray); //column test
         var test2 = self.currentGame().itsArow(anArray); //row test
+        var test3 = self.currentGame().itsDiagonal(anArray); //diagonal test
           
         
         
@@ -436,12 +573,14 @@ function ConnectFourViewModel() {
         var arrayForTwo = new Array([]); //contains columns for player 2
         var arrayForOneRow = new Array([]); //rows for player 1
         var arrayForTwoRow = new Array([]); //and rows for player 2
-
-        if(test1 == null && test2 == null){
+        var arrayForOneDiag = new Array([]); //contains the diagonal for player 1
+        var arrayForTwoDiag = new Array([]); //contains the diagonal for player 2
+        
+        if(test1 == null && test2 == null && test3 == null){
 
             self.displayTimedNotification("There are currently no solutions","alert");
         }
-
+        
         
 
         if(test1 != null){     
@@ -509,7 +648,7 @@ function ConnectFourViewModel() {
 
             
             if(self.currentPlayer() == 1 && arrayForOne.length < 3){
-                self.displayTimedNotification("There are currently no winning solutions");
+                self.displayTimedNotification("There are currently no solutions",alert);
             }
             
             if(self.currentPlayer() == 1 && arrayForOne.length >= 3){
@@ -522,13 +661,12 @@ function ConnectFourViewModel() {
                     xvar = arrayForOne[i][0]; //
                     yvar = arrayForOne[i][1]; //
 
-                    //creation of the temporary cells begins using the setCell method
+                    
                     
                     self.setCell(new ConnectFourCell(xvar, yvar, forCell));
 
                     
-                    //self.displayTimedNotification(xvar+" "+yvar,"alert");
-                    //fade-in fade-out effect using Jquery
+                   
                 }
                 $(document).ready(function(){
 
@@ -553,7 +691,7 @@ function ConnectFourViewModel() {
             
 
             if(self.currentPlayer() == 2 && arrayForTwo.length < 3){
-                self.displayTimedNotification("There are currently no winning solutions");
+                //self.displayTimedNotification("There are currently no solutions",alert);
             }
         
 
@@ -664,7 +802,7 @@ function ConnectFourViewModel() {
             }
 
             if(self.currentPlayer() == 1 && arrayForOneRow.length < 3){
-                self.displayTimedNotification("There are currently no winning solutions");
+                //self.displayTimedNotification("There are currently no solutions",alert);
             }
             
             if(self.currentPlayer() == 1 && arrayForOneRow.length >= 3){
@@ -697,7 +835,7 @@ function ConnectFourViewModel() {
             }
 
             if(self.currentPlayer() == 2 && arrayForTwoRow.length < 3){
-                self.displayTimedNotification("There are currently no winning solutions");
+                //self.displayTimedNotification("There are currently no solutions",alert);
             }
 
             if(self.currentPlayer() == 2 && arrayForTwoRow.length >= 3){
@@ -731,6 +869,160 @@ function ConnectFourViewModel() {
             }
         
         } //cancel this one out to comment out only test2
+
+        if(test3 != null){
+
+            //self.displayTimedNotification("I'm here!","alert");
+
+            for(var i = 0; i<test3.length;i++){
+
+                self.displayTimedNotification(test3[i],"alert");
+            }
+            ///*
+            for(var i = 0; i<test3.length; i++){
+
+                //self.displayTimedNotification(test1[i],"alert");
+
+                //population of the arrays begins here
+                //[i][0] is the xval, [i][1] is the yval, and [1][2] is the value of the cell
+                
+                if(test3[i][2] == 1){
+                    arrayForOneDiag.push([test3[i][0],test3[i][1],test3[i][2]]);
+                }
+                if(test3[i][2] == 2){
+                    arrayForTwoDiag.push([test3[i][0],test3[i][1],test3[i][2]]);
+
+                }
+                if(test3[i][2] == (null||undefined)){
+                    break;
+                }
+                
+            }
+            //cleanup operations. making sure no extra chips made it into the streak
+            
+            
+            for(var i = 0; i<arrayForOne.length; i++){
+
+                //self.displayTimedNotification(arrayForOne[i],"alert");
+
+                if(arrayForOneDiag[1] == (null||undefined)){
+                    
+                    break;
+                }
+                
+                if((arrayForOneDiag[i][0] != arrayForOneDiag[1][0]) || (arrayForOneDiag[i][2] != arrayForOneDiag[1][2])){
+                     arrayForOneDiag.splice(i,1);
+                     
+                }
+                
+
+                //self.displayTimedNotification(arrayForOne.length,"alert");
+
+            }
+
+            for(var i = 0; i<arrayForTwoDiag.length; i++){
+
+                //self.displayTimedNotification(arrayForTwo[i],"alert");
+
+                if(arrayForTwoDiag[1] == (null||undefined)){
+                    
+                    break;
+                }
+
+                
+                if((arrayForTwoDiag[i][0] != arrayForTwoDiag[1][0]) || (arrayForTwoDiag[i][2] != arrayForTwoDiag[1][2])){
+                     arrayForTwo.splice(i,1);
+                     
+                }
+                
+                //self.displayTimedNotification(arrayForTwo.length,"alert");
+            }
+
+            
+            if(self.currentPlayer() == 1 && arrayForOneDiag.length < 3){
+                self.displayTimedNotification("There are currently no solutions",alert);
+            }
+            
+            if(self.currentPlayer() == 1 && arrayForOneDiag.length >= 3){
+
+                
+
+                var forCell = 3; //sets the temporary css class to cell-p1help
+                for(var i = 0; i<arrayForOneDiag.length; i++){
+
+                    xvar = arrayForOneDiag[i][0]; //
+                    yvar = arrayForOneDiag[i][1]; //
+
+                    //creation of the temporary cells begins using the setCell method
+                    
+                    self.setCell(new ConnectFourCell(xvar, yvar, forCell));
+
+                    
+                    //self.displayTimedNotification(xvar+" "+yvar,"alert");
+                    //fade-in fade-out effect using Jquery
+                }
+                $(document).ready(function(){
+
+                    $(".cell-p1help").fadeTo("slow",0.10);
+                    $(".cell-p1help").fadeTo("slow",1);
+                    $(".cell-p1help").fadeTo("slow",0.10);
+                    $(".cell-p1help").fadeTo("slow",1);
+
+                });
+
+                //after the effect is over, restore the previous CSS class values to
+                //the cells
+                for(var i = 0; i<arrayForOneDiag.length;i++){
+                    xvar = arrayForOneDiag[i][0];
+                    yvar = arrayForOneDiag[i][1];
+
+                    self.setCell(new ConnectFourCell(xvar,yvar,1));
+                }
+                
+                
+            }
+            
+
+            if(self.currentPlayer() == 2 && arrayForTwoDiag.length < 3){
+                
+            }
+        
+
+
+            if(self.currentPlayer() == 2 && arrayForTwoDiag.length >= 3){
+
+                var forCell = 4;
+                for(var i = 0; i<arrayForTwoDiag.length; i++){
+                    xvar = arrayForTwoDiag[i][0];
+                    yvar = arrayForTwoDiag[i][1];
+
+                    //self.displayTimedNotification(xvar+" "+yvar,"alert");
+                    
+                    self.setCell(new ConnectFourCell(xvar, yvar, forCell));
+
+                    //self.displayTimedNotification(xvar+" "+yvar,"alert");
+
+                    
+                }
+                $(document).ready(function(){
+
+                    $(".cell-p2help").fadeTo("slow",0.10);
+                    $(".cell-p2help").fadeTo("slow",1);
+                    $(".cell-p2help").fadeTo("slow",0.10);
+                    $(".cell-p2help").fadeTo("slow",1);
+
+                });
+                for(var i = 0; i<arrayForTwoDiag.length;i++){
+                    xvar = arrayForTwoDiag[i][0];
+                    yvar = arrayForTwoDiag[i][1];
+
+                    self.setCell(new ConnectFourCell(xvar,yvar,2));
+                }
+                 
+            }
+            //*/
+        }
+        
     }
         
         
