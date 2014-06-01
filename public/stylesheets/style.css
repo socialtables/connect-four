@@ -224,6 +224,7 @@ div.notifications span {
   background: yellow;
 }
 
+/*Temporary classes in order to apply jquery to winning streaks*/
 #grid table tr .cell-p1help {
   background: red;
 }
@@ -231,6 +232,7 @@ div.notifications span {
 #grid table tr .cell-p2help{
   background: yellow;
 }
+
 
 /* Win text */
 .youWin {

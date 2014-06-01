@@ -391,8 +391,8 @@ function checkForRows(matrix,ArrayOfValues,streakof){
             //
             // 0 0 0 0 0 0
             // 0 0 0 0 0 0 
-            // 0 2 0 2 2 0 -->potential solution
-            // 0 0 0 0 0 0
+            // 0 0 2 2 0 2 -->potential solution
+            // 0 0 0 0 1 0
             // 0 1 0 1 1 0 --> this too
 
                 
@@ -461,6 +461,10 @@ function checkForRows(matrix,ArrayOfValues,streakof){
 
 }
 
+/* This function checks if there is a streak of 3 diagonals from bottom to top-right. If there is
+// a streak of 3, see if it is valid. If so, return the ArrayOfValues that compose that solution. 
+*/
+
 function checkDiagonalRight(x,y,matrix,ArrayOfValues,streakof){
 
     var current = streakof, //aka matrix
@@ -481,6 +485,8 @@ function checkDiagonalRight(x,y,matrix,ArrayOfValues,streakof){
 
         streak++;
         /*
+        coming soon! if there is a streak of 2 diagonals, but there is a possibility of winning.
+        for an example, see the above rows function(if streak == 2)
         if (streak == 2) {
 
             ArrayOfValues.reverse();
@@ -567,6 +573,10 @@ function checkDiagonalRight(x,y,matrix,ArrayOfValues,streakof){
     
 }
 
+/* This function checks if there is a streak of 3 diagonals from bottom to top-left. If there is
+// a streak of 3, see if it is valid. If so, return the ArrayOfValues that compose that solution. 
+*/
+
 function checkDiagonalLeft(x,y,matrix,ArrayOfValues,streakof){
 
     var current = streakof, //aka matrix
@@ -575,23 +585,22 @@ function checkDiagonalLeft(x,y,matrix,ArrayOfValues,streakof){
         max_x = matrix.length - 1,
         streak = 0;
 
-    // First, search decreasing in both indices -- upwards and to the left,
+    //search decreasing in both indices -- upwards and to the left,
     // in the virtual game space.
     while ((i >= 0) && (j >= 0)) {
         if (matrix[i][j] != current) {
             // The streak's been broken. Give up.
             break;
         }
-        // Optimistic -- keep going.
+        
         ArrayOfValues.push([i,j,current]);
 
         streak++;
 
         if (streak == 3) {
-            //ArrayOfValues.push([i,j]);  3,3
-                 //ArrayOfValues.push([i,j-1]); 3,2
-                 //ArrayOfValues.push(matrix[i]);
-             ArrayOfValues.reverse();
+            
+
+             ArrayOfValues.reverse(); //this improves legibility
 
             
              if((i-1) >= 0 ){
@@ -614,7 +623,7 @@ function checkDiagonalLeft(x,y,matrix,ArrayOfValues,streakof){
 
                             if(matrix[i+3][j+3] == (null||undefined)){
 
-                                if(matrix[i+3][j+4] == (null||undefined)){
+                                if(matrix[i+3][j+4] != (null||undefined)){
 
                                     return ArrayOfValues;
                                 }
