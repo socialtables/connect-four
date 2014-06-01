@@ -480,35 +480,81 @@ function checkDiagonalRight(x,y,matrix,ArrayOfValues,streakof){
         ArrayOfValues.push([i,j,current]);
 
         streak++;
+        /*
+        if (streak == 2) {
 
+            ArrayOfValues.reverse();
+
+            if((j+3) <= 5){
+
+                if((i-3) >= 0){
+
+                    if(matrix[i-3][j+3] == matrix[i][j]){
+
+                        if(matrix[i-2][j+2] == (null||undefined)){
+
+                            ArrayOfValues.push([i,j,matrix[i-3][j+3]]);
+
+                            return ArrayOfValues;
+                        }
+
+                    }
+                    
+                }
+            }
+        }
+        */
         if (streak == 3) {
             
             ArrayOfValues.reverse();
 
-            if((i-3) > -1){
+            if((i+1) <= 6){
 
-                if((j-3) > -1){
+                if(matrix[i+1][j] != (null||undefined)){
 
-                    if(matrix[i+1][j-1] != (null||undefined)){
+                    if((j-1) >= 0) {
 
-                        if(matrix[i-3][j+3] == (null||undefined)){
+                        if(matrix[i+1][j-1] == (null||undefined)){
 
                             return ArrayOfValues;
-                              //la chapita de abajo
+                        }
+
+                    }
+
+                    
+                    if((i-3) >= 0){
+
+                        if((j+4) <= 5){
+
+                            if(matrix[i-3][j+3] == (null||undefined)){
+
+                                if(matrix[i-3][j+4] != (null||undefined)){
+
+                                    return ArrayOfValues;
+                                }
+
+                                
+                            }
                         }
                     }
-                    
-                }
 
+                }
             }
-            if(matrix[i+1][j] != (null||undefined)){
+            
 
-                if(matrix[i+1][j-1] == (null||undefined)){
+            if((i-3) >= 0){
 
-                    return ArrayOfValues;
+                if((j+4) <= 5){
+
+                    if(matrix[i-3][j+3] == (null||undefined)){
+
+                        if(matrix[i-3][j+4] != (null||undefined)){
+
+                            return ArrayOfValues;
+                        }
+                        
+                    }
                 }
-
-
             }
             
 
@@ -540,23 +586,63 @@ function checkDiagonalLeft(x,y,matrix,ArrayOfValues,streakof){
         ArrayOfValues.push([i,j,current]);
 
         streak++;
+
         if (streak == 3) {
             //ArrayOfValues.push([i,j]);  3,3
                  //ArrayOfValues.push([i,j-1]); 3,2
                  //ArrayOfValues.push(matrix[i]);
              ArrayOfValues.reverse();
 
-             if((i-1) > -1){
+            
+             if((i-1) >= 0 ){
 
-                 if(matrix[i-1][j] != (null||undefined)){
 
-                     if(matrix[i-1][j-1] == (null||undefined)){
+                if(matrix[i-1][j] != (null||undefined)){
 
-                         return ArrayOfValues;
-                     }
-                 } 
+                    if((j-1) >= 0){
 
+                        if(matrix[i-1][j-1] == (null||undefined)){
+
+                            return ArrayOfValues;
+                        }
+                    }
+
+                    
+                    if((i+3) <= 6){
+
+                        if((j+4) <= 5){
+
+                            if(matrix[i+3][j+3] == (null||undefined)){
+
+                                if(matrix[i+3][j+4] == (null||undefined)){
+
+                                    return ArrayOfValues;
+                                }
+     
+                            }
+                        }
+                    }
+                } 
              }
+
+             
+
+             if((i+3) <= 6){
+
+                if((j+4) <= 5){
+
+                    if(matrix[i+3][j+3] == (null||undefined)){
+
+                        if(matrix[i+3][j+4] != (null||undefined)){
+
+                            return ArrayOfValues;
+                        }
+  
+                    }
+                }
+             }
+
+             
              
                    
         }

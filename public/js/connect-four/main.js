@@ -202,6 +202,11 @@ function ConnectFourGame(id, grid) {
         
     };
 
+/*This function performs analysis on diagonals. Using a for loop, it iterates over the
+* x and y coordinates of a grid, and checks to see if there is a streak of 3. If there is
+* a streak of 3, and those 3 meet the conditions for winning, give the values for parsing. 
+* the output will then be used by the helpmewin function 
+*/
 
     self.itsDiagonal = function(theArray){
         var grid = self.serializedGrid();
@@ -668,6 +673,7 @@ function ConnectFourViewModel() {
                     
                    
                 }
+                
                 $(document).ready(function(){
 
                     $(".cell-p1help").fadeTo("slow",0.10);
@@ -676,6 +682,9 @@ function ConnectFourViewModel() {
                     $(".cell-p1help").fadeTo("slow",1);
 
                 });
+
+
+                
 
                 //after the effect is over, restore the previous CSS class values to
                 //the cells
