@@ -25,7 +25,7 @@
 
       <div class="row">
         <div class="column third">
-          <button data-bind="click: startNewGame, enable: (currentGame() == null)" class="success button">New Game</button>
+          <button data-bind="click: showPlayerSelection, enable: (currentGame() == null)" class="success button">New Game</button>
         </div>
         <div class="column third">
           <button data-bind="click: saveGame, enable: currentGame" class="default button">Save Game</button>
@@ -34,13 +34,21 @@
           <button data-bind="click: quitGame, enable: currentGame" class="alert button">Quit Game</button>
         </div>
       </div>
-
+      <div class="row" data-bind="fadeVisible: playerSelection()">
+        <h4 class="prefix label-p2  column  full">How many players?</h4>
+        <div class="column half">
+          <button class="default button" data-bind="click: setPlayerCount">1 player</button>
+        </div>
+        <div class="column half">
+          <button class="default button" data-bind="click: setPlayerCount">2 player</button>
+        </div>
+      </div>
       <div class="row nameInputRow">
         <div class="column half">
           <h4 class="prefix label-p1">Player One</h4>
           <input type="text" placeholder="Name" data-bind="value: playerOneName" class="nameInput p1"/>
         </div>
-        <div class="column half">
+        <div class="column half" data-bind="fadeVisible: (numOfPlayers() == 2) ">
           <h4 class="prefix label-p2">Player Two</h4>
           <input type="text" placeholder="Name" data-bind="value: playerTwoName" class="nameInput p2"/>
         </div>

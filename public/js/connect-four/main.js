@@ -176,139 +176,154 @@ function ConnectFourGame(id, grid) {
  * although there isn't time for this exercise.
  */
 function ConnectFourViewModel() {
-    var self = this;
+  var self = this;
 
-    /* Application state -- not necessarily related to any particular game. */
+  self.playerSelection = ko.observable(false)
+  self.numOfPlayers = ko.observable(0)
+  self.lastMove = ko.observable(null)
+  
+  /* Application state -- not necessarily related to any particular game. */
 
-    self.currentNotifications = ko.observableArray([]);
+  self.currentNotifications = ko.observableArray([]);
 
-    self.loadGameId = ko.observable(null);  // serves 'load game' input / button
+  self.loadGameId = ko.observable(null);  // serves 'load game' input / button
 
-    /* Game state */
+  /* Game state */
 
-    // If a game is in progress, this holds a `ConnectFourGame` instance.
-    self.currentGame = ko.observable(null);
+  // If a game is in progress, this holds a `ConnectFourGame` instance.
+  self.currentGame = ko.observable(null);
 
-    // Whose turn is it?
-    self.currentPlayer = ko.observable(null);
+  // Whose turn is it?
+  self.currentPlayer = ko.observable(null);
 
-    // If someone has won, this will be populated appropriately
-    self.gameWinner = ko.observable(null);
+  // If someone has won, this will be populated appropriately
+  self.gameWinner = ko.observable(null);
 
-    // Convenience computed function for ease of binding in the view.
-    self.currentGameRows = ko.computed(function() {
-        if (self.currentGame() === null) {
-            return [];
-        }
-        return self.currentGame().asRows();
-    });
+  // Convenience computed function for ease of binding in the view.
+  self.currentGameRows = ko.computed(function() {
+    if (self.currentGame() === null) {
+      return [];
+    }
+    return self.currentGame().asRows();
+  });
 
-    // Players' names, for friendliness and convenience in Knockout bindings
-    // at the root level.
-    self.playerOneName = ko.observable(null);
-    self.playerTwoName = ko.observable(null);
+  // Players' names, for friendliness and convenience in Knockout bindings
+  // at the root level.
+  self.playerOneName = ko.observable(null);
+  self.playerTwoName = ko.observable(null);
 
-    self.currentPlayerName = ko.computed(function() {
-        switch(self.currentPlayer()) {
-            case 1:
-              return self.playerOneName();
-            case 2:
-              return self.playerTwoName();
-            default:
-              return null;
-        }
-    });
+  self.currentPlayerName = ko.computed(function() {
+    switch(self.currentPlayer()) {
+      case 1:
+        return self.playerOneName();
+      case 2:
+        return self.playerTwoName();
+      default:
+        return null;
+    }
+  });
 
-    /**
-     * Display a notification to the player(s) with a built-in timeout.
-     *
-     * Insert a message into the notifications 'tray', with an optional
-     * alert type (e.g. green for success, red for warning). Since these are
-     * transactional messages, they self-destruct after 5 seconds.
-     */
-    self.displayTimedNotification = function(message, alertType) {
-        var notification = new ConnectFourNotification(message, alertType);
-        self.currentNotifications.push(notification);
-        setTimeout(function() {
-                       self.currentNotifications.destroy(notification);
-                   }, 5000);
-    };
+  /**
+   * Display a notification to the player(s) with a built-in timeout.
+   *
+   * Insert a message into the notifications 'tray', with an optional
+   * alert type (e.g. green for success, red for warning). Since these are
+   * transactional messages, they self-destruct after 5 seconds.
+   */
+  self.displayTimedNotification = function(message, alertType) {
+    var notification = new ConnectFourNotification(message, alertType);
+    self.currentNotifications.push(notification);
+    setTimeout(function() {
+             self.currentNotifications.destroy(notification);
+           }, 5000);
+  };
 
-    /**
-     * Indicate the app is loading something from the backend.
-     *
-     * Do this by fading out the whole app -- quick and dirty.
-     */
-    self.showLoading = function() {
-        $("body").css({ opacity: 0.7 });
-    };
+  /**
+   * Indicate the app is loading something from the backend.
+   *
+   * Do this by fading out the whole app -- quick and dirty.
+   */
+  self.showLoading = function() {
+    $("body").css({ opacity: 0.7 });
+  };
 
-    /**
-     * Stop the loading indication.
-     *
-     * Restore full opacity.
-     */
-    self.hideLoading = function() {
-        $("body").css({ opacity: 1.0 });
-    };
+  /**
+   * Stop the loading indication.
+   *
+   * Restore full opacity.
+   */
+  self.hideLoading = function() {
+    $("body").css({ opacity: 1.0 });
+  };
 
 
-    /* Game play */
+  /* Game play */
 
-    /**
-     * Respond to a player input in the game.
-     *
-     * Since clicks on cells are how the game is played, this is the key method
-     * here. After checking to see that the game is playable (i.e. hasn't been
-     * won already), attempts to drop a piece into the column the player clicked
-     * on.
-     *
-     * Once the piece has been dropped, check to see if the game has been won,
-     * and if so set the state appropriately; otherwise give the other player
-     * a turn.
-     *
-     * Display an error on an invalid move.
-     *
-     * @param {ConnectFourCell} cell The cell the player clicked on.
-     */
-    self.selectCell = function(cell) {
-        if (self.gameWinner()) {
-            self.displayTimedNotification(
-                "Game is over. Please quit this game and start a new one.",
-                "alert");
-            return;
-        }
+  /**
+   * Respond to a player input in the game.
+   *
+   * Since clicks on cells are how the game is played, this is the key method
+   * here. After checking to see that the game is playable (i.e. hasn't been
+   * won already), attempts to drop a piece into the column the player clicked
+   * on.
+   *
+   * Once the piece has been dropped, check to see if the game has been won,
+   * and if so set the state appropriately; otherwise give the other player
+   * a turn.
+   *
+   * Display an error on an invalid move.
+   *
+   * @param {ConnectFourCell} cell The cell the player clicked on.
+   */
+  self.selectCell = function(cell) {
+    if (self.gameWinner()) {
+      self.displayTimedNotification(
+        "Game is over. Please quit this game and start a new one.",
+        "alert");
+      return;
+    }
 
-        var game = self.currentGame(),
-            x = cell.x,
-            y = cell.y;
+    var game = self.currentGame(),
+      // x is the column
+      x = cell.x,
+      // y is the row
+      y = cell.y;
 
-        var stored = false;
-        var column = game.grid[x];
-        // Note because 0,0 is the *top* left of the grid, we iterate
-        // backwards to fill it from the bottom up
-        for (var i = (column.length - 1); i >= 0; i--) {
-            if (!column[i].value()) {
-                column[i].value(self.currentPlayer());
-                stored = true;
-                break;
-            }
-        }
+    var stored = false;
+    var column = game.grid[x];
+    // Note because 0,0 is the *top* left of the grid, we iterate
+    // backwards to fill it from the bottom up
+    for (var i = (column.length - 1); i >= 0; i--) {
+      if (!column[i].value()) {
+        column[i].value(self.currentPlayer());
+        self.lastMove(column[i])
+        stored = true;
+        break;
+      }
+    }
 
-        if (!stored) {
-            self.displayTimedNotification("Invalid move. Please try again.", "alert");
-            return;
-        }
+    if (!stored) {
+      self.displayTimedNotification("Invalid move. Please try again.", "alert");
+      return;
+    }
 
-        var won = self.currentGame().isWon();
-        if (won) {
-            self.gameWinner(self.currentPlayer());
-            return;
-        }
+    var won = self.currentGame().isWon();
+    if (won) {
+      self.gameWinner(self.currentPlayer());
+      return;
+    }
 
-        var nextPlayer = (self.currentPlayer() % 2) + 1;
-        self.currentPlayer(nextPlayer);
-    };
+    if (self.numOfPlayers() == 2){
+      var nextPlayer = (self.currentPlayer() % 2) + 1;
+      self.currentPlayer(nextPlayer);
+    } else {
+      setTimeout( function(){self.findBestMove(1)}, 200)
+    }
+  };
+
+    self.showPlayerSelection = function(){
+        self.playerSelection(true)
+    }
 
     /**
      * Start a new game of Connect Four.
@@ -340,6 +355,7 @@ function ConnectFourViewModel() {
         $.ajax(params);
         self.showLoading();
         setTimeout("$('.cell').height($('.cell').width()); smoothScroll.animateScroll( null, '#grid' );", 700);
+    
     };
 
     /**
@@ -417,4 +433,94 @@ function ConnectFourViewModel() {
         $.ajax(params);
         self.showLoading();
     };
+
+  // Sets if the game is 1 player or 2 player
+  self.setPlayerCount = function(val, event) {
+    self.playerSelection(false);
+    self.startNewGame();
+    event.target.innerHTML == '1 player' ? self.numOfPlayers(1) : self.numOfPlayers(2);
+  }
+
+  // Findes the longest run
+  self.findBestMove = function(player){
+    var serialized_grid = self.currentGame().serializedGrid();
+    var runs = [
+      {key: 'diagLeftRight', value: checkRuns(player, self.lastMove().x, self.lastMove().y, 1, 1, serialized_grid)
+      }, // diagonal "/"
+      {key: 'diagRightleft', value: checkRuns(player, self.lastMove().x, self.lastMove().y, 1, -1, serialized_grid)   // diagonal "\"
+      },
+      {key: 'verticalRun', value: checkRuns(player, self.lastMove().x, self.lastMove().y, 0, 1, serialized_grid)  // vertical
+      },
+      {key: 'horizontalRun', value: checkRuns(player, self.lastMove().x, self.lastMove().y, 1, 0, serialized_grid) //horizontal
+      }
+      ]
+    var sortedRuns = _.sortBy(runs, function(run){return run.value})
+    self.makeCpuMove(sortedRuns.reverse()[0])
+    
+  }
+
+  // Makes a move depending on the direction of the run
+  self.makeCpuMove = function(runDirection){
+    console.log(runDirection)
+    var board = self.currentGame().grid,
+    lastMove = self.lastMove(),
+    futureMove;
+
+    if (runDirection.key == 'verticalRun') {
+      var column = board[lastMove.x]
+      for (var i = (column.length - 1); i >= 0; i--) {
+        if (!column[i].value()) {
+          column[i].value(2);
+          stored = true;
+          break;
+        } 
+      }
+    }
+
+    if (runDirection.key == 'horizontalRun'){
+      // keeps from using a column that does not exist
+      if (lastMove.x == board.length - 1){
+        var move = board[lastMove.x - 1][lastMove.y]
+      } else {
+        var move = board[lastMove.x + 1][lastMove.y]
+      }
+
+      if (move.value() == null){
+        self.validMove(move)
+      } else{
+        self.validMove(board[lastMove.x - 1][lastMove.y])
+      }
+    }
+
+    if (runDirection.key == 'diagLeftRight' || runDirection.key == 'diagRightleft' ){
+      if (board[lastMove.x + 1][lastMove.y + 1].value() == null){
+        futureMove = board[lastMove.x + 1][lastMove.y + 1]
+      } else if (board[lastMove.x - 1][lastMove.y].value() == null){
+        futureMove = board[lastMove.x - 1][lastMove.y - 1]
+      }
+      self.validMove(futureMove)
+    }
+  }
+
+  self.validMove = function(futureMove){
+    console.log(futureMove)
+    var board = self.currentGame().grid,
+    lastMove = self.lastMove();
+    
+    var column = board[futureMove.x]
+    for (var i = (column.length - 1); i >= 0; i--) {
+        if (!column[i].value()) {
+          column[i].value(2);
+          stored = true;
+          break;
+      } 
+    }
+  }
+
+  self.playSomeOffense = function(){
+    self.findBestMove(2)
+  }
 }
+
+
+
