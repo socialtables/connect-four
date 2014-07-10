@@ -9,13 +9,13 @@
     <link rel="stylesheet" href="stylesheets/style.css">
     <script src="js/vendor/modernizr.js"></script>
   </head>
-  <body>
+  <body class="animate-area">
 
     <div class="notifications" data-bind="foreach: currentNotifications">
       <span class="radius label" data-bind="text: message"></span>
     </div>
 
-    <div class="container animated fadeInDown">
+    <div class="container animated fadeInDown main">
 
       <div class="row">
         <div class="column full">
@@ -57,7 +57,7 @@
         </div>
       </div>
 
-      <div class="row">
+      <div class="row btm_sec">
         <div class="column third">
           <div class="instructionCont" data-bind="if: (currentGame() && !gameWinner())" data-bind="fadeVisible: currentGame">
             <h3 class="turnTicker" data-bind="css: { p1Color: currentPlayer() == 1, p2Color: currentPlayer() == 2 }">It's <span data-bind="text: currentPlayerName"></span>'s turn.</h3>

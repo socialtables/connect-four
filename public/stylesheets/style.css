@@ -8,10 +8,17 @@
 /* Body Style & Font */
 body {
  font-family: "Lato", "Helvetica Neue", "Helvetica", "Arial", sans-serif !important;
- background-color: rgb(122, 183, 215);
+ /*background-color: rgb(122, 183, 215); */
  color: #ffffff;
 }
-
+.main
+{ background-color: rgba(122, 183, 215, 0.5);
+padding:10px;
+-moz-border-radius: 5px;
+-webkit-border-radius: 5px;
+-ms-border-radius: 5px;
+-o-border-radius: 5px;
+}
 /* Grid Arrangement */
 .row {
   margin-top: 20px;
@@ -25,6 +32,12 @@ body {
 h1.title {
   font-size: 3rem;
   text-align: center;
+  text-shadow: 2px 2px 2px rgba(150, 150, 150, 1);
+  background:url('../images/logo.png') no-repeat;
+  background-position:center top;  
+  text-indent:-9999px; 
+   height: 148px;  
+   
 }
 
 /* Button Styles */
@@ -189,7 +202,7 @@ div.notifications span {
 
 #grid table {
   width: 100%;
-  background: rgb(122, 183, 215);
+  /* background: rgb(122, 183, 215); */
 }
 
 #grid table tr td {
@@ -205,23 +218,93 @@ div.notifications span {
 }
 
 #gridCont.p1ColorH > #grid > .gridTable > tbody > tr > td.cell-empty:hover {
-  background-color: rgba(255,0,0,0.5);
+   background-color: rgba(255,0,0,0.5);
+   -moz-box-shadow:    inset 0 0 10px #000000;
+   -webkit-box-shadow: inset 0 0 10px #000000;
+   box-shadow:         inset 0 0 10px #000000;
+   -webkit-animation: glowred .4s infinite alternate;
+   animation: glowred .4s infinite alternate;
+   -moz-animation: glowred .4s infinite alternate;
+   -o-animation: glowred .4s infinite alternate;
+
+}
+
+@-webkit-keyframes glowred {
+    to {
+		
+        background-color: rgba(255,0,0,1);
+    }
+}
+@-moz-keyframes glowred {
+    to {
+		
+        background-color: rgba(255,0,0,1);
+    }
+}
+@-o-keyframes glowred {
+    to {
+		
+        background-color: rgba(255,0,0,1);
+    }
+}
+@keyframes glowred {
+    to {
+		
+        background-color: rgba(255,0,0,1);
+    }
 }
 
 #gridCont.p2ColorH  > #grid > .gridTable > tbody > tr td.cell-empty:hover {
-  background-color: rgba(255,255,0,0.6);
+  background-color: rgba(255,255,0,0.5);
+   -moz-box-shadow:    inset 0 0 10px #000000;
+   -webkit-box-shadow: inset 0 0 10px #000000;
+   box-shadow:         inset 0 0 10px #000000;
+   animation: glow .4s infinite alternate;
+   -webkit-animation: glowyellow .4s infinite alternate;
+   animation: glowredyellow .4s infinite alternate;
+   -moz-animation: glowyellow .4s infinite alternate;
+   -o-animation: glowyellow .4s infinite alternate;
 }
-
 #grid table tr .cell-empty {
   background: transparent;
 }
 
+@-webkit-keyframes glowyellow {
+    to {
+		
+        background-color: rgba(255,255,0,1);
+    }
+}
+@-moz-keyframes glowyellow {
+    to {
+		
+        background-color: rgba(255,0,0,1);
+    }
+}
+@-o-keyframes glowyellow {
+    to {
+		
+        background-color: rgba(255,0,0,1);
+    }
+}
+@keyframes glowyellow {
+    to {
+		
+        background-color: rgba(255,0,0,1);
+    }
+}
 #grid table tr .cell-p1 {
   background: red;
+   -moz-box-shadow:    inset 0 0 10px #000000;
+   -webkit-box-shadow: inset 0 0 10px #000000;
+   box-shadow:         inset 0 0 10px #000000;
 }
 
 #grid table tr .cell-p2 {
   background: yellow;
+   -moz-box-shadow:    inset 0 0 10px #000000;
+   -webkit-box-shadow: inset 0 0 10px #000000;
+   box-shadow:         inset 0 0 10px #000000;
 }
 
 /* Win text */
@@ -241,4 +324,67 @@ div.notifications span {
 /* Load button */
 .loadGame button {
   margin-top: 2px;
+}
+
+.btm_sec {
+    /* RGBa*/
+    background-color: rgba(86, 195, 223, 1);
+    /* For IE 5.5 - 7*/
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#A5EDFF, endColorstr=#A5EDFF);
+    /* For IE 8*/
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#A5EDFF, endColorstr=#A5EDFF)";
+	-moz-border-radius: 5px;
+-webkit-border-radius: 5px;
+-ms-border-radius: 5px;
+-o-border-radius: 5px;
+border-radius: 5px;
+-webkit-box-shadow: 0 8px 6px -6px rgba(0, 0, 0, 0.3);
+	   -moz-box-shadow: 0 8px 6px -6px rgba(0, 0, 0, 0.3);
+	        box-shadow: 0 8px 6px -6px rgba(0, 0, 0, 0.3);
+padding-bottom:10px;
+}
+.animate-area
+{ background-image: url(../images/hori.png), url(../images/verti.png), url(../images/connect.png);
+ background-repeat: no-repeat, no-repeat, repeat;
+ background-position: 140px 80px, 20px 220px, 0px 0px;
+-webkit-transition: animatedbg 1s ease-in-out;
+    -moz-transition: animatedbg 1s ease-in-out;
+    -o-transition: animatedbg 1s ease-in-out;
+    -ms-transition: animatedbg 1s ease-in-out;
+    transition: animatedbg 1s ease-in-out;
+
+-webkit-animation-direction: normal;
+    -webkit-animation-duration: 2s;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-name: blink;
+    -webkit-animation-timing-function: ease-in-out;
+    
+-moz-animation-direction: normal;
+    -moz-animation-duration: 2s;
+    -moz-animation-iteration-count: infinite;
+    -moz-animation-name: blink;
+    -moz-animation-timing-function: ease-in-out;  
+}
+
+@keyframes animatedbg {
+    0% {
+        opacity:1;
+    }
+    50% {
+        opacity:0;
+    }
+    100% {
+        opacity:1;
+    }
+}
+@-webkit-keyframes animatedbg {
+    0% {
+        opacity:1;
+    }
+    50% {
+        opacity:0;
+    }
+    100% {
+        opacity:1;
+    }
 }
