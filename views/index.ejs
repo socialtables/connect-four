@@ -1,114 +1,624 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Connect Four</title>
-    <link rel="stylesheet" href="stylesheets/animate.css">
-    <link rel="stylesheet" href="stylesheets/grid.css">
-    <link rel="stylesheet" href="stylesheets/style.css">
-    <script src="js/vendor/modernizr.js"></script>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' type='text/css'/>
+    <script type="text/javascript" src="/js/jquery-1.11.1.min.js"></script>
+    <!--<script type="text/javascript" src="/js/socket.io.js"></script>-->
   </head>
   <body>
-
-    <div class="notifications" data-bind="foreach: currentNotifications">
-      <span class="radius label" data-bind="text: message"></span>
+   <div class="menu" style="
+    height: 50%;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;">
+    <div style="
+    width: 50%;
+    height: 30%;
+    display: block;
+    text-align: center;
+    margin-left: 25%;
+">
+      <h1>Connect 4</h1>
     </div>
+  <div style="
+    display: block;
+    position: relative;
+    height: 70%;
+">
+<div style="
+    width: 25%;
+    height: 100%;
+    position: absolute;
+    margin-left: 23%;
+    display: inline-block;
+">
+<input type="button" value="New" class="newButton" style="
+    -webkit-border-radius: 5px;-moz-border-radius: 5px;border-radius: 5px; //CSS3 Feature;
+    width: 100%;
+    height: 100%;
+    border-color: red;
+    height: 100%;
+    font-size: 3em;
+    background: transparent;
+    position: absolute;
+">
+  </div>
+<div style="
+    width: 25%;   height: 100%; 
+    position: absolute;
+    display: inline-block;
+    margin-left: 52%;
+"><input type="text" class="loadID" style="
+    display: block;
+    width: 100%;
+    height: 25%;
+    top: 0;
+    text-align: center;
+    font-size: 3em;
+    padding: 0;
+    margin: 0;
+">
 
-    <div class="container animated fadeInDown">
+<input type="button" value="Load" class="loadButton" style="
+    -webkit-border-radius: 5px;-moz-border-radius: 5px;border-radius: 5px; //CSS3 Feature;
+    background: transparent;
+    height: 70%;
+    border-color: green;
+    font-size: 3em;
+    width: 100%;
+    display: block;position: relative;top: 5%;">
+  </div>
+</div>
+</div>
 
-      <div class="row">
-        <div class="column full">
-          <h1 class="title">Connect 4</h1>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="column third">
-          <button data-bind="click: startNewGame, enable: (currentGame() == null)" class="success button">New Game</button>
-        </div>
-        <div class="column third">
-          <button data-bind="click: saveGame, enable: currentGame" class="default button">Save Game</button>
-        </div>
-        <div class="column third">
-          <button data-bind="click: quitGame, enable: currentGame" class="alert button">Quit Game</button>
-        </div>
-      </div>
-
-      <div class="row nameInputRow">
-        <div class="column half">
-          <h4 class="prefix label-p1">Player One</h4>
-          <input type="text" placeholder="Name" data-bind="value: playerOneName" class="nameInput p1"/>
-        </div>
-        <div class="column half">
-          <h4 class="prefix label-p2">Player Two</h4>
-          <input type="text" placeholder="Name" data-bind="value: playerTwoName" class="nameInput p2"/>
-        </div>
-      </div>
-
-      <div class="row" data-bind="fadeVisible: (currentGame() == null)">
-        <div class="loadGame column three-fourths">
-          <h4 class="prefix">LOAD GAME</h4>
-          <input type="text" placeholder="Game ID" class="nameInput" data-bind="value: loadGameId"/>
-        </div>
-        <div class="loadGame column fourth">
-          <h4 class="prefix">&nbsp;</h4>
-          <button class="button postfix success" data-bind="click: loadGame">Load</button>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="column third">
-          <div class="instructionCont" data-bind="if: (currentGame() && !gameWinner())" data-bind="fadeVisible: currentGame">
-            <h3 class="turnTicker" data-bind="css: { p1Color: currentPlayer() == 1, p2Color: currentPlayer() == 2 }">It's <span data-bind="text: currentPlayerName"></span>'s turn.</h3>
-            <p class="rules">Click anywhere in a column to drop your piece into that column &mdash; it will appear
-            atop any pieces already in the column, or at the bottom of the column if the column
-            is empty.
-            </p>
-            <a class="ruleButton" href="http://www.hasbro.com/common/documents/dad2614d1c4311ddbd0b0800200c9a66/1EF6874419B9F36910222EB9858E8CB8.pdf">Rules</a>
-          </div>
-          <h2 data-bind="if: gameWinner, css: { p1Color: currentPlayer() == 1, p2Color: currentPlayer() == 2 }" class="youWin">Congratulations <span data-bind="text: currentPlayerName"></span><br>You've won!</h2>
-        </div>
-        <div id="gridCont" class="gameRow" data-bind="visible: currentGame, css: { p1ColorH: currentPlayer() == 1, p2ColorH: currentPlayer() == 2 }">
-          <div id="grid" class="column two-thirds">
+    <div class="aspectwrapper">
+    <div id="grid" >
             <table class="gridTable">
-              <tbody data-bind="foreach: currentGameRows">
-                <tr data-bind="foreach: columns">
-                  <td class="cell" data-bind="css: valueForCSS, rowColumnClasses: $data, click: $root.selectCell"></td>
+              <tbody>
+                <tr >
+                  <td class="cell cell-empty row-0 col-0" ></td>
+                
+                  <td class="cell cell-empty row-0 col-1" ></td>
+                
+                  <td class="cell cell-empty row-0 col-2"  ></td>
+                
+                  <td class="cell cell-empty row-0 col-3"  ></td>
+                
+                  <td class="cell cell-empty row-0 col-4"  ></td>
+                
+                  <td class="cell cell-empty row-0 col-5"  ></td>
+                
+                  <td class="cell cell-empty row-0 col-6"  ></td>
+                </tr>
+              
+                <tr>
+                  <td class="cell cell-empty row-1 col-0"  ></td>
+                
+                  <td class="cell cell-empty row-1 col-1"  ></td>
+                
+                  <td class="cell cell-empty row-1 col-2"  ></td>
+                
+                  <td class="cell cell-empty row-1 col-3"  ></td>
+                
+                  <td class="cell cell-empty row-1 col-4"  ></td>
+                
+                  <td class="cell cell-empty row-1 col-5"  ></td>
+                
+                  <td class="cell cell-empty row-1 col-6"  ></td>
+                </tr>
+              
+                <tr>
+                  <td class="cell cell-empty row-2 col-0"  ></td>
+                
+                  <td class="cell cell-empty row-2 col-1"  ></td>
+                
+                  <td class="cell cell-empty row-2 col-2"  ></td>
+                
+                  <td class="cell cell-empty row-2 col-3"  ></td>
+                
+                  <td class="cell cell-empty row-2 col-4"  ></td>
+                
+                  <td class="cell cell-empty row-2 col-5"  ></td>
+                
+                  <td class="cell cell-empty row-2 col-6"  ></td>
+                </tr>
+              
+                <tr >
+                  <td class="cell cell-empty row-3 col-0"  ></td>
+                
+                  <td class="cell cell-empty row-3 col-1"  ></td>
+                
+                  <td class="cell cell-empty row-3 col-2"  ></td>
+                
+                  <td class="cell cell-empty row-3 col-3"  ></td>
+                
+                  <td class="cell cell-empty row-3 col-4"  ></td>
+                
+                  <td class="cell cell-empty row-3 col-5"  ></td>
+                
+                  <td class="cell cell-empty row-3 col-6"  ></td>
+                </tr>
+              
+                <tr >
+                  <td class="cell cell-empty row-4 col-0"  ></td>
+                
+                  <td class="cell cell-empty row-4 col-1"  ></td>
+                
+                  <td class="cell cell-empty row-4 col-2"  ></td>
+                
+                  <td class="cell cell-empty row-4 col-3"  ></td>
+                
+                  <td class="cell cell-empty row-4 col-4"  ></td>
+                
+                  <td class="cell cell-empty row-4 col-5"  ></td>
+                
+                  <td class="cell cell-empty row-4 col-6"  ></td>
+                </tr>
+              
+                <tr >
+                  <td class="cell cell-empty row-5 col-0"  ></td>
+                
+                  <td class="cell cell-empty row-5 col-1"  ></td>
+                
+                  <td class="cell cell-empty row-5 col-2"  ></td>
+                
+                  <td class="cell cell-empty row-5 col-3"  ></td>
+                
+                  <td class="cell cell-empty row-5 col-4"  ></td>
+                
+                  <td class="cell cell-empty row-5 col-5"  ></td>
+                
+                  <td class="cell cell-empty row-5 col-6"  ></td>
                 </tr>
               </tbody>
             </table>
           </div>
         </div>
-      </div>
 
-    <!-- Container Close -->
-    </div>
-
-    <script src="js/vendor/jquery.js"></script>
-    <script src="js/vendor/jquery.easyModal.js"></script>
-    <script src="js/vendor/underscore.js"></script>
-    <script src="js/vendor/knockout.js"></script>
-    <script src="js/vendor/smooth-scroll.js"></script>
-    <script src="js/connect-four/utils.js"></script>
-    <script src="js/connect-four/bindings.js"></script>
-    <script src="js/connect-four/main.js"></script>
     <script type="text/javascript">
-      // Call this at the page level so it's clear from the HTML what'll happen
-      ko.applyBindings(new ConnectFourViewModel());
 
-      $(window).resize(function() {
-        $(".cell").height($(".cell").width());
+
+
+    var topBarHeight = parseInt();
+    var playerColor = '#ffffff';
+    var player1Color = '#ff0000';
+    var player2Color = '#00ff00';
+    var player1HoverColor = '#A2435D';
+    var player2HoverColor = '#00DE74';
+
+    
+
+    var mover = $('<td class="cell cell-empty" ></td>');
+
+    $(function(){
+
+      playerColor = player1Color;
+
+      function layout(){
+
+
+        $('.gridTable').stop(true);
+
+        if(window.innerWidth > window.innerHeight){
+
+            var newWidth = window.innerHeight;
+            var per = newWidth / window.innerWidth * 100;
+
+            $('.gridTable').animate({
+
+              height: '100%',
+              width: per + "%",
+              left: (100 - per)/2 + "%",
+              top: '',
+            }, 500);
+
+             $('#grid').animate({
+
+              top: window.innerHeight / 7 +'px'
+            }, 500);
+        }else{
+          
+            var newHeight = window.innerWidth * (6/7);
+            var per = newHeight / window.innerHeight * 100;
+
+            $('.gridTable').animate({
+
+              width: '100%',
+              height: per + "%",
+              top: (100 - per)/2 + "%",
+              left: '',
+            }, 500);
+
+            $('#grid').animate({
+              
+              top: newHeight / 7 +'px'
+
+            }, 500);
+        
+        }
+
+      }
+
+      layout();
+
+      $(window).resize(layout);
+
+      var data;
+      var id;
+
+      $('.newButton').click(startNewGame);
+      $('.loadButton').click(loadGame);
+
+      function saveGame(){
+
+        $.post("http://localhost:3000/" + id, {data:data}, function(ret){
+          // console.log(ret);
+        });
+      }
+
+      function startNewGame(){
+
+         $.getJSON("http://localhost:3000/new", function(ret){
+          id = ret.id;
+          data = ret.data;
+
+
+
+          window.location = window.location.origin + "/#" + id;
+
+          $('.menu').hide();
+          $('.aspectwrapper').show();
+        });
+      }
+
+      function loadGame(){
+
+        var d = $('.loadID').val().trim();
+        console.log(d);
+        $.getJSON("http://localhost:3000/"+d, function(ret){
+
+          if(ret.data){
+            id = d;
+            data = ret.data.data;
+            if(data == null)
+              data = ret.data;
+            console.log(data);
+            window.location = window.location.origin + "/#" + id;
+
+            var p1count = 0;
+            var p2count = 0;
+
+            for(var i = 0; i < data.length;i++){
+              for(var j = 0; j < data[0].length;j++){
+                var val = data[i][j];
+                val = val == "" ? null : val;
+                data[i][j] = val;
+
+                if(val == player1Color)
+                  p1count++;
+                else if(val == player2Color)
+                  p2count++;
+                
+
+                $('.cell.col-'+i+'.row-'+j).css('background', val);
+              }
+            }
+
+            if(p1count > p2count){
+              playerColor = player2Color;
+            }else{
+              playerColor = player1Color;
+            }
+
+            window.data = data;
+
+            $('.menu').hide();
+            $('.aspectwrapper').show();
+          }
+        });
+
+      }
+
+      function getRowCol(elm){
+
+        var ob = {};
+
+        var elClasses = $( elm ).attr ( 'class' ).split ( ' ' );
+         for(var cl in elClasses){
+          if(elClasses[cl].indexOf('row-') != -1){
+            ob.row = parseInt(elClasses[cl].substring(4));
+          }
+            
+          if(elClasses[cl].indexOf('col-') != -1)
+            ob.col = parseInt(elClasses[cl].substring(4));
+        }
+
+        return ob;
+
+      }
+
+      function playerWins(){
+
+        var count = 0;
+        var curColor;
+        //check cols
+        for(var i = 0; i < data.length; i++){
+          for(var j = 0; j < data[i].length; j++){
+
+              if( j == 0 || data[i][j] == null || curColor != data[i][j]){
+                  count = 1;
+              }else{
+                count++;
+
+                if(count == 4)
+                  return true;
+              }
+              curColor = data[i][j];
+
+          }
+
+        }
+
+        count = 0;
+
+         //check rows
+        for(var i = 0; i < data[0].length; i++){
+          for(var j = 0; j < data.length; j++){
+
+              if( j == 0 || data[j][i] == null || curColor != data[j][i]){
+                  count = 1;
+              }else{
+                count++;
+
+                if(count == 4)
+                  return true;
+              }
+              curColor = data[j][i];
+
+          }
+
+        }
+
+        count = 0;
+
+        //diagnols
+        for(var i =3; i < 6; i++){
+          for(var j = 0; j < i+1; j++){
+
+            if( j == 0 || data[i-j][j] == null || curColor != data[i-j][j]){
+                  count = 1;
+              }else{
+                count++;
+
+                if(count == 4)
+                  return true;
+              }
+              curColor = data[i-j][j];
+          }
+        }
+
+        count = 0;
+
+        for(var i =0; i < 3; i++){
+          for(var j = 6; j > i; j--){
+            if( j == 6 || data[j][6 - j + i] == null || curColor != data[j][6 - j + i]) {
+                  count = 1;
+              }else{
+                count++;
+                if(count == 4)
+                  return true;
+              }
+              curColor = data[j][6 - j + i];
+          }
+        }
+
+        count = 0;
+
+        for(var i =0; i < 3; i++){
+          for(var j = 0; j < 6 - i; j++){
+            if( j == 0 || data[j][j + i] == null || curColor != data[j][j + i]) {
+                  count = 1;
+              }else{
+                count++;
+                if(count == 4)
+                  return true;
+              }
+              curColor = data[j][j + i];
+          }
+        }
+
+        count = 0;
+
+         for(var i =3; i < 6; i++){
+          for(var j = 6; j >  6 - (i+1); j--) {
+
+            if( j == 6 || data[j][i + j - 6] == null || curColor != data[j][i + j - 6]){
+                  count = 1;
+              }else{
+                count++;
+
+                if(count == 4)
+                  return true;
+              }
+              curColor = data[j][i + j - 6];
+          }
+        }
+
+        return false;
+
+      }
+      
+
+      function switchPlayer(){
+
+        if(playerColor == player1Color){
+          playerColor = player2Color;
+        }else{
+          playerColor = player1Color;
+        }
+
+      }
+
+      function getAvailableSpot(c){
+
+        var col = data[c];
+
+        for(var i = 0; i < col.length; i++){
+
+          if(col[i] != null)
+            return i-1;
+        }
+
+        return 5; 
+
+      }
+
+      // var socket = io.connect('http://localhost');
+      // var wsconnected = false;
+      // var waitingOnMove = false;
+      // // socket.io specific code
+
+      // socket.on('connect', function () {
+      //   console.log("Connected");
+      //   wsconnected = true;
+      // });
+
+      // socket.on('Color', function (color) {
+      //     playerColor = color; 
+      // });
+
+      // socket.on('Opponent', function(row, col){
+      //   console.log(row + ", " + col);
+
+      //   waitingOnMove = false;
+
+      // });
+
+
+
+      $('.cell').hover(function(){
+        
+        if(!imFalling){
+
+          var pos = getRowCol(this);
+
+          $('body').append(mover);
+
+          var left = $('.col-' + pos.col).offset() != null ? parseInt($('.col-' + pos.col).offset().left) : 0;
+
+          mover.css({
+
+            background:playerColor,
+            position:'absolute',
+
+          });
+
+          var row = getAvailableSpot(pos.col);
+
+          if(row != -1)
+             $($('.col-' + pos.col + '.row-' + row)[0]).css({
+              'background': playerColor == player1Color ? player1HoverColor : player2HoverColor,
+            });
+
+
+          mover.stop(true);
+          mover.animate({ left: left,
+            top:0,
+            width: $('.row-0').width(),
+            height: $('.row-0').height(),
+          }, 500);
+
+        }
+
+      }, function(){
+          if(!imFalling){
+             var pos = getRowCol(this);
+            var row = getAvailableSpot(pos.col);
+            if(row != -1)
+              $($('.col-' + pos.col + '.row-'+row)[0]).css('background', '');
+          }
       });
 
-      smoothScroll.init({
-          speed: 1000, // Integer. How fast to complete the scroll in milliseconds
-          easing: 'easeInOutCubic', // Easing pattern to use
-          updateURL: false, // Boolean. Whether or not to update the URL with the anchor hash on scroll
-          offset: 0, // Integer. How far to offset the scrolling anchor location in pixels
-          callbackBefore: function ( toggle, anchor ) {}, // Function to run before scrolling
-          callbackAfter: function ( toggle, anchor ) {} // Function to run after scrolling
-      });
+      var imFalling = false;
+
+    $('.cell').click(function(){
+      if(!imFalling){
+       var pos = getRowCol(this);
+       var row = getAvailableSpot(pos.col);
+        if(row != -1){
+
+            $('body').append(mover);
+
+            $($('.col-' + pos.col + '.row-'+row)[0]).css('background', '');
+
+            var top = $('.row-' + row).offset() != null ? parseInt($('.row-' + row).offset().top) : 0;
+            var left = $('.col-' + pos.col).offset() != null ? parseInt($('.col-' + pos.col).offset().left) : 0;
+            mover.css({
+
+              background:playerColor,
+              position:'absolute',
+              top:0,
+              left:left,
+              width: $('.row-0').width(),
+              height: $('.row-0').height(),
+
+            });
+
+            imFalling = true;
+
+            mover.animate({
+
+                top:top,
+            },
+             {duration:500, always:function(){
+                imFalling = false;
+                $($('.col-' + pos.col + '.row-'+row)[0]).css('background', playerColor);
+                
+                data[pos.col][row] = playerColor;
+
+                // if(wsconnected){
+                //   socket.emit('playerMove', row, pos.col, playerColor);
+                // }
+
+                saveGame();
+
+                if(playerWins()){
+
+
+                  startNewGame();
+                  $('.cell').css('background', '');
+
+                }
+
+                // if(!wsconnected){
+                  switchPlayer();
+                // }else{
+                //   waitingOnMove = true;
+                // }
+                
+                
+
+                  mover.css({
+
+                  top:0,
+                  left:0,
+                  width: 0,
+                  height: 0,
+
+                });
+            }});
+
+      }
+    }
+    });
+
+  $('.aspectwrapper').hide();
+
+});
+
     </script>
+
   </body>
 </html>

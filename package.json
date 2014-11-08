@@ -1,17 +1,14 @@
 {
-  "name": "connect-four",
-  "description": "A simple Connect Four game.",
+  "name": "application-name",
   "version": "0.0.1",
   "private": true,
   "scripts": {
     "start": "node app.js"
   },
   "dependencies": {
-    "express": "3.4.4",
     "ejs": "*",
+    "express": "3.4.4",
+    "less-middleware": "^1.0.4",
     "uuid": "~1.4.1"
-  },
-	"engines": {
-		"node": "0.10.22"
-	}
+  }
 }
