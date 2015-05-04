@@ -1,0 +1,50 @@
+@backgroundColor: #00B7FF;
+@topHeight: 100px;
+
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+
+body {
+	background: @backgroundColor;
+}
+
+#grid {
+
+	 position: absolute;
+     top: @topHeight; /* Header Height */
+     bottom: 0px; /* Footer Height */
+     width: 100%;
+     left:0;
+
+	table tr {
+
+		.cell-empty {
+			background: @backgroundColor;
+		}
+
+	}
+
+}
+
+.cell {
+	-moz-border-radius: 100px;
+	-webkit-border-radius: 100px;
+	-ms-border-radius: 100px;
+	-o-border-radius: 100px;
+	border-radius: 100px;
+	cursor: pointer;
+}
+
+
+.gridTable {
+	width: 100%;
+	background: black;
+	height: 100%;
+	position: relative;
+}
